@@ -1,4 +1,4 @@
-package com.eric.generic.thread
+package com.eric.thread
 
 /**
 
