@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+
+    // 背后的服务，用来监听是否在编译中 注意 这里需要使用1.0-rc7的版本
+    compileOnly'com.google.auto.service:auto-service:1.0-rc7'
+    annotationProcessor'com.google.auto.service:auto-service:1.0-rc7'
+    // 使用JavaPoet 帮助我们通过类调用的形式来生成Java代码
+    implementation "com.squareup:javapoet:1.9.0"
+
+    api project(':router-annotation')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
