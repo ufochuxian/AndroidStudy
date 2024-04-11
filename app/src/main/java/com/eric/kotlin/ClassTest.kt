@@ -37,7 +37,7 @@ class Person {
 
     fun sayHelloWithAlso() {
         words = words?.also {
-             it.toUpperCase()
+             it.toUpperCase().run (::println)
         }
     }
 

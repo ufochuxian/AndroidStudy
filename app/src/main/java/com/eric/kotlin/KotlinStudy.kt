@@ -22,3 +22,11 @@ fun detailConnectFunction(vararg parms : String) :String {
     }
     return result
 }
+
+fun main() {
+    Person().apply {
+        printWithDate {
+            this.sayHelloWithAlso()
+        }
+    }
+}
