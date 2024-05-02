@@ -21,7 +21,7 @@ import java.lang.Exception
 
 
 // WorkManager中，需要创建的work对象
-class BlurWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
+class BlurWorker(val ctx: Context, val params: WorkerParameters) : Worker(ctx, params) {
 
     companion object {
         private const val TAG = "BlurWorker"
@@ -43,9 +43,10 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
             val blurBitmap = blurBitmap(pic, appContext)
             val outputUri = writeBitmapToFile(appContext, blurBitmap)
 
+            //此处可以接受别的地方传输过来的数据
             makeStatusNotification("Output is $outputUri", appContext)
 
-            Log.i(TAG,"Output is $outputUri")
+            Log.i(TAG,"Output is $outputUri,data:${params.inputData.getString("a")}")
 
             Result.success()
 
