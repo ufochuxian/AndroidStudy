@@ -12,10 +12,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.eric.jetpack.JetpackActivity
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
+import com.eric.workmanager.BlurWorker
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
 import org.github.jamm.MemoryMeter
@@ -89,6 +92,8 @@ class MainActivity : AppCompatActivity() {
         println(obtain.readInt())
         println(obtain.readInt())
 
+        this.testWorkManager()
+
 
 
 
@@ -108,6 +113,15 @@ class MainActivity : AppCompatActivity() {
 //        rxjava.testFlatMap()
 //        rxjava.testMap()
 //        rxjava.testSubscribeOn()
+    }
+
+
+    private fun testWorkManager() {
+        val workManager = WorkManager.getInstance(this)
+        //构建一个Request对象，包含具体的Work，这里的Request有很多中类型，可以用来区分周期性任务，或者一次性任务等等
+        val oneTimeWorkRequest = OneTimeWorkRequest.from(BlurWorker::class.java)
+        //提交到WorkManager来进行任务的运行
+        workManager.enqueue(oneTimeWorkRequest)
     }
 
 
