@@ -18,6 +18,12 @@ import com.eric.rxjava.R;
 
 public class ScreenMatchUtil {
 
+    /**
+     *
+     * 适配方案（https://blog.csdn.net/weixin_39583013/article/details/117617567）
+     * @param context
+     */
+
     public static void log(Activity context) {
         //  px的全称是（ pixel ）, 即像素的意思；
         //我们常数的 480*800 、720*1280、1080*1920指的就是像素值宽高的意思；
