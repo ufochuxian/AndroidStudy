@@ -1,4 +1,4 @@
-package com.eric.workmanager
+package com.eric.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

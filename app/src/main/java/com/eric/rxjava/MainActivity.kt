@@ -15,8 +15,10 @@ import androidx.work.WorkManager
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
+import com.eric.rxjava.databinding.LayoutFigmaAutoAiCodeBinding
 import com.eric.workmanager.BlurWorker
-import com.eric.workmanager.ConstraintLayoutActivity
+import com.eric.ui.ConstraintLayoutActivity
+import com.eric.ui.UILayoutActivity
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -52,7 +54,11 @@ class MainActivity : AppCompatActivity() {
 //        testCustomRxJava()
 
         binding.displayConstraintlayoutChains.setOnClickListener {
-            startActivity(Intent(this,ConstraintLayoutActivity::class.java))
+            startActivity(Intent(this, ConstraintLayoutActivity::class.java))
+        }
+
+        binding.uiLayout.setOnClickListener {
+            startActivity(Intent(this, UILayoutActivity::class.java))
         }
 
         var flowable = JustOperator()

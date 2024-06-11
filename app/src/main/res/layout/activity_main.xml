@@ -56,6 +56,18 @@
         android:textColor="@color/purple_700" />
 
 
+    <TextView
+        android:id="@+id/ui_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginStart="200dp"
+        android:text="@string/ui_layout"
+        android:textColor="@color/purple_700" />
+
+
     <ImageView
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
