@@ -194,11 +194,12 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/design_default_color_primary"
-                app:layout_constraintDimensionRatio="1:2"
+                app:layout_constraintStart_toEndOf="@+id/third_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/third_view"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/third_view"
+                app:layout_constraintBottom_toBottomOf="@id/seven_view"
+                />
 
             <TextView
                 android:id="@+id/third_view"
@@ -231,6 +232,7 @@
                 android:id="@+id/fifth_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/design_default_color_on_secondary"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="@id/first_view"
@@ -244,6 +246,7 @@
                 android:id="@+id/sixth_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/design_default_color_on_secondary"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="@id/forth_view"
@@ -256,6 +259,7 @@
                 android:id="@+id/seven_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/design_default_color_on_secondary"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="@id/third_view"
