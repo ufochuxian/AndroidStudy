@@ -1,28 +1,21 @@
 package com.eric.rxjava
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.eric.jetpack.JetpackActivity
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
 import com.eric.workmanager.BlurWorker
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.rxjava3.core.Observable
-import org.github.jamm.MemoryMeter
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -93,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         println(obtain.readInt())
 
         this.testWorkManager()
-
 
 
 

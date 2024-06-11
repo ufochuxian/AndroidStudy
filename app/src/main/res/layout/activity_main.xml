@@ -39,6 +39,7 @@
         />
 
 
+
     <com.eric.SinWaveView
         android:id="@+id/sinWaveView"
         android:layout_width="match_parent"
