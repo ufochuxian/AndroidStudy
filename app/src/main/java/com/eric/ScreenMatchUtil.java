@@ -17,6 +17,7 @@ import com.eric.rxjava.R;
 
 
 public class ScreenMatchUtil {
+
     public static void log(Activity context) {
         //  px的全称是（ pixel ）, 即像素的意思；
         //我们常数的 480*800 、720*1280、1080*1920指的就是像素值宽高的意思；
@@ -34,6 +35,8 @@ public class ScreenMatchUtil {
         } else {
             display.getMetrics(displayMetrics);
         }
+
+        // 关于参数的一些讲解：https://blog.csdn.net/u013597998/article/details/51093728s
 
         // 首先 dp=dip，老版本的Android系统中，常用dip，现在都用dp；
         //dp也是一种像素，全称“Device-Independent Pixel”，叫“设备独立像素”,这个值和“像素密度”有关；
