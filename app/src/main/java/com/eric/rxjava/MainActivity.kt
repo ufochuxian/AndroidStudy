@@ -15,6 +15,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.eric.ScreenMatchUtil
+import com.eric.ScreenSizeUtil
 import com.eric.jetpack.JetpackActivity
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
@@ -97,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         this.testWorkManager()
 
 
+        ScreenMatchUtil.log(this)
 
 
 //        val launchBitmap = binding.icLauncher.drawable.toBitmap()
