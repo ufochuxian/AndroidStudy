@@ -1,5 +1,6 @@
 package com.eric.rxjava
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
 import android.view.Menu
@@ -15,6 +16,7 @@ import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
 import com.eric.workmanager.BlurWorker
+import com.eric.workmanager.ConstraintLayoutActivity
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -27,22 +29,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         TgmRouter.getInstance().init(this)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
 
+        setSupportActionBar(binding.toolbar)
+
+        setContentView(binding.root)
+
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+//        binding.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+
 //        testCustomRxJava()
+
+        binding.displayConstraintlayoutChains.setOnClickListener {
+            startActivity(Intent(this,ConstraintLayoutActivity::class.java))
+        }
 
         var flowable = JustOperator()
 

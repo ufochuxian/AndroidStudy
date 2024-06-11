@@ -27,6 +27,8 @@
         <activity android:name="com.eric.lifecycle.LifeCycleActivity"/>
         <activity android:name="com.eric.lifecycle.TestLifeCycleActivity"/>
 
+        <activity android:name="com.eric.workmanager.ConstraintLayoutActivity"/>
+
     </application>
 
 </manifest>
