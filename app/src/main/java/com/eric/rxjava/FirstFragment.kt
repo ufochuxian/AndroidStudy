@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.eric.animation.CustomAnim
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.rxjava.databinding.FragmentFirstBinding
 import com.eric.routers.TgmRouter
@@ -53,6 +54,11 @@ class FirstFragment : Fragment() {
                 it.startActivity(intent)
             }
         }
+
+        val anim = CustomAnim()
+        anim.setRotateY(10f)
+        binding.threeDView.text = "测试3d效果"
+        binding.threeDView.startAnimation(anim)
     }
 
     override fun onDestroyView() {

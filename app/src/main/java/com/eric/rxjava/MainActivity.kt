@@ -3,11 +3,9 @@ package com.eric.rxjava
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -21,7 +19,10 @@ import com.eric.jetpack.JetpackActivity
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
+import com.eric.rxjava.databinding.LayoutFigmaAutoAiCodeBinding
 import com.eric.workmanager.BlurWorker
+import com.eric.ui.ConstraintLayoutActivity
+import com.eric.ui.UILayoutActivity
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
 import org.github.jamm.MemoryMeter
@@ -38,22 +39,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         TgmRouter.getInstance().init(this)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
 
+        setSupportActionBar(binding.toolbar)
+
+        setContentView(binding.root)
+
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+//        binding.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+
 //        testCustomRxJava()
+
+        binding.displayConstraintlayoutChains.setOnClickListener {
+            startActivity(Intent(this, ConstraintLayoutActivity::class.java))
+        }
+
+        binding.uiLayout.setOnClickListener {
+            startActivity(Intent(this, UILayoutActivity::class.java))
+        }
 
         var flowable = JustOperator()
 
@@ -100,7 +114,6 @@ class MainActivity : AppCompatActivity() {
 
 
         ScreenMatchUtil.log(this)
-
 
 //        val launchBitmap = binding.icLauncher.drawable.toBitmap()
 //
