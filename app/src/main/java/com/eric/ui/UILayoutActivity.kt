@@ -11,6 +11,7 @@ class UILayoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = LayoutFigmaAutoAiCodeBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
     }
 }
