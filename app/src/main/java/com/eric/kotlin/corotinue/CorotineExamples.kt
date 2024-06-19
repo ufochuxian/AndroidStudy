@@ -1,5 +1,10 @@
 package com.eric.kotlin.corotinue
 
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.createCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.startCoroutine
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -40,4 +45,31 @@ suspend fun getUserSuspend(name : String) = suspendCoroutine<User> {
     } else {
         it.resumeWith(Result.failure(Throwable("请求发生了错误")))
     }
+}
+
+fun main() {
+
+    //1. 最原始的创建一个Coroutine的方式，传入一个suspend{}函数，
+    // 然后完成后，返回的是一个包装好了结果的Continuation
+    suspend {  }.createCoroutine(object :Continuation<Unit> {
+        override val context: CoroutineContext
+            get() = TODO("Not yet implemented")
+
+        override fun resumeWith(result: Result<Unit>) {
+            TODO("Not yet implemented")
+        }
+    })
+        //这个resume方法用于启动协程
+        .resume(Unit)
+
+    //2. 简化创建协程，并且启动的方式,startCoroutine，等同于上面create之后，再resume
+    suspend {  }.startCoroutine(object :Continuation<Unit> {
+        override val context: CoroutineContext
+            get() = TODO("Not yet implemented")
+
+        override fun resumeWith(result: Result<Unit>) {
+            TODO("Not yet implemented")
+        }
+
+    })
 }
