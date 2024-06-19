@@ -47,6 +47,11 @@ dependencies {
     api 'com.github.jbellis:jamm:0.3.0'
     api project(":router")
 
+    api "com.squareup.retrofit2:retrofit:$retrofit"
+    api "com.squareup.okhttp3:okhttp:$okhttp"
+
+
+
     testApi 'junit:junit:4.+'
     androidTestApi 'androidx.test.ext:junit:1.1.2'
     androidTestApi 'androidx.test.espresso:espresso-core:3.3.0'
