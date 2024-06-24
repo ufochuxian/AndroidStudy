@@ -1,6 +1,6 @@
 package com.eric.rxjava
 
-import org.junit.Test
+import org.xjunit.Test
 
 import org.junit.Assert.*
 
