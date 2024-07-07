@@ -50,6 +50,9 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:$retrofit"
     api "com.squareup.okhttp3:okhttp:$okhttp"
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+
+
 
 
     testApi 'junit:junit:4.+'
