@@ -19,6 +19,8 @@ import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
 import com.eric.kotlin.corotinue.broadcast.EventBroadcast
 import com.eric.kotlin.corotinue.broadcast.Message
+import com.eric.kotlin.corotinue.broadcast.PageA
+import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
@@ -111,6 +113,12 @@ class MainActivity : AppCompatActivity() {
         println(obtain.readInt())
 
         this.testWorkManager()
+
+        //需要初始化，先进行注册广播
+        val pageA = PageA()
+        pageA.registerBroadcastByFlow()
+        val pageB = PageB()
+        pageB.registerBroadcastByFlow()
 
 
         ScreenMatchUtil.log(this)

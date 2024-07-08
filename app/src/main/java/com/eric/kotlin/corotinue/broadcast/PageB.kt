@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 
  */
 class PageB {
-    init {
+
+     fun registerBroadcastByFlow() {
         CoroutineScope(Dispatchers.Main).launch {
             EventBroadcast.events.collect { msg ->
 
@@ -23,6 +24,7 @@ class PageB {
             }
         }
     }
+
     private fun handleEvent(msg: Message) {
         Log.i("PageB","PageB received msg:${msg.content}")
     }

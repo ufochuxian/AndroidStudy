@@ -16,9 +16,10 @@ import kotlinx.coroutines.launch
  */
 class PageA {
 
-    init {
+
+    fun registerBroadcastByFlow() {
         CoroutineScope(Dispatchers.Main).launch {
-            EventBroadcast.events.collect {event->
+            EventBroadcast.events.collect { event ->
                 handleEvent(event)
             }
         }
