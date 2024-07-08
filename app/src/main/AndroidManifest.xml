@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name="com.eric.AndroidStudyApplication"
         android:theme="@style/Theme.Rxjava">
         <activity
             android:name=".MainActivity"
