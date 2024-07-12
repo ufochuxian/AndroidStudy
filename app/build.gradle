@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.eric.rxjava"
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 34
         //renderscript 兼容配置;
         renderscriptTargetApi 14
         renderscriptSupportModeEnabled  true

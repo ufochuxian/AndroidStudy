@@ -10,8 +10,6 @@ android {
     defaultConfig {
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,6 +47,21 @@ dependencies {
 
     api "com.squareup.retrofit2:retrofit:$retrofit"
     api "com.squareup.okhttp3:okhttp:$okhttp"
+
+
+    // ViewModel
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0" // 检查是否有更新的版本
+
+    // 如果你还没有添加，以下是LiveData和Lifecycle库
+    api "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
+    api 'androidx.lifecycle:lifecycle-process:2.7.0'
+
+
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0-RC"
+
+
 
 
 

@@ -3,17 +3,17 @@
     package="com.eric.rxjava">
 
     <application
+        android:name="com.eric.AndroidStudyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Rxjava.NoActionBar">
+        android:theme="@style/Theme.Rxjava">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
             android:exported="true"
-           >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,14 +21,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.eric.routers.apt.SecondActivity"/>
+        <activity android:name="com.eric.routers.apt.SecondActivity" />
 
-        <activity android:name="com.eric.jetpack.JetpackActivity"/>
-        <activity android:name="com.eric.lifecycle.LifeCycleActivity"/>
-        <activity android:name="com.eric.lifecycle.TestLifeCycleActivity"/>
+        <activity android:name="com.eric.jetpack.JetpackActivity" />
+        <activity android:name="com.eric.lifecycle.LifeCycleActivity" />
+        <activity android:name="com.eric.lifecycle.TestLifeCycleActivity" />
 
-        <activity android:name="com.eric.ui.ConstraintLayoutActivity"/>
-        <activity android:name="com.eric.ui.UILayoutActivity"/>
+        <activity android:name="com.eric.ui.ConstraintLayoutActivity" />
+        <activity android:name="com.eric.ui.UILayoutActivity" />
 
     </application>
 

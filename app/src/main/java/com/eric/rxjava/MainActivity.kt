@@ -6,6 +6,9 @@ import android.os.Parcel
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,20 +17,19 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
-import com.eric.ScreenSizeUtil
-import com.eric.jetpack.JetpackActivity
+import com.eric.kotlin.corotinue.broadcast.EventBroadcast
+import com.eric.kotlin.corotinue.broadcast.Message
+import com.eric.kotlin.corotinue.broadcast.PageA
+import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.rxjava.databinding.ActivityMainBinding
-import com.eric.rxjava.databinding.LayoutFigmaAutoAiCodeBinding
-import com.eric.workmanager.BlurWorker
 import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
+import com.eric.workmanager.BlurWorker
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.rxjava3.core.Observable
-import org.github.jamm.MemoryMeter
-import java.util.HashMap
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -112,6 +114,12 @@ class MainActivity : AppCompatActivity() {
 
         this.testWorkManager()
 
+        //需要初始化，先进行注册广播
+        val pageA = PageA()
+        pageA.registerBroadcastByFlow()
+        val pageB = PageB()
+        pageB.registerBroadcastByFlow()
+
 
         ScreenMatchUtil.log(this)
 
@@ -123,6 +131,12 @@ class MainActivity : AppCompatActivity() {
 //        val size = meter.measure(launchBitmap)
 //        println("Size of the object: $size bytes")
 
+        //ViewModel scope，协程作用域的使用，自动取消，减少模板代码
+        val activityViewModel = ViewModelProvider(this).get<MainActivityViewModel>()
+        activityViewModel.viewModelScope.launch {
+            delay(800)
+            EventBroadcast.sendEvent(Message("msg","利用SharedFlow实现的全局广播机制"))
+        }
     }
 
     private fun testCustomRxJava() {
