@@ -1,4 +1,4 @@
-package com.eric.rxjava;
+package com.eric.androidstudy;
 
 import android.os.Handler;
 import android.os.Looper;

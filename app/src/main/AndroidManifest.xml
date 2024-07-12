@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.eric.androidstudy">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name="com.eric.AndroidStudyApplication"
         android:allowBackup="true"
@@ -29,6 +31,7 @@
 
         <activity android:name="com.eric.ui.ConstraintLayoutActivity" />
         <activity android:name="com.eric.ui.UILayoutActivity" />
+        <activity android:name="com.eric.ui.WanAndroidActivity" />
 
     </application>
 

@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        minSdk 24
+        minSdk 25
         targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -64,4 +64,6 @@ dependencies {
     api 'junit:junit:4.13.2'
     androidTestApi 'androidx.test.ext:junit:1.2.1'
     androidTestApi 'androidx.test.espresso:espresso-core:3.6.1'
+
+    api(project(":network"))
 }

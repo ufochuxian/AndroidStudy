@@ -1,4 +1,4 @@
-package com.eric.rxjava
+package com.eric.androidstudy
 
 import android.content.Intent
 import android.os.Bundle

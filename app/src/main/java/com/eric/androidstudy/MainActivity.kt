@@ -1,19 +1,13 @@
-package com.eric.rxjava
+package com.eric.androidstudy
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -27,8 +21,8 @@ import com.eric.routers.TgmRouter
 import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
+import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -152,6 +146,8 @@ class MainActivity : AppCompatActivity() {
             }
                 .collect()
         }
+
+        startActivity(Intent(this,WanAndroidActivity::class.java))
     }
 
     private fun testCustomRxJava() {

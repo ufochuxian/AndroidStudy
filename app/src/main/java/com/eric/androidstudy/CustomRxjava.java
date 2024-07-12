@@ -1,8 +1,6 @@
-package com.eric.rxjava;
+package com.eric.androidstudy;
 
-import android.app.Application;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.File;

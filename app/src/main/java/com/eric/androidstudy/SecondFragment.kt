@@ -1,4 +1,4 @@
-package com.eric.rxjava
+package com.eric.androidstudy
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
