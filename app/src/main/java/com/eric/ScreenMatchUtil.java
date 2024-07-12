@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.eric.rxjava.R;
+import com.eric.androidstudy.R;
 
 
 public class ScreenMatchUtil {

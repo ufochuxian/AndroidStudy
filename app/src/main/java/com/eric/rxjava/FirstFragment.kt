@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.eric.androidstudy.R
+import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
 import com.eric.lifecycle.TestLifeCycleActivity
-import com.eric.rxjava.databinding.FragmentFirstBinding
 import com.eric.routers.TgmRouter
 
 /**

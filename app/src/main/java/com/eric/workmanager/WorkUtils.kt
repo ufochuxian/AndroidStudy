@@ -2,7 +2,7 @@
 
 package com.eric.workmanager
 
-import com.eric.rxjava.R
+import com.eric.androidstudy.R
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

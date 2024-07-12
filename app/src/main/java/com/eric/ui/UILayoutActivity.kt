@@ -2,11 +2,11 @@ package com.eric.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.eric.rxjava.databinding.LayoutFigmaAutoAiCodeBinding
+import com.eric.androidstudy.databinding.LayoutFigmaAutoAiCodeBinding
 
 class UILayoutActivity : AppCompatActivity() {
 
-    private var mBinding:LayoutFigmaAutoAiCodeBinding? = null
+    private var mBinding: LayoutFigmaAutoAiCodeBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

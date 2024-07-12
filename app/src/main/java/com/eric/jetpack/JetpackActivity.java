@@ -6,10 +6,9 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.eric.rxjava.R;
+import com.eric.androidstudy.R;
 
 import java.util.concurrent.TimeUnit;
 

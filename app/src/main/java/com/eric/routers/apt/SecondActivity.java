@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eric.router_annotation.Router;
-import com.eric.rxjava.R;
+import com.eric.androidstudy.R;
 
 /**
  * @Author: chen
@@ -20,7 +20,7 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.eric.rxjava.R.layout.activity_second);
+        setContentView(com.eric.androidstudy.R.layout.activity_second);
 
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override

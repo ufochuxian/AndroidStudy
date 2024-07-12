@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,18 +24,21 @@ import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
-import com.eric.rxjava.databinding.ActivityMainBinding
+import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
 import com.eric.workmanager.BlurWorker
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
 
-//    private lateinit var appBarConfiguration: AppBarConfiguration
+    //    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,7 +139,18 @@ class MainActivity : AppCompatActivity() {
         val activityViewModel = ViewModelProvider(this).get<MainActivityViewModel>()
         activityViewModel.viewModelScope.launch {
             delay(800)
-            EventBroadcast.sendEvent(Message("msg","利用SharedFlow实现的全局广播机制"))
+            EventBroadcast.sendEvent(Message("msg", "利用SharedFlow实现的全局广播机制"))
+        }
+
+        lifecycleScope.launch {
+            flow<Int> {
+                for (i in 1..20) {
+                    emit(i)
+                }
+            }.map {
+                println("测试flow冷流使用:${it * 2}")
+            }
+                .collect()
         }
     }
 
@@ -152,10 +167,11 @@ class MainActivity : AppCompatActivity() {
         val workManager = WorkManager.getInstance(this)
         //构建一个Request对象，包含具体的Work，这里的Request有很多中类型，可以用来区分周期性任务，或者一次性任务等等
 
-        val map = mutableMapOf("a" to "x","b" to "y")
+        val map = mutableMapOf("a" to "x", "b" to "y")
         //这里使用了build的设计模式来构造数据data
         val data = Data.Builder().putString("a", "传输过来的数据").build()
-        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BlurWorker::class.java).setInputData(data).build()
+        val oneTimeWorkRequest =
+            OneTimeWorkRequest.Builder(BlurWorker::class.java).setInputData(data).build()
         //提交到WorkManager来进行任务的运行
         workManager.enqueue(oneTimeWorkRequest)
     }

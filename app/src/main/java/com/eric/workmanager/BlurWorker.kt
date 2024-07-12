@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.eric.rxjava.R
+import com.eric.androidstudy.R
 import java.lang.Exception
 
 
