@@ -9,11 +9,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 
 class UserRepository(private val apiService: ApiService) {
-    suspend fun login(userName: String, password: String): Flow<BaseResponse<UserData>> = flow {
-        apiService.login(mapOf("userName" to userName, "password" to password)).onStart {
+    fun login(userName: String, password: String): Flow<BaseResponse<UserData>> {
+        return flow<BaseResponse<UserData>> {
+            val response = apiService.login(mapOf("username" to userName, "password" to password))
+            println("${response.data?.getUsername()}")
+        }.onStart {
             println("onLoading.........")
         }.catch {
-            println("登陆发生错误:${it}")
+            println("请求登陆发生错误:${it.cause}")
         }
     }
 }

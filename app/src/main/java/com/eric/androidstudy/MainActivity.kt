@@ -147,7 +147,9 @@ class MainActivity : AppCompatActivity() {
                 .collect()
         }
 
-        startActivity(Intent(this,WanAndroidActivity::class.java))
+        binding.testBtn.setOnClickListener {
+            startActivity(Intent(this,WanAndroidActivity::class.java))
+        }
     }
 
     private fun testCustomRxJava() {

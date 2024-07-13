@@ -13,8 +13,8 @@ class WanAndroidActivity : AppCompatActivity() {
         val wanAndroidViewModel = ViewModelProvider(this)[WanAndroidViewModel::class.java]
 
 
-        wanAndroidViewModel.userDataLiveData?.observe(this) {
-            println("hello ${it.username},登陆成功！ ")
+        wanAndroidViewModel.userDataLiveData.observe(this) {
+            println("hello ${it.getUsername()},登陆成功！ ")
         }
 
         lifecycleScope.launch {
