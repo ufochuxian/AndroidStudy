@@ -12,5 +12,5 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/user/login")
-    suspend fun login(@FieldMap params: Map<String, String>) :BaseResponse<UserData>
+    suspend fun login(@FieldMap params: Map<String, String>): BaseResponse<UserData>
 }

@@ -3,20 +3,19 @@ package com.eric.ui
 import com.eric.network.ApiService
 import com.eric.network.BaseResponse
 import com.eric.network.UserData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.flowOn
 
 class UserRepository(private val apiService: ApiService) {
     fun login(userName: String, password: String): Flow<BaseResponse<UserData>> {
-        return flow<BaseResponse<UserData>> {
-            val response = apiService.login(mapOf("username" to userName, "password" to password))
-            println("${response.data?.getUsername()}")
-        }.onStart {
-            println("onLoading.........")
+        return flow {
+            val baseResponse = apiService.login(mapOf("username" to userName, "password" to password))
+            emit(baseResponse)
         }.catch {
-            println("请求登陆发生错误:${it.cause}")
-        }
+            emit(BaseResponse<UserData>())
+        }.flowOn(Dispatchers.IO)
     }
 }
