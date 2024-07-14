@@ -25,3 +25,8 @@ data class UserData(
     val type: Int,
     val username: String?
 )
+
+enum class Result(val code:Int) {
+    SUCCESS(0),
+    FAIL(-1)
+}

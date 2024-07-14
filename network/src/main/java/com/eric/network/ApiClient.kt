@@ -1,6 +1,7 @@
 package com.eric.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import io.reactivex.rxjava3.internal.operators.flowable.FlowableConcatArray
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
