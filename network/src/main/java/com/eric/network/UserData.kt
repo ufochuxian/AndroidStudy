@@ -4,9 +4,9 @@ import androidx.annotation.Keep
 
 @Keep
 data class BaseResponse<T>(
-    val data: T?,
-    val errorCode: Int?,
-    val errorMsg: String?
+    val data: T? = null,
+    val errorCode: Int? = -1,
+    val errorMsg: String? = ""
 )
 
 @Keep
