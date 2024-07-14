@@ -17,7 +17,7 @@ class WanAndroidActivity : AppCompatActivity() {
 
         val liveData = wanAndroidViewModel.login("ufochuxian@", "wanandroidTest")
         liveData.observe(this) {
-            Log.i("WanAndroidActivity","登陆成功:${it.data?.getUsername()}")
+            Log.i("WanAndroidActivity","登陆成功:${it.data?.username}")
         }
 }
 }

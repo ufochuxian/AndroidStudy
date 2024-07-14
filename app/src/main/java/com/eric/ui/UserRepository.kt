@@ -15,7 +15,7 @@ class UserRepository(private val apiService: ApiService) {
             val baseResponse = apiService.login(mapOf("username" to userName, "password" to password))
             emit(baseResponse)
         }.catch {
-            emit(BaseResponse<UserData>())
+            emit(BaseResponse(null,-1,"请求出错了:${it.cause}"))
         }.flowOn(Dispatchers.IO)
     }
 }
