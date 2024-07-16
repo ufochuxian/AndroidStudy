@@ -26,6 +26,13 @@ import kotlinx.coroutines.flow.single
  * 2024-07-17 00:35:50.173  5224-5267  costTime                com.eric.androidstudy                I  after delay:YaoMing
  */
 
+/**
+ * 高阶函数： 使用函数作为“参数”或者“返回值”的“函数”
+ *
+ * 函数作为参数，使用() -> 返回值，作为“函数”类型（也叫lambada）
+ * 这里不管函数的参数是什么，可以不用写入参数
+ *
+ */
 inline fun costTime(noinline block: () -> Any) {
     val start = System.currentTimeMillis()
     block()
