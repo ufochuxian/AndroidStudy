@@ -19,15 +19,21 @@ import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.androidstudy.databinding.ActivityMainBinding
+import com.eric.function.costTime
+import com.eric.function.sayHello
 import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.coroutineContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -149,6 +155,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.testBtn.setOnClickListener {
             startActivity(Intent(this,WanAndroidActivity::class.java))
+        }
+
+        costTime {
+            lifecycleScope.launch {
+                sayHello("YaoMing")
+            }
         }
     }
 
