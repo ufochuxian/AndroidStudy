@@ -15,6 +15,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/shape_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_100"
+        android:text="这是一个测试代码shape的例子" />
+
+
+    <TextView
+        android:id="@+id/gradient_drawable_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shape_code"
+        android:padding="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_80"
+        android:text="这是一个测试代码GradientShapeDrawable的例子" />
+
     <Button
         android:id="@+id/button_second"
         android:layout_width="wrap_content"
