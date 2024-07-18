@@ -39,6 +39,9 @@ inline fun costTime(noinline block: () -> Any) {
     val end = System.currentTimeMillis()
     //这句会继续执行，协程内部的delay只会在协程内部执行
     Log.i("costTime", "$block,costTime:${end - start}")
+
+    //添加一些用于git测试的代码
+    //多添加一些用于测试
 }
 
 suspend fun sayHello(name: String) {
