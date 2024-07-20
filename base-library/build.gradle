@@ -67,6 +67,8 @@ dependencies {
 
     api 'com.blankj:utilcodex:1.31.1'
 
+    api 'org.jetbrains.kotlin:kotlin-reflect:1.9.24'
+
 
     api(project(":network"))
 }
