@@ -23,6 +23,35 @@ class TaskActivity(private var tName: String = "default", var id: Int = -1) {
     override fun toString(): String {
         return "taskName:${taskName},taskId:${taskId}"
     }
+
+    fun onCreate() {
+
+    }
+
+    fun runTask(id : Int) {
+
+    }
+
+    fun stopTask(id : Int) {
+
+    }
+}
+
+fun getClassByStringPath() {
+    
+}
+
+fun useKClassAndKProperty() {
+    //类的class
+    val kClass = TaskActivity::class
+    //获取类的属性列表
+    kClass.declaredMemberProperties
+
+    //类的对象
+    val taskActivity = kClass.primaryConstructor?.call()
+
+    //调用类的方法
+    taskActivity?.runTask(9)
 }
 
 
