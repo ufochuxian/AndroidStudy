@@ -20,9 +20,19 @@
         android:name="com.eric.androidstudy.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
-
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_CalculateFragment"
+            app:destination="@id/CalculateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/CalculateFragment"
+        android:name="com.eric.androidstudy.CalculateFragment"
+        android:label="@string/calculate_fragment_label"
+        tools:layout="@layout/layout_calculate_fragment">
     </fragment>
 </navigation>

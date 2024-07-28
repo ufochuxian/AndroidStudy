@@ -1,6 +1,5 @@
 package com.eric.androidstudy
 
-import android.R
 import android.graphics.Color
 import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
@@ -68,9 +67,13 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.buttonSecond.setOnClickListener {
-//            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-//        }
+        binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }
+
+        binding.buttonCalculateFragment.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_CalculateFragment)
+        }
     }
 
     override fun onDestroyView() {
