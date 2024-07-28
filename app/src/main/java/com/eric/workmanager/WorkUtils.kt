@@ -2,22 +2,26 @@
 
 package com.eric.workmanager
 
+import android.Manifest
 import com.eric.androidstudy.R
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.renderscript.Allocation
-import androidx.renderscript.Element
-import androidx.renderscript.RenderScript
-import androidx.renderscript.ScriptIntrinsicBlur
+
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import com.example.background.*
 
 import java.io.File
@@ -64,6 +68,20 @@ fun makeStatusNotification(message: String, context: Context) {
         .setVibrate(LongArray(0))
 
     // Show the notification
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return
+    }
     NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
 }
 
