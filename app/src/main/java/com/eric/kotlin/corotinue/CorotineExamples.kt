@@ -1,5 +1,14 @@
 package com.eric.kotlin.corotinue
 
+import android.util.Log
+import com.eric.kotlin.printWithDate
+import com.eric.kotlin.printWithTime
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.createCoroutine
@@ -39,8 +48,8 @@ class User(val name: String) {
 //类似于js中的Promise
 
 //默认传递的这个Continuation对象，可以帮助我们实现“挂起”。不过如果我们在下面的例子中，没有使用Dispatcher切换线程，那么也不是真正的"挂起"。
-suspend fun getUserSuspend(name : String) = suspendCoroutine<User> {
-    if(name.isNotEmpty()) {
+suspend fun getUserSuspend(name: String) = suspendCoroutine<User> {
+    if (name.isNotEmpty()) {
         it.resumeWith(Result.success(User("haha")))
     } else {
         it.resumeWith(Result.failure(Throwable("请求发生了错误")))
@@ -51,25 +60,68 @@ fun main() {
 
     //1. 最原始的创建一个Coroutine的方式，传入一个suspend{}函数，
     // 然后完成后，返回的是一个包装好了结果的Continuation
-    suspend {  }.createCoroutine(object :Continuation<Unit> {
-        override val context: CoroutineContext
-            get() = TODO("Not yet implemented")
+//    suspend { }.createCoroutine(object : Continuation<Unit> {
+//        override val context: CoroutineContext
+//            get() = TODO("Not yet implemented")
+//
+//        override fun resumeWith(result: Result<Unit>) {
+//            TODO("Not yet implemented")
+//        }
+//    })
+//        //这个resume方法用于启动协程
+//        .resume(Unit)
+//
+//    //2. 简化创建协程，并且启动的方式,startCoroutine，等同于上面create之后，再resume
+//    suspend { }.startCoroutine(object : Continuation<Unit> {
+//        override val context: CoroutineContext
+//            get() = TODO("Not yet implemented")
+//
+//        override fun resumeWith(result: Result<Unit>) {
+//            TODO("Not yet implemented")
+//        }
+//
+//    })
 
-        override fun resumeWith(result: Result<Unit>) {
-            TODO("Not yet implemented")
+    runBlocking {
+        suspendCancellableCoroutine<BaseResult> {
+            val fetchAPiSongsDeferred = async {
+                fetchSongApis()
+            }
+
+            val fetchNewDeferred = async {
+                fetchNesApis()
+            }
+
+            launch {
+                awaitAll(fetchAPiSongsDeferred, fetchNewDeferred)
+                "all apis completed".printWithTime()
+            }
+
         }
-    })
-        //这个resume方法用于启动协程
-        .resume(Unit)
 
-    //2. 简化创建协程，并且启动的方式,startCoroutine，等同于上面create之后，再resume
-    suspend {  }.startCoroutine(object :Continuation<Unit> {
-        override val context: CoroutineContext
-            get() = TODO("Not yet implemented")
 
-        override fun resumeWith(result: Result<Unit>) {
-            TODO("Not yet implemented")
-        }
+    }
+}
 
-    })
+private val TAG  = "await"
+data class BaseResult(val code: Int, val msg: APIResult)
+
+sealed class APIResult {
+    class SUCCESS
+    class FAIl
+}
+
+
+suspend fun fetchSongApis(): List<String> {
+    "fetchSongApis start".printWithTime()
+    delay(3000)
+    "fetchSongApis end".printWithTime()
+    return emptyList()
+}
+
+suspend fun fetchNesApis(): List<String> {
+    "fetchNesApis start".printWithTime()
+    delay(2000)
+    "fetchNesApis end".printWithTime()
+    return emptyList()
 }
