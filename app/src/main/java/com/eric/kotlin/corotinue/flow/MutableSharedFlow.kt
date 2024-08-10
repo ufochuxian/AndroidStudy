@@ -33,6 +33,9 @@ class MutableSharedViewModel : ViewModel() {
     suspend fun sendEvent(event: String) {
         _state.emit(event)
     }
+
+    val isFiveMinuteMLeft = MutableSharedFlow<String>(0,1)
+    val isFiveMinute: SharedFlow<String> = isFiveMinuteMLeft
 }
 
 /**
@@ -59,5 +62,15 @@ fun main() {
 //        launch {
 //            mutableStateViewModel.state.collect(mutableStateViewModel._state)
 //        }
+
+        launch {
+            mutableStateViewModel.isFiveMinute.collect {
+                println(it)
+            }
+        }
+
+        mutableStateViewModel.isFiveMinuteMLeft.emit("1")
+        mutableStateViewModel.isFiveMinuteMLeft.emit("2")
+
     }
 }
