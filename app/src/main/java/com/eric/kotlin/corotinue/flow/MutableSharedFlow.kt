@@ -64,13 +64,16 @@ fun main() {
 //        }
 
         launch {
+            // 通过设置sharedFlow的extraBufferCapacity为1，我们把sharedFlow变成了类似"冷流"的效果
+            mutableStateViewModel.isFiveMinuteMLeft.emit("1")
             mutableStateViewModel.isFiveMinute.collect {
                 println(it)
             }
         }
 
-        mutableStateViewModel.isFiveMinuteMLeft.emit("1")
-        mutableStateViewModel.isFiveMinuteMLeft.emit("2")
-
+        launch {
+            //这里如果需要在上面的sharedFlow注册之后，再运行的话，那么这里的代码，也需要放置一个协程之中才行
+            mutableStateViewModel.isFiveMinuteMLeft.emit("2")
+        }
     }
 }
