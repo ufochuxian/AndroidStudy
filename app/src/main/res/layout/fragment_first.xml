@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:qwerjk="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FirstFragment">
+
+    <com.eric.ui.MagicTextView
+        android:textSize="78sp"
+        android:textColor="#ff333333"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@android:drawable/btn_star"
+        android:textStyle="bold"
+        android:padding="10dp"
+        qwerjk:magicText_foreground="@drawable/fake_luxury_tiled"
+        qwerjk:magicText_innerShadowDy="2"
+        qwerjk:magicText_innerShadowColor="#FF000000"
+        qwerjk:magicText_innerShadowRadius="1"
+        qwerjk:magicText_outerShadowDy="20"
+        qwerjk:magicText_outerShadowColor="#FF0088ff"
+        qwerjk:magicText_outerShadowRadius="10"
+        qwerjk:magicText_strokeColor="#FFff0000"
+        qwerjk:magicText_strokeJoinStyle="miter"
+        qwerjk:magicText_strokeWidth="5"
+        android:text="Sample"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_first"
+        android:layout_marginTop="5dp"
+        />
 
     <TextView
         android:id="@+id/textview_first"

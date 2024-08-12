@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MagicTextView">
+        <attr name="magicText_innerShadowColor" format="color"/>
+        <attr name="magicText_innerShadowRadius" format="float"/>
+        <attr name="magicText_innerShadowDx" format="float"/>
+        <attr name="magicText_innerShadowDy" format="float"/>
+
+        <attr name="magicText_outerShadowColor" format="color"/>
+        <attr name="magicText_outerShadowRadius" format="float"/>
+        <attr name="magicText_outerShadowDx" format="float"/>
+        <attr name="magicText_outerShadowDy" format="float"/>
+
+        <attr name="magicText_typeface" format="string" />
+
+        <attr name="magicText_foreground" format="reference|color"/>
+        <attr name="magicText_background" format="reference|color"/>
+
+        <attr name="magicText_strokeWidth" format="float" />
+        <attr name="magicText_strokeMiter" format="float" />
+        <attr name="magicText_strokeColor" format="color" />
+        <attr name="magicText_strokeJoinStyle">
+            <enum name="miter" value="0" />
+            <enum name="bevel" value="1" />
+            <enum name="round" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>
