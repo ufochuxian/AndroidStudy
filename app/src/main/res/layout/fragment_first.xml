@@ -8,29 +8,50 @@
     tools:context=".FirstFragment">
 
     <com.eric.ui.MagicTextView
-        android:textSize="78sp"
-        android:textColor="#ff333333"
+        android:id="@+id/magicText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:drawableStart="@android:drawable/btn_star"
-        android:textStyle="bold"
         android:padding="10dp"
+        android:text="Sample"
+        android:textColor="#ff333333"
+        android:textSize="78sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_first"
         qwerjk:magicText_foreground="@drawable/fake_luxury_tiled"
-        qwerjk:magicText_innerShadowDy="2"
         qwerjk:magicText_innerShadowColor="#FF000000"
+        qwerjk:magicText_innerShadowDy="2"
         qwerjk:magicText_innerShadowRadius="1"
-        qwerjk:magicText_outerShadowDy="20"
         qwerjk:magicText_outerShadowColor="#FF0088ff"
+        qwerjk:magicText_outerShadowDy="20"
         qwerjk:magicText_outerShadowRadius="10"
         qwerjk:magicText_strokeColor="#FFff0000"
         qwerjk:magicText_strokeJoinStyle="miter"
-        qwerjk:magicText_strokeWidth="5"
-        android:text="Sample"
-        app:layout_constraintStart_toStartOf="parent"
+        qwerjk:magicText_strokeWidth="5" />
+
+    <com.eric.ui.ShineTextView
+        android:id="@+id/shadow_tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_5"
+        android:padding="10dp"
+        android:text="@string/schedule"
+        android:textColor="#fff1f1f1"
+        android:textSize="54sp"
+        app:bgShadowColor="#FF000000"
+        app:bgShadowDy="1"
+        app:bgShadowRadius="12"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_first"
-        android:layout_marginTop="5dp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/magicText"
+        app:outerShadowColor="#CC2b88f6"
+        app:outerShadowDy="6"
+        app:outerShadowRadius="32" />
 
     <TextView
         android:id="@+id/textview_first"
@@ -42,18 +63,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/threeDView"
-            android:text="动画文本"
-            android:textColor="@color/purple_700"
-            android:layout_marginTop="50dp"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </TextView>
+    <TextView
+        android:id="@+id/threeDView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="动画文本"
+        android:textColor="@color/purple_700"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
 
     <Button
         android:id="@+id/button_first"
@@ -73,8 +93,7 @@
         android:text="自定义路由跳转"
         app:layout_constraintEnd_toEndOf="@id/button_first"
         app:layout_constraintStart_toStartOf="@id/button_first"
-        app:layout_constraintTop_toBottomOf="@id/button_first">
-    </Button>
+        app:layout_constraintTop_toBottomOf="@id/button_first"></Button>
 
     <Button
         android:id="@+id/lifecycleBtn"
