@@ -3,6 +3,7 @@ package com.eric.androidstudy
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -12,28 +13,27 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
+import com.eric.androidstudy.databinding.ActivityMainBinding
+import com.eric.function.costTime
+import com.eric.function.sayHello
+import com.eric.kotlin.SPMgr
+import com.eric.kotlin.SpDelegate
+import com.eric.kotlin.SpKey
 import com.eric.kotlin.corotinue.broadcast.EventBroadcast
 import com.eric.kotlin.corotinue.broadcast.Message
 import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
-import com.eric.androidstudy.databinding.ActivityMainBinding
-import com.eric.function.costTime
-import com.eric.function.sayHello
 import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.coroutineContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 //        setSupportActionBar(binding.toolbar)
+
+        SPMgr.isFirst = "no"
+
+        Log.i("FirstFragment","xxx isFirst:${SPMgr.isFirst}")
+
 
         setContentView(binding.root)
 
