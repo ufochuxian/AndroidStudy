@@ -7,4 +7,51 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Primary App Colors -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Background and Surface Colors -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorSurface">#F5F5F5</color>
+    <color name="colorOnSurface">#000000</color>
+
+    <!-- Text Colors -->
+    <color name="colorTextPrimary">#212121</color>
+    <color name="colorTextSecondary">#757575</color>
+    <color name="colorTextHint">#9E9E9E</color>
+    <color name="colorTextOnPrimary">#FFFFFF</color>
+
+    <!-- Divider and Border Colors -->
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorBorder">#E0E0E0</color>
+
+    <!-- Button Colors -->
+    <color name="colorButton">#6200EE</color>
+    <color name="colorButtonText">#FFFFFF</color>
+
+    <!-- Error and Warning Colors -->
+    <color name="colorError">#B00020</color>
+    <color name="colorWarning">#FFA000</color>
+
+    <!-- Success and Info Colors -->
+    <color name="colorSuccess">#4CAF50</color>
+    <color name="colorInfo">#2196F3</color>
+
+    <!-- Overlay Colors -->
+    <color name="colorOverlayDark">#80000000</color> <!-- 50% Black -->
+    <color name="colorOverlayLight">#80FFFFFF</color> <!-- 50% White -->
+
+    <!-- Transparent Color -->
+    <color name="colorTransparent">#00000000</color>
+
+    <!-- Custom Theme Colors -->
+    <color name="colorPrimaryLight">#BB86FC</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorSecondary">#03DAC6</color>
+    <color name="colorSecondaryVariant">#018786</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnError">#FFFFFF</color>
 </resources>
