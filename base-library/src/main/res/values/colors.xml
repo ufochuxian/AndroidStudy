@@ -54,4 +54,7 @@
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSecondary">#000000</color>
     <color name="colorOnError">#FFFFFF</color>
+    <color name="color_33ffffff">#33FFFFFF</color>
+    <color name="color_1ffffff">#1FFFFFFF</color>
+    <color name="color_ffbdbdbd">#FFBDBDBD</color>
 </resources>
