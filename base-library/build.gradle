@@ -69,6 +69,13 @@ dependencies {
 
     api 'org.jetbrains.kotlin:kotlin-reflect:1.9.24'
 
+    api("androidx.compose.ui:ui:1.5.3")
+    api("androidx.compose.material:material:1.5.3")
+    api("androidx.compose.ui:ui-tooling-preview:1.5.3")
+    debugApi("androidx.compose.ui:ui-tooling:1.5.3")
+    api("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    api("androidx.activity:activity-compose:1.8.1")
+
 
     api(project(":network"))
 }

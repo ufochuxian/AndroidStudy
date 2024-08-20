@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Base-library</string>
+    <string name="preview_in_xml">Preview in XML</string>
 </resources>

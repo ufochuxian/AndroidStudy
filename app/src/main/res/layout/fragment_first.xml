@@ -57,10 +57,40 @@
         app:outerShadowRadius="32" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:padding="16dp"
+        android:text="@string/preview_in_xml"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:background="@drawable/shapeable_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.eric.base.view.ShapeAbleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:padding="16dp"
+        android:text="@string/preview_in_xml"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:solidColor="@color/colorAccent"
+        app:strokeColor="@color/purple_500"
+        app:strokeWidth="4dp" />
+
+    <TextView
         android:id="@+id/textview_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_first_fragment"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/button_first"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

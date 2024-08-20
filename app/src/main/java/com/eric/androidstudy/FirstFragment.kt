@@ -59,7 +59,7 @@ class FirstFragment : Fragment() {
 
         val cornerRadius = 12f // 你可以根据需要动态计算这个值
         activity?.let {
-//            val rippleColor = android.R.attr.colorControlHighlight
+//            val rippleColor = R.attr.colorControlHighlight
             val rippleColor = R.color.color_ffbdbdbd
             binding.rippleView.setRippleBackground(it, R.color.colorAccent, rippleColor, cornerRadius)
         }
