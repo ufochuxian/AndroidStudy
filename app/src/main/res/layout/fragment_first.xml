@@ -81,6 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@color/colorTextHint"
         app:solidColor="@color/colorAccent"
         app:strokeColor="@color/purple_500"
         app:strokeWidth="4dp" />

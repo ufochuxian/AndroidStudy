@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
+import com.eric.base.setRippleForeground
 import com.eric.baselibrary.R
 
 /**
@@ -23,6 +24,7 @@ class ShapeAbleTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     private var strokeColor: Int = Color.TRANSPARENT
+    private var rippleColor: Int = Color.TRANSPARENT
     private var strokeWidth: Float = 0f
     private var cornerRadius: Float = 0f
     private var solidColor: Int = Color.TRANSPARENT
@@ -41,6 +43,7 @@ class ShapeAbleTextView @JvmOverloads constructor(
         ).apply {
             try {
                 strokeColor = getColor(R.styleable.ShapeAbleTextView_strokeColor, Color.TRANSPARENT)
+                rippleColor =  getColor(R.styleable.ShapeAbleTextView_rippleColor, Color.TRANSPARENT)
                 strokeWidth = getDimension(R.styleable.ShapeAbleTextView_strokeWidth, 0f)
                 cornerRadius = getDimension(R.styleable.ShapeAbleTextView_cornerRadius, 0f)
                 solidColor = getColor(R.styleable.ShapeAbleTextView_solidColor, Color.TRANSPARENT)
@@ -50,6 +53,10 @@ class ShapeAbleTextView @JvmOverloads constructor(
         }
         updateAdjustedRectF()
         paint.strokeWidth = strokeWidth
+
+        if(rippleColor != Color.TRANSPARENT) {
+            setRippleForeground(getContext(),R.color.colorTextHint,16f)
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

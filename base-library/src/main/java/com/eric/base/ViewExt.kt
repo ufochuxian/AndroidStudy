@@ -1,6 +1,7 @@
 package com.eric.base
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
 import android.util.TypedValue
@@ -54,4 +55,36 @@ fun View.setRippleBackground(
 
     // 设置背景
     this.background = rippleDrawable
+}
+
+fun View.setRippleForeground(
+    context: Context,
+    rippleColor: Int,
+    cornerRadius: Float
+) {
+    this.isClickable = true
+    this.isFocusable = true
+
+    val cornerRadiusInPx = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, cornerRadius, context.resources.displayMetrics
+    )
+
+    val maskDrawable = GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        setColor(Color.BLACK)
+        cornerRadii = floatArrayOf(
+            cornerRadiusInPx, cornerRadiusInPx,
+            cornerRadiusInPx, cornerRadiusInPx,
+            cornerRadiusInPx, cornerRadiusInPx,
+            cornerRadiusInPx, cornerRadiusInPx
+        )
+    }
+    val rippleDrawable = ContextCompat.getColorStateList(context, rippleColor)?.let {
+        RippleDrawable(
+            it,
+            null,
+            maskDrawable
+        )
+    }
+    this.foreground = rippleDrawable
 }
