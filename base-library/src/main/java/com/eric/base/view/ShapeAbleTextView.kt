@@ -11,7 +11,7 @@ import com.eric.base.setRippleForeground
 import com.eric.baselibrary.R
 
 /**
- * @Author: eric
+ * @Author: jianxiang.chen
  * @Date 2021/08/21
  * 自定义Shape View
  *
