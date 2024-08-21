@@ -22,9 +22,9 @@ class ShapeAbleTextView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
-    private var strokeColor: Int = Color.GRAY
-    private var strokeWidth: Float = 2f
-    private var cornerRadius: Float = 8f
+    private var strokeColor: Int = Color.TRANSPARENT
+    private var strokeWidth: Float = 0f
+    private var cornerRadius: Float = 0f
     private var solidColor: Int = Color.TRANSPARENT
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -40,9 +40,9 @@ class ShapeAbleTextView @JvmOverloads constructor(
             0, 0
         ).apply {
             try {
-                strokeColor = getColor(R.styleable.ShapeAbleTextView_strokeColor, Color.GRAY)
-                strokeWidth = getDimension(R.styleable.ShapeAbleTextView_strokeWidth, 2f)
-                cornerRadius = getDimension(R.styleable.ShapeAbleTextView_cornerRadius, 8f)
+                strokeColor = getColor(R.styleable.ShapeAbleTextView_strokeColor, Color.TRANSPARENT)
+                strokeWidth = getDimension(R.styleable.ShapeAbleTextView_strokeWidth, 0f)
+                cornerRadius = getDimension(R.styleable.ShapeAbleTextView_cornerRadius, 0f)
                 solidColor = getColor(R.styleable.ShapeAbleTextView_solidColor, Color.TRANSPARENT)
             } finally {
                 recycle()
