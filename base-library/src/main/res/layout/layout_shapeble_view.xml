@@ -15,7 +15,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:solidColor="@color/colorAccent" />
+        app:strokeColor="@color/purple_500"
+        app:strokeWidth="1dp"
+        app:solidColor="@color/colorAccent"
+        app:cornerRadius="16dp"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
