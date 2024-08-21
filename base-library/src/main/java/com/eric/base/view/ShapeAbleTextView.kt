@@ -55,7 +55,7 @@ class ShapeAbleTextView @JvmOverloads constructor(
         paint.strokeWidth = strokeWidth
 
         if(rippleColor != Color.TRANSPARENT) {
-            setRippleForeground(getContext(),R.color.colorTextHint,16f)
+            setRippleForeground(getContext(),R.color.colorTextHint,cornerRadius)
         }
     }
 
