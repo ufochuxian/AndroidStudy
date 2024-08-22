@@ -3,6 +3,7 @@ import com.eric.dag.task.flow.VisitStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+
 class TaskManager {
     val tasks = mutableListOf<Task<*>>()
 
@@ -14,19 +15,19 @@ class TaskManager {
         val visitStatus = mutableMapOf<Task<*>, VisitStatus>()
 
         fun dfs(task: Task<*>) {
-            visitStatus[task] = VisitStatus.GRAY
+            visitStatus[task] = VisitStatus.IN_PROGRESS
             for (dependency in task.dependencies) {
                 when (visitStatus[dependency]) {
-                    VisitStatus.GRAY -> throw CircularDependencyException("Circular dependency detected at task: ${task.name}")
-                    VisitStatus.WHITE -> dfs(dependency)
-                    else -> {} // Already visited
+                    VisitStatus.IN_PROGRESS -> throw CircularDependencyException("Circular dependency detected at task: ${task.name}")
+                    VisitStatus.UNVISITED -> dfs(dependency)
+                    else -> {} // 已处理完成，无需处理
                 }
             }
-            visitStatus[task] = VisitStatus.BLACK
+            visitStatus[task] = VisitStatus.COMPLETED
         }
 
         tasks.forEach { task ->
-            if (visitStatus[task] == null || visitStatus[task] == VisitStatus.WHITE) {
+            if (visitStatus[task] == null || visitStatus[task] == VisitStatus.UNVISITED) {
                 dfs(task)
             }
         }
