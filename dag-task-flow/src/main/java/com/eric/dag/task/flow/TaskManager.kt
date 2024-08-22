@@ -3,7 +3,6 @@ import com.eric.dag.task.flow.VisitStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-
 class TaskManager {
     val tasks = mutableListOf<Task<*>>()
 
@@ -11,7 +10,7 @@ class TaskManager {
         tasks.add(task)
     }
 
-    fun checkForCircularDependencies() {
+    private fun checkForCircularDependencies() {
         val visitStatus = mutableMapOf<Task<*>, VisitStatus>()
 
         fun dfs(task: Task<*>) {
@@ -34,6 +33,8 @@ class TaskManager {
     }
 
     fun executeTasks(): Flow<Task<*>> = flow {
+        checkForCircularDependencies() // 在执行任务前检查循环依赖
+
         val executedTasks = mutableSetOf<Task<*>>()
 
         suspend fun executeTask(task: Task<*>) {
