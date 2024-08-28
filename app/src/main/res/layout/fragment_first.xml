@@ -70,6 +70,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.eric.base.view.ShapeAbleTextView
+        android:id="@+id/testTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"

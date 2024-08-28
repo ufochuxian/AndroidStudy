@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eric.androidstudy.R
 import com.eric.androidstudy.databinding.FragmentFirstBinding
@@ -19,7 +20,16 @@ import com.eric.base.setRippleBackground
 import com.eric.kotlin.SPMgr
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
+import com.eric.task.BroadcastTask
+import com.eric.task.GestureTask
+import com.eric.task.ITask
+import com.eric.task.PasswordTask
+import com.eric.task.PermissionTask
+import com.eric.task.executeTaskChain
 import com.google.android.material.color.MaterialColors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -73,6 +83,13 @@ class FirstFragment : Fragment() {
             var intent = Intent(activity,TestLifeCycleActivity::class.java);
             activity?.let {
                 it.startActivity(intent)
+            }
+        }
+
+        binding.testTask.setOnClickListener {
+            lifecycleScope.launch {
+                val tasks = listOf<ITask>(PermissionTask(), PasswordTask(), BroadcastTask(), GestureTask())
+                executeTaskChain(tasks)
             }
         }
 
