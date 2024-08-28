@@ -19,9 +19,8 @@ import com.eric.routers.TgmRouter
 import com.eric.task.BaseViewModel
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
-import com.eric.task.ChainTaskManager
+import com.eric.task.TasksChainManager
 import com.eric.task.GestureTask
-import com.eric.task.ITask
 import com.eric.task.PasswordTask
 import com.eric.task.PermissionTask
 import kotlinx.coroutines.launch
@@ -87,7 +86,7 @@ class FirstFragment : Fragment() {
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(PermissionTask(null), PasswordTask(null), BroadcastTask(broadCastViewModel), GestureTask(null))
-                ChainTaskManager<BaseViewModel>().executeTaskChain(tasks)
+                TasksChainManager<BaseViewModel>().executeTaskChain(tasks)
             }
         }
 

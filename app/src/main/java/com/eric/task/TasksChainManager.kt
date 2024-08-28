@@ -1,12 +1,9 @@
 package com.eric.task
 
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
-class ChainTaskManager<T> {
+class TasksChainManager<T> {
 
     // 使用协程执行任务链
     suspend fun executeTaskChain(tasks: List<ITask<T?>>) {
