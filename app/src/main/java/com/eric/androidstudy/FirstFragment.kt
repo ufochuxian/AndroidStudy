@@ -2,33 +2,28 @@ package com.eric.androidstudy
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.eric.androidstudy.R
 import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
 import com.eric.base.setRippleBackground
-import com.eric.kotlin.SPMgr
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
+import com.eric.task.BaseViewModel
+import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
+import com.eric.task.ChainTaskManager
 import com.eric.task.GestureTask
 import com.eric.task.ITask
 import com.eric.task.PasswordTask
 import com.eric.task.PermissionTask
-import com.eric.task.executeTaskChain
-import com.google.android.material.color.MaterialColors
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 /**
@@ -37,6 +32,8 @@ import kotlinx.coroutines.launch
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
+
+    private val broadCastViewModel by viewModels<BroadCastViewModel>()
 
     companion object {
         const val SECOND_ACTIVITY = "secondActivity"
@@ -59,6 +56,7 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initObserver()
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
@@ -88,8 +86,8 @@ class FirstFragment : Fragment() {
 
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
-                val tasks = listOf<ITask>(PermissionTask(), PasswordTask(), BroadcastTask(), GestureTask())
-                executeTaskChain(tasks)
+                val tasks = listOf(PermissionTask(null), PasswordTask(null), BroadcastTask(broadCastViewModel), GestureTask(null))
+                ChainTaskManager<BaseViewModel>().executeTaskChain(tasks)
             }
         }
 
@@ -97,6 +95,12 @@ class FirstFragment : Fragment() {
         anim.setRotateY(10f)
         binding.threeDView.text = "测试3d效果"
         binding.threeDView.startAnimation(anim)
+    }
+
+    private fun initObserver() {
+        broadCastViewModel.resultData.observe(viewLifecycleOwner) {
+            binding.testTask.text = it?.msg
+        }
     }
 
     override fun onDestroyView() {
