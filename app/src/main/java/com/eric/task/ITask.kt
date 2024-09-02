@@ -40,6 +40,10 @@ const val hasSetPwd = true
  */
 // 定义 ITask 接口
 interface ITask<out T> {
+    var taskName: String
+        get() = ""
+        set(value) = TODO()
+
     suspend fun execute(): Boolean
 }
 
