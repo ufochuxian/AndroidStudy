@@ -4,10 +4,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class TaskManager {
-    val tasks = mutableListOf<Task<*>>()
+    private val tasks = mutableListOf<Task<*>>()
 
+    // 单个任务注册方法
     fun <T> registerTask(task: Task<T>) {
         tasks.add(task)
+    }
+
+    // 批量注册任务方法
+    fun registerTasks(tasks: List<Task<*>>) {
+        this.tasks.addAll(tasks)
     }
 
     private fun checkForCircularDependencies() {
@@ -54,4 +60,9 @@ class TaskManager {
             }
         }
     }
+
+    fun getTasks(): List<Task<*>> {
+        return tasks
+    }
+
 }

@@ -71,17 +71,11 @@ suspend fun main() {
     taskI.addDependency(taskH)
     taskJ.addDependency(taskI)
 
+    val tasks = arrayListOf(taskA,taskB,taskC,taskD,taskE,taskF,taskG,taskH,taskI,taskJ)
+
     // 注册任务
-    taskManager.registerTask(taskA)
-    taskManager.registerTask(taskB)
-    taskManager.registerTask(taskC)
-    taskManager.registerTask(taskD)
-    taskManager.registerTask(taskE)
-    taskManager.registerTask(taskF)
-    taskManager.registerTask(taskG)
-    taskManager.registerTask(taskH)
-    taskManager.registerTask(taskI)
-    taskManager.registerTask(taskJ)
+    taskManager.registerTasks(tasks)
+
 
     try {
         // 执行任务并处理结果
@@ -93,5 +87,5 @@ suspend fun main() {
     }
 
     val graphvizEngine = GraphvizEngine()
-    graphvizEngine.generateGraph(taskManager.tasks)
+    graphvizEngine.generateGraph(taskManager.getTasks())
 }
