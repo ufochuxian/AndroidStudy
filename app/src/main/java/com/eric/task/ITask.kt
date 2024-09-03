@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 const val TAG = "ITask"
 
 
-const val hasSetPwd = true
+const val hasSetPwd = false
 
 /**
  * // 定义 ITask 接口，支持协变
@@ -80,6 +80,7 @@ class BroadcastTask(private val viewModel: BroadCastViewModel?,override var task
     override suspend fun execute(): Boolean {
         return withContext(Dispatchers.IO) {
             // 模拟请求广告弹窗
+            Log.i(TAG, "BroadcastTask start execute")
             viewModel?.resultData?.postValue(BroadCastResult(0, "开始请求广告"))
             delay(3000)
             Log.i(TAG, "BroadcastTask executed")

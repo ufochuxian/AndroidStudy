@@ -1,5 +1,6 @@
 package com.eric.androidstudy
 
+import ParallelTasksManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -85,8 +86,9 @@ class FirstFragment : Fragment() {
 
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
-                val tasks = listOf(PermissionTask(null,"PermissionTask"), PasswordTask(null,"PasswordTask"), BroadcastTask(broadCastViewModel,"PasswordTask"), GestureTask(null,"PasswordTask"))
-                TasksChainManager<Boolean>().executeTasks(tasks)
+                val tasks = listOf(PermissionTask(null,"PermissionTask"), PasswordTask(null,"PasswordTask"), BroadcastTask(broadCastViewModel,"BroadcastTask"), GestureTask(null,"GestureTask"))
+                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
+//                ParallelTasksManager().executeTasks(tasks) //并发执行任务
             }
         }
 

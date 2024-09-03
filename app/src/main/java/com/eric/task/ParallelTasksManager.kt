@@ -1,34 +1,29 @@
-package com.eric.task
-
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.merge
+import com.eric.task.ITask
+import com.eric.task.ITasksManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 
 class ParallelTasksManager : ITasksManager {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun <T> executeTasks(tasks: List<ITask<T>>): Map<String, T> {
         val results = mutableMapOf<String, T>()
-        val taskMap = tasks.associateBy { it.taskName }
-        val pendingTasks = tasks.toMutableSet()
-        while (pendingTasks.isNotEmpty()) {
-            val readyTasks = pendingTasks.filter { task ->
-                task.dependencies?.all { dep -> results.containsKey(dep.simpleName) } == true
-            }
-            if (readyTasks.isEmpty()) {
-                throw IllegalStateException("Circular dependency detected or missing dependencies.")
-            }
 
-            readyTasks.map { task ->
+        // 使用 flatMapMerge 并行执行每个任务
+        tasks.asFlow()
+            .flatMapMerge { task ->
                 flow {
-                    emit(task.taskName to task.execute())
+                    val result = withContext(Dispatchers.Default) { task.execute() }
+                    emit(task.taskName to result)
                 }
-            }.merge()
-                .collect { (taskName, result) ->
-                    results[taskName] = result
-                    println("Task $taskName executed successfully with result: $result")
-                }
-            pendingTasks.removeAll(readyTasks)
+            }
+            .collect { (taskName, result) ->
+                results[taskName] = result
+                println("Task $taskName executed successfully with result: $result")
+            }
 
-        }
         return results
     }
 }
