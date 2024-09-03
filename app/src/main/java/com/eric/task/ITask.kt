@@ -41,14 +41,14 @@ const val hasSetPwd = true
 // 定义 ITask 接口
 interface ITask<out T> {
     var taskName: String
-        get() = ""
-        set(value) = TODO()
-
-    suspend fun execute(): Boolean
+    val dependencies: List<Class<out ITask<*>>>? // 依赖的任务列表
+    suspend fun execute(): T
 }
 
 // 定义具体任务类
-class PermissionTask(private val viewModel: BaseViewModel?) : ITask<BaseViewModel> {
+class PermissionTask(private val viewModel: BaseViewModel?,override var taskName : String) : ITask<Boolean> {
+    override val dependencies: List<Class<out ITask<*>>>?
+        get() = null
     override suspend fun execute(): Boolean {
         return withContext(Dispatchers.Main) {
             // 模拟显示权限弹窗，并等待用户操作
@@ -59,7 +59,9 @@ class PermissionTask(private val viewModel: BaseViewModel?) : ITask<BaseViewMode
     }
 }
 
-class PasswordTask(private val viewModel: BaseViewModel?) : ITask<BaseViewModel> {
+class PasswordTask(private val viewModel: BaseViewModel?,override var taskName : String) : ITask<Boolean> {
+    override val dependencies: List<Class<out ITask<*>>>?
+        get() = null
     override suspend fun execute(): Boolean {
         return withContext(Dispatchers.Main) {
             if (!hasSetPwd) {
@@ -72,7 +74,9 @@ class PasswordTask(private val viewModel: BaseViewModel?) : ITask<BaseViewModel>
     }
 }
 
-class BroadcastTask(private val viewModel: BroadCastViewModel?) : ITask<BroadCastViewModel?> {
+class BroadcastTask(private val viewModel: BroadCastViewModel?,override var taskName : String) : ITask<Boolean?> {
+    override val dependencies: List<Class<out ITask<*>>>?
+        get() = null
     override suspend fun execute(): Boolean {
         return withContext(Dispatchers.IO) {
             // 模拟请求广告弹窗
@@ -85,7 +89,9 @@ class BroadcastTask(private val viewModel: BroadCastViewModel?) : ITask<BroadCas
     }
 }
 
-class GestureTask(private val viewModel: BaseViewModel?) : ITask<BaseViewModel> {
+class GestureTask(private val viewModel: BaseViewModel?,override var taskName : String) : ITask<Boolean> {
+    override val dependencies: List<Class<out ITask<*>>>?
+        get() = null
     override suspend fun execute(): Boolean {
         return withContext(Dispatchers.Main) {
             // 模拟显示手势密码弹窗，并等待用户输入

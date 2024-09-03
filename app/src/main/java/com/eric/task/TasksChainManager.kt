@@ -10,7 +10,7 @@ class TasksChainManager<T> {
         coroutineScope {
             for (task in tasks) {
                 val result = task.execute()
-                if (!result) {
+                if (result == null) {
                     Log.i(TAG, "Task { ${task::class.simpleName} } execute false, continue chain.")
                     continue
                 }

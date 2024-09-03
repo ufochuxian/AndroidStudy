@@ -85,8 +85,8 @@ class FirstFragment : Fragment() {
 
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
-                val tasks = listOf(PermissionTask(null), PasswordTask(null), BroadcastTask(broadCastViewModel), GestureTask(null))
-                TasksChainManager<BaseViewModel>().executeTasks(tasks)
+                val tasks = listOf(PermissionTask(null,"PermissionTask"), PasswordTask(null,"PasswordTask"), BroadcastTask(broadCastViewModel,"PasswordTask"), GestureTask(null,"PasswordTask"))
+                TasksChainManager<Boolean>().executeTasks(tasks)
             }
         }
 
