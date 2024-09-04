@@ -81,6 +81,7 @@ class BroadcastTask(private val viewModel: BroadCastViewModel?,override var task
         return withContext(Dispatchers.IO) {
             // 模拟请求广告弹窗
             Log.i(TAG, "BroadcastTask start execute")
+            //在io线程等非主线程进行计算处理后，结果如果需要回调到主线程，需要通过postValue（本质还是通过handler）回调到主线程进行ui更新
             viewModel?.resultData?.postValue(BroadCastResult(0, "开始请求广告"))
             delay(3000)
             Log.i(TAG, "BroadcastTask executed")
