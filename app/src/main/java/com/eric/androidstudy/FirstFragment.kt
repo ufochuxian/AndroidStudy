@@ -44,8 +44,8 @@ class FirstFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
@@ -78,7 +78,7 @@ class FirstFragment : Fragment() {
         }
 
         binding.lifecycleBtn.setOnClickListener {
-            var intent = Intent(activity,TestLifeCycleActivity::class.java);
+            var intent = Intent(activity, TestLifeCycleActivity::class.java);
             activity?.let {
                 it.startActivity(intent)
             }
@@ -90,9 +90,14 @@ class FirstFragment : Fragment() {
 
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
-                val tasks = listOf(PermissionTask(null,"PermissionTask"), PasswordTask(null,"PasswordTask"), BroadcastTask(broadCastViewModel,"BroadcastTask"), GestureTask(null,"GestureTask"))
-                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
-//                ParallelTasksManager().executeTasks(tasks) //并发执行任务
+                val tasks = listOf(
+                    PermissionTask(null, "PermissionTask"),
+                    PasswordTask(null, "PasswordTask"),
+                    BroadcastTask(broadCastViewModel, "BroadcastTask"),
+                    GestureTask(null, "GestureTask")
+                )
+//                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
+                ParallelTasksManager().executeTasks(tasks) //并发执行任务
             }
         }
 
