@@ -76,6 +76,9 @@ dependencies {
     api("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     api("androidx.activity:activity-compose:1.8.1")
 
+    api("com.squareup.okio:okio:3.9.0")
+
+
 
     api(project(":network"))
 }

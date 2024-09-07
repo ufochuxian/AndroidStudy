@@ -1,6 +1,5 @@
 package com.eric.androidstudy
 
-import ParallelTasksManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -17,14 +16,15 @@ import com.eric.animation.CustomAnim
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
-import com.eric.task.BaseViewModel
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
-import com.eric.task.TasksChainManager
 import com.eric.task.GestureTask
 import com.eric.task.PasswordTask
 import com.eric.task.PermissionTask
+import com.eric.task.TasksChainManager
+import com.eric.task.copyFile
 import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -84,6 +84,10 @@ class FirstFragment : Fragment() {
             }
         }
 
+        binding.copyFileByOkio.setOnClickListener {
+            copyFileByOkio()
+        }
+
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(PermissionTask(null,"PermissionTask"), PasswordTask(null,"PasswordTask"), BroadcastTask(broadCastViewModel,"BroadcastTask"), GestureTask(null,"GestureTask"))
@@ -101,6 +105,16 @@ class FirstFragment : Fragment() {
     private fun initObserver() {
         broadCastViewModel.resultData.observe(viewLifecycleOwner) {
             binding.testTask.text = it?.msg
+        }
+    }
+
+    private fun copyFileByOkio() {
+        // 定义源文件和目标文件
+        val sourceFile = File("MainActivity.kt")
+        val destinationFile = File("MainActivity_Copy.kt")
+        // 复制文件
+        context?.let {
+            copyFile(sourceFile, it)
         }
     }
 
