@@ -1,7 +1,6 @@
 package com.eric.media
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.graphics.ImageFormat
 import android.hardware.camera2.CameraCaptureSession
@@ -9,14 +8,16 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
+import android.hardware.camera2.TotalCaptureResult
 import android.media.Image
 import android.media.ImageReader
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
+import android.util.Size
+import android.util.SparseIntArray
 import android.view.Surface
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import java.io.File
@@ -30,9 +31,12 @@ class Camera2PhotoCapture(
     private var config: CameraConfig = CameraConfig()
 ) : DefaultLifecycleObserver {
 
+    private val TAG = "Camera2PhotoCapture"
+
     private lateinit var cameraDevice: CameraDevice
     private lateinit var captureSession: CameraCaptureSession
     private lateinit var imageReader: ImageReader
+    private var backgroundThread: HandlerThread? = null
     private var backgroundHandler: Handler? = null
     private val cameraManager: CameraManager by lazy {
         context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -58,115 +62,156 @@ class Camera2PhotoCapture(
         }
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray, onPermissionDenied: () -> Unit) {
-        permissionManager.handlePermissionResult(requestCode, grantResults,
-            onSuccess = {
-                startBackgroundThread()
-                openFrontCamera {
-
-                }
-            },
-            onFailure = {
-                onPermissionDenied()
-            }
-        )
-    }
-
     private fun startBackgroundThread() {
-        val backgroundThread = HandlerThread("CameraBackground").also { it.start() }
-        backgroundHandler = Handler(backgroundThread.looper)
+        backgroundThread = HandlerThread("CameraBackground").also { it.start() }
+        backgroundHandler = Handler(backgroundThread!!.looper)
     }
 
     private fun stopBackgroundThread() {
-        backgroundHandler?.looper?.thread?.interrupt()
+        backgroundThread?.quitSafely()
+        backgroundThread = null
         backgroundHandler = null
     }
 
     @SuppressLint("MissingPermission")
     private fun openFrontCamera(onImageSaved: (File) -> Unit) {
-        cameraId = cameraManager.cameraIdList.find { id ->
-            val characteristics = cameraManager.getCameraCharacteristics(id)
-            characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT
-        } ?: throw IllegalStateException("No front camera found")
+        try {
+            // 查找前置摄像头 ID
+            cameraId = cameraManager.cameraIdList.find { id ->
+                val characteristics = cameraManager.getCameraCharacteristics(id)
+                characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT
+            } ?: throw IllegalStateException("No front camera found")
 
-        cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
-            override fun onOpened(camera: CameraDevice) {
-                cameraDevice = camera
-                createCaptureSession(onImageSaved)
-            }
+            // 获取相机支持的最佳分辨率
+            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+            val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            val outputSizes = map?.getOutputSizes(ImageFormat.JPEG)
+            val largestSize = outputSizes?.maxByOrNull { it.width * it.height } ?: Size(640, 480)
+            config.imageWidth = largestSize.width
+            config.imageHeight = largestSize.height
 
-            override fun onDisconnected(camera: CameraDevice) {
-                cameraDevice.close()
-            }
+            imageReader = ImageReader.newInstance(
+                config.imageWidth, config.imageHeight, config.imageFormat, 1
+            )
+            imageReader.setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
 
-            override fun onError(camera: CameraDevice, error: Int) {
-                cameraDevice.close()
-            }
-        }, backgroundHandler)
-    }
+            cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
+                override fun onOpened(camera: CameraDevice) {
+                    cameraDevice = camera
+                    createPreviewSession(onImageSaved)
+                }
 
-    private fun createCaptureSession(onImageSaved: (File) -> Unit) {
-        imageReader = ImageReader.newInstance(config.imageWidth, config.imageHeight, config.imageFormat, 1)
-        imageReader.setOnImageAvailableListener({ reader ->
-            val image = reader.acquireLatestImage()
-            image?.let {
-                saveImageToFile(it, onImageSaved)
-                image.close()
-            }
-        }, backgroundHandler)
+                override fun onDisconnected(camera: CameraDevice) {
+                    camera.close()
+                }
 
-        val captureRequestBuilder = createCaptureRequestBuilder()
-
-        cameraDevice.createCaptureSession(listOf(imageReader.surface), object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                captureSession = session
-                captureSession.capture(captureRequestBuilder.build(), null, backgroundHandler)
-            }
-
-            override fun onConfigureFailed(session: CameraCaptureSession) {
-            }
-        }, backgroundHandler)
-    }
-
-    private fun createCaptureRequestBuilder(): CaptureRequest.Builder {
-        val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        captureRequestBuilder.addTarget(imageReader.surface)
-
-        val jpegOrientation = calculateJpegOrientation()
-        captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, jpegOrientation)
-
-        return captureRequestBuilder
-    }
-
-    private fun getDeviceRotation(): Int {
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val rotation = windowManager.defaultDisplay.rotation
-        return when (rotation) {
-            Surface.ROTATION_0 -> 0
-            Surface.ROTATION_90 -> 90
-            Surface.ROTATION_180 -> 180
-            Surface.ROTATION_270 -> 270
-            else -> 0
+                override fun onError(camera: CameraDevice, error: Int) {
+                    camera.close()
+                    Log.e(TAG, "Camera error: $error")
+                }
+            }, backgroundHandler)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to open front camera: ${e.message}")
         }
     }
 
-    private fun getCameraSensorOrientation(): Int {
-        val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-        return characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
+    private fun createPreviewSession(onImageSaved: (File) -> Unit) {
+        try {
+            val previewSurface = imageReader.surface
+
+            val previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            previewRequestBuilder.addTarget(previewSurface)
+
+            cameraDevice.createCaptureSession(
+                listOf(previewSurface),
+                object : CameraCaptureSession.StateCallback() {
+                    override fun onConfigured(session: CameraCaptureSession) {
+                        captureSession = session
+                        previewRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
+                        captureSession.setRepeatingRequest(previewRequestBuilder.build(), null, backgroundHandler)
+                        // 短暂延迟后执行拍照
+                        backgroundHandler?.postDelayed({
+                            takePicture(onImageSaved)
+                        }, 500)
+                    }
+
+                    override fun onConfigureFailed(session: CameraCaptureSession) {
+                        Log.e(TAG, "Failed to configure camera")
+                    }
+                },
+                backgroundHandler
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to create preview session: ${e.message}")
+        }
     }
 
-    private fun calculateJpegOrientation(): Int {
-        val deviceRotation = getDeviceRotation()
-        val sensorOrientation = getCameraSensorOrientation()
-        return (deviceRotation + sensorOrientation + 360) % 360
+    private fun takePicture(onImageSaved: (File) -> Unit) {
+        try {
+            val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+            captureRequestBuilder.addTarget(imageReader.surface)
+
+            // 获取正确的方向
+            val rotation = context.windowManager.defaultDisplay.rotation
+            val orientations = SparseIntArray()
+            orientations.append(Surface.ROTATION_0, 90)
+            orientations.append(Surface.ROTATION_90, 0)
+            orientations.append(Surface.ROTATION_180, 270)
+            orientations.append(Surface.ROTATION_270, 180)
+            val sensorOrientation = cameraManager.getCameraCharacteristics(cameraId)
+                .get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
+            val jpegOrientation = (orientations.get(rotation) + sensorOrientation + 270) % 360
+            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, jpegOrientation)
+
+            captureSession.stopRepeating() // 停止重复预览请求
+
+            captureSession.capture(captureRequestBuilder.build(), object : CameraCaptureSession.CaptureCallback() {
+                override fun onCaptureCompleted(
+                    session: CameraCaptureSession,
+                    request: CaptureRequest,
+                    result: TotalCaptureResult
+                ) {
+                    Log.d(TAG, "Image captured")
+                    captureSession.close() // 拍摄完成后关闭会话
+                    cameraDevice.close() // 关闭相机
+                }
+            }, backgroundHandler)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to take picture: ${e.message}")
+        }
     }
+
+
+    private val onImageAvailableListener = ImageReader.OnImageAvailableListener { reader ->
+        backgroundHandler?.post {
+            var image: Image? = null
+            try {
+                image = reader.acquireLatestImage()
+                image?.let {
+                    saveImageToFile(it) { file ->
+                        Log.d(TAG, "Image saved: ${file.absolutePath}")
+                        // 处理完图像后，停止监听，防止重复捕获
+                        reader.setOnImageAvailableListener(null, null)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to process image: ${e.message}")
+            } finally {
+                image?.close()
+            }
+        }
+    }
+
 
     private fun saveImageToFile(image: Image, onImageSaved: (File) -> Unit) {
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
         buffer.get(bytes)
 
-        val file = File(photoDirectory, "${config.photoFileNamePrefix}${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg")
+        val file = File(
+            photoDirectory,
+            "${config.photoFileNamePrefix}${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
+        )
         FileOutputStream(file).use {
             it.write(bytes)
         }
@@ -188,15 +233,3 @@ class Camera2PhotoCapture(
         stopBackgroundThread()
     }
 }
-
-
-class CameraConfig() {
-
-    var imageWidth: Int = 640
-    var imageHeight: Int = 480
-    var imageFormat: Int = ImageFormat.JPEG
-
-    // 可以扩展其他配置项，例如照片保存的前缀
-    var photoFileNamePrefix: String = "IMG_"
-}
-
