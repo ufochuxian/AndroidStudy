@@ -3,6 +3,7 @@ package com.eric.androidstudy
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +16,14 @@ import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
+import com.eric.media.Camera2PhotoCapture
 import com.eric.routers.TgmRouter
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
 import com.eric.task.GestureTask
 import com.eric.task.PasswordTask
 import com.eric.task.PermissionTask
+import com.eric.task.TAG
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
 import kotlinx.coroutines.launch
@@ -65,6 +68,8 @@ class FirstFragment : Fragment() {
 
         }
 
+
+
         val cornerRadius = 12f // 你可以根据需要动态计算这个值
         activity?.let {
 //            val rippleColor = R.attr.colorControlHighlight
@@ -84,6 +89,15 @@ class FirstFragment : Fragment() {
             }
         }
 
+        binding.takePhoto.setOnClickListener {
+//            activity?.let {
+//                val capture = Camera2PhotoCapture(it)
+//                capture.startCameraAndTakePhoto(onImageSaved = { imgFile ->
+//                    Log.d(TAG, "${imgFile.name} is capture & saved success,path:${imgFile.path}")
+//                })
+//            }
+        }
+
         binding.copyFileByOkio.setOnClickListener {
             copyFileByOkio()
         }
@@ -97,7 +111,7 @@ class FirstFragment : Fragment() {
                     GestureTask(null, "GestureTask")
                 )
 //                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
-                ParallelTasksManager().executeTasks(tasks) //并发执行任务
+//                ParallelTasksManager().executeTasks(tasks) //并发执行任务
             }
         }
 

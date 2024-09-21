@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.blankj.utilcode.util.ConvertUtils.dp2px
@@ -29,13 +30,29 @@ class SecondFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
 
         shapeByCode()
 
         setGradientDrawable()
+
+
+        // 模拟数据
+        val items = listOf("选项一", "选项二", "选项三")
+
+        // 使用 SpinnerDelegate 代理类来初始化 Spinner
+        SpinnerDelegate(
+            context = requireContext(),
+            spinner = binding.mySpinner,
+            triggerView = binding.spinnerBtn,
+            items = items
+        ) { selectedItem ->
+            // 当用户选择了某个选项时的回调处理
+            Toast.makeText(context, "你选择了: $selectedItem", Toast.LENGTH_SHORT).show()
+        }
+
 
         return binding.root
     }

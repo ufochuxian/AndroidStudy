@@ -23,8 +23,10 @@ import com.eric.kotlin.corotinue.broadcast.EventBroadcast
 import com.eric.kotlin.corotinue.broadcast.Message
 import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
+import com.eric.media.Camera2PhotoCapture
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
+import com.eric.task.TAG
 import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
@@ -73,7 +75,11 @@ class MainActivity : AppCompatActivity() {
 //        testCustomRxJava()
 
         binding.displayConstraintlayoutChains.setOnClickListener {
-            startActivity(Intent(this, ConstraintLayoutActivity::class.java))
+//            startActivity(Intent(this, ConstraintLayoutActivity::class.java))
+            val capture = Camera2PhotoCapture(this)
+            capture.startCameraAndTakePhoto(onImageSaved = { imgFile ->
+                Log.d(TAG, "${imgFile.name} is capture & saved success,path:${imgFile.path}")
+            })
         }
 
         binding.uiLayout.setOnClickListener {
