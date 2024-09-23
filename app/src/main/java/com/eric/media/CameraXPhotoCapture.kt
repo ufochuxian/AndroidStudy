@@ -49,7 +49,7 @@ class CameraXPhotoCapture(private val context: AppCompatActivity, private val us
                 CameraSelector.DEFAULT_BACK_CAMERA
             }
 
-            val rotation = (context as AppCompatActivity).windowManager.defaultDisplay.rotation
+            val rotation = context.windowManager.defaultDisplay.rotation
 
             imageCapture = ImageCapture.Builder()
                 .setTargetRotation(rotation)
@@ -114,7 +114,6 @@ class CameraXPhotoCapture(private val context: AppCompatActivity, private val us
                 else -> bitmap
             }
 
-            // 保存旋转后的图像
             saveBitmapToFile(rotatedBitmap, photoFile)
 
         } catch (e: Exception) {
