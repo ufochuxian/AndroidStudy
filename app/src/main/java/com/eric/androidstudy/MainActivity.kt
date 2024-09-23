@@ -17,17 +17,13 @@ import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.function.costTime
 import com.eric.function.sayHello
 import com.eric.kotlin.SPMgr
-import com.eric.kotlin.SpDelegate
-import com.eric.kotlin.SpKey
 import com.eric.kotlin.corotinue.broadcast.EventBroadcast
 import com.eric.kotlin.corotinue.broadcast.Message
 import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
-import com.eric.media.Camera2PhotoCapture
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
 import com.eric.task.TAG
-import com.eric.ui.ConstraintLayoutActivity
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
@@ -37,6 +33,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,12 +70,12 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 //        testCustomRxJava()
+        val capture = CameraXPhotoCapture(this,true)
 
         binding.displayConstraintlayoutChains.setOnClickListener {
 //            startActivity(Intent(this, ConstraintLayoutActivity::class.java))
-            val capture = Camera2PhotoCapture(this)
-            capture.startCameraAndTakePhoto(onImageSaved = { imgFile ->
-                Log.d(TAG, "${imgFile.name} is capture & saved success,path:${imgFile.path}")
+            capture.takePhoto(onImageSaved = { imgFile ->
+                Log.d("MainActivity", "${imgFile?.name} is capture & saved success,path:${imgFile?.path}")
             })
         }
 

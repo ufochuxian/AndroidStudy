@@ -15,8 +15,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import android.util.Size
-import android.util.SparseIntArray
-import android.view.Surface
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -53,7 +51,7 @@ class Camera2PhotoCapture(
         context.lifecycle.addObserver(this) // 将观察者绑定到 Activity 的生命周期
     }
 
-    fun startCameraAndTakePhoto(onImageSaved: (File) -> Unit) {
+    fun takePhoto(onImageSaved: (File) -> Unit) {
         if (permissionManager.hasPermissions()) {
             startBackgroundThread()
             openFrontCamera(onImageSaved)
@@ -151,16 +149,17 @@ class Camera2PhotoCapture(
             val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
             captureRequestBuilder.addTarget(imageReader.surface)
 
-            // 获取正确的方向
-            val rotation = context.windowManager.defaultDisplay.rotation
-            val orientations = SparseIntArray()
-            orientations.append(Surface.ROTATION_0, 90)
-            orientations.append(Surface.ROTATION_90, 0)
-            orientations.append(Surface.ROTATION_180, 270)
-            orientations.append(Surface.ROTATION_270, 180)
+            // 获取相机传感器的方向
             val sensorOrientation = cameraManager.getCameraCharacteristics(cameraId)
                 .get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
-            val jpegOrientation = (orientations.get(rotation) + sensorOrientation + 270) % 360
+
+            // 强制将 JPEG 图片方向设置为竖屏
+            val jpegOrientation = if (sensorOrientation == 90 || sensorOrientation == 270) {
+                0 // 如果传感器已经是竖屏方向，则不需要额外旋转
+            } else {
+                90 // 否则旋转90度以强制竖屏
+            }
+
             captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, jpegOrientation)
 
             captureSession.stopRepeating() // 停止重复预览请求
@@ -171,7 +170,7 @@ class Camera2PhotoCapture(
                     request: CaptureRequest,
                     result: TotalCaptureResult
                 ) {
-                    Log.d(TAG, "Image captured")
+                    Log.d(TAG, "Image captured in portrait mode")
                     captureSession.close() // 拍摄完成后关闭会话
                     cameraDevice.close() // 关闭相机
                 }
@@ -180,6 +179,8 @@ class Camera2PhotoCapture(
             Log.e(TAG, "Failed to take picture: ${e.message}")
         }
     }
+
+
 
 
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener { reader ->
