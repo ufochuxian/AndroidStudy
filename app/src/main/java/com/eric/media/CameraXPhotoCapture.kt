@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.AudioManager
 import android.media.ExifInterface
+import android.util.Size
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -12,6 +13,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.eric.media.ImageCompressor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -24,6 +30,10 @@ class CameraXPhotoCapture(private val context: AppCompatActivity, private val us
     private var imageCapture: ImageCapture? = null
     private var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
     private var cameraProvider: ProcessCameraProvider? = null
+
+    private val imageCompressor by lazy {
+        ImageCompressor(context)
+    }
 
     // 定义拍照文件存储目录
     private val photoDir: File by lazy {
@@ -88,7 +98,20 @@ class CameraXPhotoCapture(private val context: AppCompatActivity, private val us
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     setDeviceSilentMode(false)
                     rotateImageIfRequired(photoFile) // 手动调整照片方向
-                    onImageSaved(photoFile)
+
+                    // 照片拍摄成功后，压缩处理并替换原图
+                    CoroutineScope(Dispatchers.IO).launch {
+                        // 用原图的名字拼上 "compressed_" 前缀
+                        val compressedFile = File(photoDir, "compressed_${photoFile.name}")
+                        val success = imageCompressor.compressImage(photoFile, compressedFile)
+                        withContext(Dispatchers.Main) {
+                            if (success) {
+                                onImageSaved(compressedFile)
+                            } else {
+                                onImageSaved(null)
+                            }
+                        }
+                    }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
