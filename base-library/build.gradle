@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'  // 必须启用注解处理器
 }
 
 android {
@@ -91,6 +92,26 @@ dependencies {
     api 'com.github.bumptech.glide:glide:4.15.1' // Glide 版本 4.x 最新版
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1' // Glide 注解处理器
 
+    // Room runtime
+    api "androidx.room:room-runtime:2.6.1"  // 检查最新版本
+
+    // Room compiler (KAPT for annotation processing)
+    kapt "androidx.room:room-compiler:2.6.1"  // 如果使用 Kotlin 需要 KAPT
+
+    // 如果使用 Kotlin 协程，添加协程支持
+    api "androidx.room:room-ktx:2.6.1"
+
+    api "androidx.room:room-paging:2.6.1"  // Add this for Room + Paging integration
+
+    // Optional - Test helpers
+    testApi "androidx.room:room-testing:2.6.1"
+
+
+    // Paging 3 core library for Kotlin
+    api "androidx.paging:paging-runtime:3.1.1"  // 检查最新版本
+
+    // If using Paging with testing
+    testApi "androidx.paging:paging-common:3.1.1"
 
 
     api(project(":network"))

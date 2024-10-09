@@ -14,4 +14,5 @@
     <string name="ui_layout">适配布局展示</string>
     <string name="go_to_calculate_fragment">gotoCalculatement</string>
     <string name="schedule">schedule</string>
+    <string name="page3">page3使用</string>
 </resources>

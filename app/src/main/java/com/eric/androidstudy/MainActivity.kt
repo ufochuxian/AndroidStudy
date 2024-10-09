@@ -23,6 +23,7 @@ import com.eric.kotlin.corotinue.broadcast.Message
 import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
+import com.eric.pageing3.Page3Activity
 import com.eric.routers.TgmRouter
 import com.eric.task.TAG
 import com.eric.ui.UILayoutActivity
@@ -82,6 +83,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.uiLayout.setOnClickListener {
             startActivity(Intent(this, UILayoutActivity::class.java))
+        }
+
+        binding.page3.setOnClickListener {
+            startActivity(Intent(this, Page3Activity::class.java))
         }
 
         var flowable = JustOperator()

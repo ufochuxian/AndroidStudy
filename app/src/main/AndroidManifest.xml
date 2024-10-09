@@ -40,6 +40,9 @@
         <activity android:name="com.eric.ui.UILayoutActivity" />
         <activity android:name="com.eric.ui.WanAndroidActivity" />
 
+        <activity android:name="com.eric.pageing3.Page3Activity" />
+
+
     </application>
 
 </manifest>
