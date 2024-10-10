@@ -42,6 +42,8 @@
 
         <activity android:name="com.eric.pageing3.Page3Activity" />
 
+        <activity android:name="com.eric.glass.GlassActivity"/>
+
 
     </application>
 

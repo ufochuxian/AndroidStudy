@@ -17,6 +17,7 @@ import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.function.costTime
 import com.eric.function.sayHello
+import com.eric.glass.GlassActivity
 import com.eric.kotlin.SPMgr
 import com.eric.kotlin.corotinue.broadcast.EventBroadcast
 import com.eric.kotlin.corotinue.broadcast.Message
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.page3.setOnClickListener {
-            startActivity(Intent(this, Page3Activity::class.java))
+            startActivity(Intent(this, GlassActivity::class.java))
         }
 
         var flowable = JustOperator()
