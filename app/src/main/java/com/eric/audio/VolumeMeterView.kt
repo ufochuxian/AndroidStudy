@@ -15,7 +15,7 @@ class VolumeMeterView @JvmOverloads constructor(
 
     private var volume: Float = 0f
     private val paint = Paint().apply {
-        color = Color.GREEN
+        color = Color.BLUE
         style = Paint.Style.FILL
     }
 
@@ -26,11 +26,11 @@ class VolumeMeterView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        
+
         // 基于音量绘制音量条
         val barHeight = height.toFloat()
         val barWidth = (width * (volume / 32767f)).coerceAtMost(width.toFloat())
-        
+
         canvas.drawRect(0f, 0f, barWidth, barHeight, paint)
     }
 }

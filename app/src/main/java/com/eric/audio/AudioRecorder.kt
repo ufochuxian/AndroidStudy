@@ -6,10 +6,16 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.sample
+
+private const val TAG = "AudioRecorder"
 
 class AudioRecorder {
     private var audioRecord: AudioRecord? = null
@@ -44,13 +50,15 @@ class AudioRecorder {
                     // 计算当前音量值
                     val volume = calculateVolume(buffer, read)
                     // 发射音量数据
+                    Log.d(TAG, "发射声音音量:${volume}")
                     emit(volume)
                 }
+                kotlinx.coroutines.delay(100)
             }
         } else {
-            Toast.makeText(context, "没有音视频相关权限",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "没有音视频相关权限", Toast.LENGTH_SHORT).show()
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun stopRecording() {
         audioRecord?.stop()
