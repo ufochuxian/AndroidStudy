@@ -16,6 +16,7 @@ import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.audio.AudioWaveActivity
+import com.eric.base.PlayerActivity
 import com.eric.function.costTime
 import com.eric.function.sayHello
 import com.eric.glass.GlassActivity
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.page3.setOnClickListener {
-            startActivity(Intent(this, AudioWaveActivity::class.java))
+            startActivity(Intent(this, PlayerActivity::class.java))
         }
 
         var flowable = JustOperator()
