@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
  * @desc:
 
  */
-object EventBroadcast {
+object GlobalEvent {
     private val mEvents = MutableSharedFlow<Message>()
     val events = mEvents.asSharedFlow()
 
@@ -28,6 +28,6 @@ data class Message(val msgType: String, val content: String)
 
 fun main() {
     GlobalScope.launch {
-        EventBroadcast.sendEvent(Message("msg","利用SharedFlow实现的全局广播机制"))
+        GlobalEvent.sendEvent(Message("msg","利用SharedFlow实现的全局广播机制"))
     }
 }

@@ -18,7 +18,7 @@ class PageB {
 
      fun registerBroadcastByFlow() {
         CoroutineScope(Dispatchers.Main).launch {
-            EventBroadcast.events.collect { msg ->
+            GlobalEvent.events.collect { msg ->
 
                 handleEvent(msg)
             }

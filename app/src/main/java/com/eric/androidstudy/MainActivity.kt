@@ -21,14 +21,13 @@ import com.eric.function.costTime
 import com.eric.function.sayHello
 import com.eric.glass.GlassActivity
 import com.eric.kotlin.SPMgr
-import com.eric.kotlin.corotinue.broadcast.EventBroadcast
+import com.eric.kotlin.corotinue.broadcast.GlobalEvent
 import com.eric.kotlin.corotinue.broadcast.Message
 import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.pageing3.Page3Activity
 import com.eric.routers.TgmRouter
-import com.eric.task.TAG
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
@@ -156,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         val activityViewModel = ViewModelProvider(this).get<MainActivityViewModel>()
         activityViewModel.viewModelScope.launch {
             delay(800)
-            EventBroadcast.sendEvent(Message("msg", "利用SharedFlow实现的全局广播机制"))
+            GlobalEvent.sendEvent(Message("msg", "利用SharedFlow实现的全局广播机制"))
         }
 
         lifecycleScope.launch {

@@ -19,7 +19,7 @@ class PageA {
 
     fun registerBroadcastByFlow() {
         CoroutineScope(Dispatchers.Main).launch {
-            EventBroadcast.events.collect { event ->
+            GlobalEvent.events.collect { event ->
                 handleEvent(event)
             }
         }
