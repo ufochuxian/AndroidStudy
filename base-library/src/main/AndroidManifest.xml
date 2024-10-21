@@ -4,6 +4,7 @@
     <application>
         <activity android:name="com.eric.base.media.VideoPlayerActivity"/>
         <activity android:name="com.eric.base.media.VideoPlayerSurfaceActivity"/>
+        <activity android:name="com.eric.base.media.VideoPlayerWithFilterActivity"/>
     </application>
 
 </manifest>

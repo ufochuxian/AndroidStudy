@@ -17,6 +17,7 @@ import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.base.media.VideoPlayerActivity
 import com.eric.base.media.VideoPlayerSurfaceActivity
+import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.function.costTime
 import com.eric.function.sayHello
 import com.eric.kotlin.SPMgr
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.page3.setOnClickListener {
-            startActivity(Intent(this, VideoPlayerSurfaceActivity::class.java))
+            startActivity(Intent(this, VideoPlayerWithFilterActivity::class.java))
         }
 
         var flowable = JustOperator()
