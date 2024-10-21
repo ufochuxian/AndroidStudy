@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <activity android:name="com.eric.base.PlayerActivity"/>
+        <activity android:name="com.eric.base.media.VideoPlayerActivity"/>
+        <activity android:name="com.eric.base.media.VideoPlayerSurfaceActivity"/>
     </application>
 
 </manifest>

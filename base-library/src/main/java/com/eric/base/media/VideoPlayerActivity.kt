@@ -25,7 +25,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         playerView.player = player
 
         // 准备要播放的 MediaItem（本地或网络视频）
-        val mediaItem = MediaItem.fromUri("https://www.w3schools.com/html/movie.mp4")
+        val mediaItem = MediaItem.fromUri("https://media.w3.org/2010/05/sintel/trailer.mp4")
 
         // 将媒体项设置给播放器
         player.setMediaItem(mediaItem)
