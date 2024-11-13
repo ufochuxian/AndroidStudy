@@ -10,6 +10,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+
+
 
     <application
         android:name="com.eric.AndroidStudyApplication"
@@ -45,7 +53,7 @@
 
         <activity android:name="com.eric.glass.GlassActivity"/>
         <activity android:name="com.eric.audio.AudioWaveActivity"/>
-        <activity android:name="com.eric.audio.AudioWaveActivity"/>
+        <activity android:name="com.eric.androidstudy.ExampleActivity"/>
 
 
     </application>

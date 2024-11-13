@@ -1,10 +1,15 @@
 package com.eric.androidstudy
 
 import CameraXPhotoCapture
+import android.Manifest
+import android.accounts.AccountManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
+import android.util.Patterns
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -15,8 +20,6 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
-import com.eric.base.media.VideoPlayerActivity
-import com.eric.base.media.VideoPlayerSurfaceActivity
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.function.costTime
 import com.eric.function.sayHello
@@ -35,6 +38,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
+
 
 const val TAG = "MainActivity"
 
@@ -42,6 +47,13 @@ class MainActivity : AppCompatActivity() {
 
     //    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    companion object {
+        // 这些都是权限请求码的例子
+        private const val PERMISSION_REQUEST_CODE = 123        // 获取账户权限
+        private const val CAMERA_PERMISSION_CODE = 124        // 相机权限
+        private const val LOCATION_PERMISSION_CODE = 125      // 位置权限
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -177,7 +189,15 @@ class MainActivity : AppCompatActivity() {
                 sayHello("YaoMing")
             }
         }
+
+
+        // 检查权限
+        checkAndRequestPermission()
+
     }
+
+
+
 
     private fun testCustomRxJava() {
         val rxjava = CustomRxjava()
@@ -201,26 +221,91 @@ class MainActivity : AppCompatActivity() {
         workManager.enqueue(oneTimeWorkRequest)
     }
 
+    private fun checkAndRequestPermission() {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            androidx.core.app.ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS),
+                PERMISSION_REQUEST_CODE
+            )
+        } else {
+            getAllEmailAccounts()
+//            printAccounts()
+        }
+    }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.menu_main, menu)
-//        return true
-//    }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//            else -> super.onOptionsItemSelected(item)
+
+    private fun getAllEmailAccounts() {
+        val accountManager = AccountManager.get(this)
+        val accounts = accountManager.accounts
+
+        // 使用Set去重
+        val emailSet = HashSet<String>()
+
+        accounts.forEach { account ->
+            val accountName = account.name
+            val accountType = account.type
+
+            // 检查是否是邮箱格式
+            if (isEmailAccount(accountName)) {
+                emailSet.add(accountName)
+                Log.d(TAG, "Email: $accountName")
+                Log.d(TAG, "Type: $accountType")
+            }
+        }
+
+        // 显示找到的邮箱数量
+        Toast.makeText(this, "找到 ${emailSet.size} 个邮箱账号", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun printAccounts() {
+//        val emailPattern: Pattern = Patterns.EMAIL_ADDRESS // API level 8+
+//        val accounts = AccountManager.get(this).accounts
+//        for (account in accounts) {
+//            if (emailPattern.matcher(account.name).matches()) {
+//                val accountName = account.name
+//                val accountType = account.type
+//                Log.d(TAG, "Email: $accountName")
+//                Log.d(TAG, "Type: $accountType")
+//            }
 //        }
-//    }
-//
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        return navController.navigateUp(appBarConfiguration)
-//                || super.onSupportNavigateUp()
-//    }
+        baseContext?.let {
+            val intent = Intent(this,ExampleActivity::class.java)
+            this.startActivity(intent)
+        }
+
+    }
+
+    // 检查是否是邮箱格式
+    private fun isEmailAccount(account: String?): Boolean {
+        return account?.let {
+            it.contains("@") && it.contains(".")
+        } ?: false
+    }
+
+    // 使用正则表达式的邮箱验证方法（可选）
+    private fun isEmailAccountWithRegex(account: String?): Boolean {
+        val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+        return account?.matches(emailPattern) ?: false
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getAllEmailAccounts()
+            } else {
+                Toast.makeText(this, "需要获取账户权限才能读取邮箱信息", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 }
