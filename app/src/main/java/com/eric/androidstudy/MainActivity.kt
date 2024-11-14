@@ -10,6 +10,7 @@ import android.os.Parcel
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -20,7 +21,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
+import com.eric.base.ext.ERIC_TAG
 import com.eric.base.media.VideoPlayerWithFilterActivity
+import com.eric.base.mgr.PermissionManager
 import com.eric.function.costTime
 import com.eric.function.sayHello
 import com.eric.kotlin.SPMgr
@@ -48,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     //    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private val permissionMgr by lazy { PermissionManager(this)}
     companion object {
         // 这些都是权限请求码的例子
         private const val PERMISSION_REQUEST_CODE = 123        // 获取账户权限
@@ -192,7 +196,25 @@ class MainActivity : AppCompatActivity() {
 
 
         // 检查权限
-        checkAndRequestPermission()
+//        checkAndRequestPermission()
+
+        lifecycleScope.launch {
+            permissionMgr.requestStoragePermission(object : PermissionManager.PermissionCallback {
+                override fun onPermissionGranted(result: ActivityResult?) {
+                    Log.i(ERIC_TAG, "onPermissionGranted:${result?.resultCode}")
+                    // 通过 Intent 置顶当前 Activity
+                    val intent = Intent(baseContext, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
+                    this@MainActivity.startActivity(intent)
+                }
+
+                override fun onPermissionDenied(result: ActivityResult?) {
+                    Log.i(ERIC_TAG, "onPermissionDenied:${result?.resultCode}")
+
+                }
+            })
+        }
 
     }
 
