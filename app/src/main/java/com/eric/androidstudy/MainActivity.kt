@@ -202,11 +202,7 @@ class MainActivity : AppCompatActivity() {
             permissionMgr.requestStoragePermission(object : PermissionManager.PermissionCallback {
                 override fun onPermissionGranted(result: ActivityResult?) {
                     Log.i(ERIC_TAG, "onPermissionGranted:${result?.resultCode}")
-                    // 通过 Intent 置顶当前 Activity
-                    val intent = Intent(baseContext, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    }
-                    this@MainActivity.startActivity(intent)
+
                 }
 
                 override fun onPermissionDenied(result: ActivityResult?) {
