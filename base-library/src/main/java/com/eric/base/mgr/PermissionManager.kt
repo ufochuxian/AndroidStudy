@@ -87,11 +87,11 @@ class PermissionManager<T : Context>(private val context: T) {
         this.callback = callback
 
         when {
-            // Android 11 及以上版本，使用 MANAGE_EXTERNAL_STORAGE
+            // Android 11 及以上版本，使用 MANAGE_EXTERNAL_STORAGE (android version >= 11)
             isOverAndroidVersionInclude11() -> {
                 processOverAndroid11StoragePermission(callback)
             }
-            // 大于Android 10，使用 READ 和 WRITE 权限
+            // 大于Android 10，使用 READ 和 WRITE 权限 (android version >= 6 && android version <= 10))
             isOverAndroidVersionInclude6() && isBelowAndroidVersionInclude10() -> {
                 processAndroid6To10StoragePermission(callback)
             }
