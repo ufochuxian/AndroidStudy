@@ -24,54 +24,13 @@ suspend fun main() {
         println("Executing Task D with results from Task B: $resultB and Task C: $resultC")
         "Result D"
     }
-    val taskE = Task("Task E") { results: List<Any?> ->
-        val resultB = results[0] as String
-        println("Executing Task E with result from Task B: $resultB")
-        "Result E"
-    }
-    val taskF = Task("Task F") { results: List<Any?> ->
-        val resultD = results[0] as String
-        println("Executing Task F with result from Task D: $resultD")
-        "Result F"
-    }
-    val taskG = Task("Task G") { results: List<Any?> ->
-        val resultE = results[0] as String
-        val resultF = results[1] as String
-        println("Executing Task G with results from Task E: $resultE and Task F: $resultF")
-        "Result G"
-    }
-    val taskH = Task("Task H") { results: List<Any?> ->
-        val resultF = results[0] as String
-        println("Executing Task H with result from Task F: $resultF")
-        "Result H"
-    }
-    val taskI = Task("Task I") { results: List<Any?> ->
-        val resultG = results[0] as String
-        val resultH = results[1] as String
-        println("Executing Task I with results from Task G: $resultG and Task H: $resultH")
-        "Result I"
-    }
-    val taskJ = Task("Task J") { results: List<Any?> ->
-        val resultI = results[0] as String
-        println("Executing Task J with result from Task I: $resultI")
-        "Result J"
-    }
 
     // 设置依赖关系
     taskB.addDependency(taskA)
     taskC.addDependency(taskA)
     taskD.addDependency(taskB)
-    taskD.addDependency(taskC)
-    taskE.addDependency(taskB)
-    taskF.addDependency(taskD)
-    taskG.addDependency(taskE)
-    taskG.addDependency(taskF)
-    taskH.addDependency(taskF)
-    taskI.addDependency(taskG)
-    taskI.addDependency(taskH)
-    taskJ.addDependency(taskI)
 
-    val tasks = arrayListOf(taskA,taskB,taskC,taskD,taskE,taskF,taskG,taskH,taskI,taskJ)
+    val tasks = arrayListOf(taskA,taskB,taskC,taskD)
 
     // 注册任务
     taskManager.registerTasks(tasks)

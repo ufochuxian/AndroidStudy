@@ -1,9 +1,13 @@
 package com.eric.task
 
+import android.content.Context
 import android.util.Log
+import com.eric.base.mgr.PermissionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import android.Manifest
+import androidx.lifecycle.LifecycleOwner
 
 
 const val TAG = "ITask"
@@ -46,16 +50,34 @@ interface ITask<out T> {
 }
 
 // 定义具体任务类
-class PermissionTask(private val viewModel: BaseViewModel?,override var taskName : String) : ITask<Boolean> {
+class PermissionTask(val context: Context, private val viewModel: BaseViewModel?, override var taskName : String,val permissionMgr: PermissionManager<LifecycleOwner>?) : ITask<Boolean> {
     override val dependencies: List<Class<out ITask<*>>>?
         get() = null
     override suspend fun execute(): Boolean {
-        return withContext(Dispatchers.Main) {
-            // 模拟显示权限弹窗，并等待用户操作
-            // 例如：showPermissionDialog() 返回用户是否授予权限的结果
-            Log.i(TAG, "PermissionTask executed")
-            true // 返回结果 true 或 false
-        }
+        var result = false
+        permissionMgr?.requestPermissions(
+            arrayOf(Manifest.permission.CAMERA),
+            object : PermissionManager.DynamicPermissionCallback {
+                override fun onPermissionsGranted() {
+                    Log.d("PermissionManager", "所有权限已授予")
+                    result = true
+                }
+
+                override fun onPermissionsDenied(deniedPermissions: List<String>) {
+                    Log.d("PermissionManager", "被拒绝的权限：$deniedPermissions")
+                    result = false
+                }
+            }
+        )
+        return result
+
+
+//        return withContext(Dispatchers.Main) {
+//            // 模拟显示权限弹窗，并等待用户操作
+//            // 例如：showPermissionDialog() 返回用户是否授予权限的结果
+//            Log.i(TAG, "PermissionTask executed")
+//            true // 返回结果 true 或 false
+//        }
     }
 }
 

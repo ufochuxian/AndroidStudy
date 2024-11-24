@@ -122,6 +122,9 @@ dependencies {
 
     api 'jp.co.cyberagent.android:gpuimage:2.1.0'
 
+    api 'com.jakewharton.timber:timber:4.7.1'
+
+
 
 
     api(project(":network"))

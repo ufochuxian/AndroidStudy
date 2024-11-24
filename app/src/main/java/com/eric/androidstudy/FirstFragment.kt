@@ -3,31 +3,31 @@ package com.eric.androidstudy
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
+import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
-import com.eric.media.Camera2PhotoCapture
 import com.eric.routers.TgmRouter
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
 import com.eric.task.GestureTask
 import com.eric.task.PasswordTask
 import com.eric.task.PermissionTask
-import com.eric.task.TAG
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
 import kotlinx.coroutines.launch
 import java.io.File
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -46,12 +46,18 @@ class FirstFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private var permissionMgr : PermissionManager<LifecycleOwner>? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
+
+        activity?.let {
+            permissionMgr = PermissionManager(it)
+        }
         return binding.root
 
     }
@@ -99,18 +105,18 @@ class FirstFragment : Fragment() {
         }
 
         binding.copyFileByOkio.setOnClickListener {
-            copyFileByOkio()
+//            copyFileByOkio()
         }
 
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(
-                    PermissionTask(null, "PermissionTask"),
+                    PermissionTask(requireContext(),null, "PermissionTask",permissionMgr),
                     PasswordTask(null, "PasswordTask"),
                     BroadcastTask(broadCastViewModel, "BroadcastTask"),
                     GestureTask(null, "GestureTask")
                 )
-//                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
+                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
 //                ParallelTasksManager().executeTasks(tasks) //并发执行任务
             }
         }
