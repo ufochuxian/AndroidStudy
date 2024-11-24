@@ -20,6 +20,7 @@ import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
+import com.eric.task.AppLockPermissionTask
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
 import com.eric.task.GestureTask
@@ -118,6 +119,7 @@ class FirstFragment : Fragment() {
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(
+                    AppLockPermissionTask(requireContext(),null,permissionMgr),
                     CameraPermissionTask(requireContext(), null, permissionMgr),
                     StoragePermissionTask(requireContext(), null, permissionMgr),
                     PatternPasswordTask(context, null),

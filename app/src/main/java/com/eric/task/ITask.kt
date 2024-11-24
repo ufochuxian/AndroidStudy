@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LifecycleOwner
 import com.eric.androidstudy.R
-import com.eric.base.dialog.DialogPresenter
+import com.eric.dialog.DialogPresenter
 import com.eric.base.mgr.PermissionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

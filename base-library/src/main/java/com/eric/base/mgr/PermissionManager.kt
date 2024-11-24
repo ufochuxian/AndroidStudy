@@ -346,9 +346,37 @@ class PermissionManager<T : Any>(private val owner: T) {
      * 处理特殊权限申请结果
      */
     private fun handleSpecificPermissionResult(result: ActivityResult) {
-        // 目前的实现假设所有特殊权限都成功
-        callback?.onPermissionGranted(result)
+        when {
+            callback == null -> return // 如果没有回调，直接返回
+
+            // 检查应用使用情况权限
+            hasUsageStatsPermission() -> {
+                callback?.onPermissionGranted(result)
+                Log.d(TAG, "应用使用情况权限申请成功")
+            }
+
+            // 检查悬浮窗权限
+            hasOverlayPermission() -> {
+                callback?.onPermissionGranted(result)
+                Log.d(TAG, "悬浮窗权限申请成功")
+            }
+
+            // 检查辅助功能权限
+            hasAccessibilityPermission() -> {
+                callback?.onPermissionGranted(result)
+                Log.d(TAG, "辅助功能权限申请成功")
+            }
+
+            // 检查电池优化权限
+            // 注意：电池优化权限本质上是跳转设置页面，无法直接判断具体某个权限是否被忽略
+            // 这里可以选择性通知用户自行确认
+            else -> {
+                callback?.onPermissionDenied(result)
+                Log.d(TAG, "特殊权限申请失败，或需要用户进一步确认")
+            }
+        }
     }
+
 
     /**
      * 检查是否具有辅助功能权限
