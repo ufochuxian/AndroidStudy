@@ -1,5 +1,6 @@
 package com.eric.task
 
+import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import androidx.activity.result.ActivityResult
@@ -8,6 +9,8 @@ import com.eric.base.mgr.PermissionManager
 import com.eric.dialog.DialogPresenter
 import com.eric.dialog.PermissionDialogCallback
 import com.eric.dialog.PermissionInfo
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class AppLockPermissionTask(
@@ -15,8 +18,10 @@ class AppLockPermissionTask(
     override val dependencies: List<Class<out ITask<*>>>?,
     private val permissionMgr: PermissionManager<LifecycleOwner>?
 ) : ITask<TaskResult<String?>> {
+    private var mAppLockPermissionDialog: Dialog? = null
+
     override suspend fun execute(): TaskResult<String?> {
-        return suspendCoroutine {
+        return suspendCoroutine { continutation ->
             // 定义权限列表，每个权限包括名称、描述和点击时的动作
             val permissions = listOf(
                 PermissionInfo(
@@ -29,9 +34,7 @@ class AppLockPermissionTask(
 
                             override fun onPermissionGranted(result: ActivityResult?) {
                                 Log.i(TAG, "获取到应用使用情况权限")
-                                if (hasGrantedAppLockPermission(permissionMgr)) {
-                                    TaskResult.Success("AppLock功能需要的权限，授权成功")
-                                }
+                                onGrantedAppLockPermissions(continutation)
                             }
 
                             override fun onPermissionDenied(result: ActivityResult?) {
@@ -51,13 +54,11 @@ class AppLockPermissionTask(
 
                             override fun onPermissionGranted(result: ActivityResult?) {
                                 Log.i(TAG, "获取到应用悬浮权限")
-                                if (hasGrantedAppLockPermission(permissionMgr)) {
-                                    TaskResult.Success("AppLock功能需要的权限，授权成功")
-                                }
+                                onGrantedAppLockPermissions(continutation)
                             }
 
                             override fun onPermissionDenied(result: ActivityResult?) {
-                                Log.i(TAG, "应用悬浮权限没有授权")
+                                Log.i(TAG, "'应用悬浮权限没有授权")
 
                             }
                         })
@@ -68,7 +69,7 @@ class AppLockPermissionTask(
             val dialogPresenter = DialogPresenter(context)
 
             // 显示加锁主要权限请求弹窗
-            dialogPresenter.showCustomPermissionDialog(
+            mAppLockPermissionDialog =  dialogPresenter.showCustomPermissionDialog(
                 permissions = permissions,
                 callback = object : PermissionDialogCallback {
                     override fun onPermissionsGranted() {
@@ -87,7 +88,18 @@ class AppLockPermissionTask(
         }
     }
 
-    fun hasGrantedAppLockPermission(permissionMgr: PermissionManager<LifecycleOwner>?): Boolean {
-        return permissionMgr?.hasOverlayPermission() == true && permissionMgr?.hasUsageStatsPermission() == true
+    private fun onGrantedAppLockPermissions(continuation: Continuation<TaskResult<String?>>) {
+        if (hasGrantedAppLockPermission(permissionMgr)) {
+            continuation.resume(TaskResult.Success("AppLock功能需要的权限，授权成功"))
+            mAppLockPermissionDialog?.dismiss()
+        }
+    }
+
+    private fun hasGrantedAppLockPermission(permissionMgr: PermissionManager<LifecycleOwner>?): Boolean {
+        return permissionMgr?.hasOverlayPermission() == true && permissionMgr.hasUsageStatsPermission()
+    }
+
+    override fun isFinished(): Boolean {
+        return hasGrantedAppLockPermission(permissionMgr)
     }
 }

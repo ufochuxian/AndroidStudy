@@ -35,7 +35,7 @@ class DialogPresenter(val context: Context) {
     fun showCustomPermissionDialog(
         permissions: List<PermissionInfo>,
         callback: PermissionDialogCallback
-    ) {
+    ) : Dialog{
         // 创建自定义 Dialog
         val dialog = Dialog(context).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -83,6 +83,7 @@ class DialogPresenter(val context: Context) {
         }
 
         dialog.show()
+        return dialog
     }
 
 
