@@ -27,6 +27,7 @@ import com.eric.base.ext.isOverAndroidVersionInclude6
  */
 private const val TAG = "PermissionManager"
 
+@Suppress("DEPRECATION")
 class PermissionManager<T : Any>(private val owner: T) {
 
     /**
@@ -47,6 +48,12 @@ class PermissionManager<T : Any>(private val owner: T) {
                                 Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         }
                         owner.startActivity(intent)
+                    } else if(owner is Fragment) {
+                        val intent = Intent(owner.requireContext(), owner.requireContext()::class.java).apply {
+                            flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+                        owner.requireContext().startActivity(intent)
                     }
                 }
             }
@@ -257,7 +264,6 @@ class PermissionManager<T : Any>(private val owner: T) {
      * @param callback 回调接口，通知权限申请结果
      */
     fun requestUsageStatsPermission(callback: PermissionCallback) {
-        val context = getContext()
         if (hasUsageStatsPermission()) {
             callback.onPermissionGranted()
         } else {
@@ -296,7 +302,6 @@ class PermissionManager<T : Any>(private val owner: T) {
      * 请求电池优化权限
      */
     fun requestBatteryOptimizationPermission(callback: PermissionCallback) {
-        val context = getContext()
         val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
         specificPermissionLauncher.launch(intent)
         this.callback = callback
@@ -306,7 +311,6 @@ class PermissionManager<T : Any>(private val owner: T) {
      * 请求辅助功能权限
      */
     fun requestAccessibilityPermission(callback: PermissionCallback) {
-        val context = getContext()
         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         specificPermissionLauncher.launch(intent)
         this.callback = callback
