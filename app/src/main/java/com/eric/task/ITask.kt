@@ -131,7 +131,6 @@ class StoragePermissionTask(
 class PatternPasswordTask(
     private val context: Context? = null,
     private val viewModel: BaseViewModel?,
-    override var taskName: String
 ) : ITask<TaskResult<String?>> {
 
     override val dependencies: List<Class<out ITask<*>>>? = null
@@ -157,7 +156,6 @@ class PatternPasswordTask(
 // BroadcastTask 改造
 class BroadcastTask(
     private val viewModel: BroadCastViewModel?,
-    override var taskName: String
 ) : ITask<TaskResult<String?>> {
 
     override val dependencies: List<Class<out ITask<*>>>? = null
@@ -181,7 +179,6 @@ class BroadcastTask(
 // GestureTask 改造
 class GestureTask(
     private val viewModel: BaseViewModel?,
-    override var taskName: String
 ) : ITask<TaskResult<String?>> {
 
     override val dependencies: List<Class<out ITask<*>>>? = null

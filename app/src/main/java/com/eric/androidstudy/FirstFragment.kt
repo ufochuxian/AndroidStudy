@@ -49,7 +49,7 @@ class FirstFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var permissionMgr : PermissionManager<LifecycleOwner>? = null
+    private var permissionMgr: PermissionManager<LifecycleOwner>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,12 +78,16 @@ class FirstFragment : Fragment() {
         }
 
 
-
         val cornerRadius = 12f // 你可以根据需要动态计算这个值
         activity?.let {
 //            val rippleColor = R.attr.colorControlHighlight
             val rippleColor = R.color.color_ffbdbdbd
-            binding.rippleView.setRippleBackground(it, R.color.colorAccent, rippleColor, cornerRadius)
+            binding.rippleView.setRippleBackground(
+                it,
+                R.color.colorAccent,
+                rippleColor,
+                cornerRadius
+            )
         }
 
 
@@ -116,9 +120,9 @@ class FirstFragment : Fragment() {
                 val tasks = listOf(
                     CameraPermissionTask(requireContext(), null, permissionMgr),
                     StoragePermissionTask(requireContext(), null, permissionMgr),
-                    PatternPasswordTask(context,null, "PasswordTask"),
-                    BroadcastTask(broadCastViewModel, "BroadcastTask"),
-                    GestureTask(null, "GestureTask")
+                    PatternPasswordTask(context, null),
+                    BroadcastTask(broadCastViewModel),
+                    GestureTask(null)
                 )
                 TasksChainManager<String?>().executeTasksSequentially(tasks) //串行执行任务
 //                ParallelTasksManager().executeTasks(tasks) //并发执行任务
@@ -149,7 +153,7 @@ class FirstFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(ERIC_TAG,"FirstFragment onResume")
+        Log.d(ERIC_TAG, "FirstFragment onResume")
     }
 
     override fun onDestroyView() {
