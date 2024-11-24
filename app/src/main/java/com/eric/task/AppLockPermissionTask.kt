@@ -58,7 +58,7 @@ class AppLockPermissionTask(
                             }
 
                             override fun onPermissionDenied(result: ActivityResult?) {
-                                Log.i(TAG, "'应用悬浮权限没有授权")
+                                Log.i(TAG, "应用悬浮权限没有授权")
 
                             }
                         })
@@ -96,7 +96,7 @@ class AppLockPermissionTask(
     }
 
     private fun hasGrantedAppLockPermission(permissionMgr: PermissionManager<LifecycleOwner>?): Boolean {
-        return permissionMgr?.hasOverlayPermission() == true && permissionMgr.hasUsageStatsPermission()
+        return PermissionManager.hasOverlayPermission(context) && PermissionManager.hasUsageStatsPermission(context)
     }
 
     override fun isFinished(): Boolean {

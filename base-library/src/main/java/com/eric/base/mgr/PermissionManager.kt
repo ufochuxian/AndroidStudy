@@ -30,38 +30,90 @@ private const val TAG = "PermissionManager"
 @Suppress("DEPRECATION")
 class PermissionManager<T : Any>(private val owner: T) {
 
+    companion object {
+        /**
+         * 检查是否具有辅助功能权限
+         */
+        fun hasAccessibilityPermission(context: Context): Boolean {
+            val accessibilityManager =
+                context.getSystemService(Context.ACCESSIBILITY_SERVICE) as android.view.accessibility.AccessibilityManager
+            val enabledServices = Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+            )
+            val packageName = context.packageName
+            return enabledServices?.split(":")?.any { it.contains(packageName) } == true &&
+                    accessibilityManager.isEnabled
+        }
+
+        /**
+         * 检查是否具有悬浮窗权限
+         */
+        fun hasOverlayPermission(context: Context): Boolean {
+            return Settings.canDrawOverlays(context)
+        }
+
+
+        /**
+         * 检查是否具有存储权限
+         *
+         * @return 如果当前版本已授予存储权限，返回 true；否则返回 false
+         */
+        fun hasStoragePermission(context: Context): Boolean {
+            return when {
+                isOverAndroidVersionInclude11() -> Environment.isExternalStorageManager()
+                isOverAndroidVersionInclude6() && isBelowAndroidVersionInclude10() -> {
+                    val readGranted = ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                    val writeGranted = ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+
+                    readGranted && writeGranted
+                }
+
+                else -> true // Android 6 以下版本默认授予权限
+            }
+        }
+
+        /**
+         * 检查是否具有应用使用情况权限
+         */
+        fun hasUsageStatsPermission(context: Context): Boolean {
+            val appOpsManager =
+                context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
+            val mode = appOpsManager.checkOpNoThrow(
+                android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(),
+                context.packageName
+            )
+            return mode == android.app.AppOpsManager.MODE_ALLOWED
+        }
+    }
+
+
     /**
      * 使用轮询器检测权限状态
      * 适用于 Android 11+ 申请 MANAGE_EXTERNAL_STORAGE 权限时，通过轮询实现用户体验优化。
      */
-    private val pollingManager by lazy {
-        PollingManager(PollingConfig(pollingCallBack = object : PollingCallBack {
-            override fun onTick() {
-                // 检测 Android 11+ 的文件管理权限状态
-                if (isOverAndroidVersionInclude11() && Environment.isExternalStorageManager()) {
-                    if (owner is Activity) {
-                        // 大于android 11的版本，申请manager_storage的权限，跳转到设置界面，轮询授权，
-                        // 获取到权限后，通过 Intent 置顶当前 Activity，顶掉系统设置界面，返回app，提高用户体验
-                        // 权限已获取，通过 Intent 返回应用界面
-                        val intent = Intent(owner, owner::class.java).apply {
-                            flags =
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        }
-                        owner.startActivity(intent)
-                    } else if(owner is Fragment) {
-                        val intent = Intent(owner.requireContext(), owner.requireContext()::class.java).apply {
-                            flags =
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        }
-                        owner.requireContext().startActivity(intent)
-                    }
-                }
-            }
+    private val pollingManager = PermissionPollingManager(getContext())
 
-            override fun onTimeout() {
-                Log.d(TAG, "轮询超时，未获取权限")
-            }
-        }))
+    // 启动对应权限轮询
+    private fun startPollingForPermission(permission: SpecialPermission) {
+        pollingManager.startPolling(permission)
+    }
+
+    // 停止对应权限轮询
+    private fun stopPollingForPermission(permission: SpecialPermission) {
+        pollingManager.stopPolling(permission)
+    }
+
+    // 停止所有权限轮询
+    fun stopAllPolling() {
+        pollingManager.stopAllPolling()
     }
 
     /**
@@ -162,7 +214,6 @@ class PermissionManager<T : Any>(private val owner: T) {
      */
     fun requestStoragePermission(callback: PermissionCallback) {
         this.callback = callback
-
         when {
             // Android 11 及以上版本，使用 MANAGE_EXTERNAL_STORAGE (android version >= 11)
             isOverAndroidVersionInclude11() -> {
@@ -182,6 +233,7 @@ class PermissionManager<T : Any>(private val owner: T) {
 
     private fun processAndroid6To10StoragePermission(callback: PermissionCallback) {
         this.callback = callback
+        currentSpecialPermission = SpecialPermission.STORAGE
         val permissions = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -194,6 +246,7 @@ class PermissionManager<T : Any>(private val owner: T) {
         if (Environment.isExternalStorageManager()) {
             callback?.onPermissionGranted()
         } else {
+            currentSpecialPermission = SpecialPermission.STORAGE
             // 引导用户到设置中开启权限
             val intent = Intent(
                 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
@@ -202,7 +255,7 @@ class PermissionManager<T : Any>(private val owner: T) {
             manageStorageLauncher.launch(intent)
 
             // 开启轮询检测权限状态
-            pollingManager.start()
+            startPollingForPermission(SpecialPermission.STORAGE)
         }
     }
 
@@ -218,7 +271,7 @@ class PermissionManager<T : Any>(private val owner: T) {
                 callback?.onPermissionDenied(result)
                 Log.d(TAG, "文件管理权限申请失败")
             }
-            pollingManager.stop()
+            stopPollingForPermission(SpecialPermission.STORAGE)
         }
     }
 
@@ -258,18 +311,16 @@ class PermissionManager<T : Any>(private val owner: T) {
 
     // 新增逻辑部分
 
-    /**
-     * 请求应用使用情况权限
-     *
-     * @param callback 回调接口，通知权限申请结果
-     */
+
     fun requestUsageStatsPermission(callback: PermissionCallback) {
-        if (hasUsageStatsPermission()) {
+        if (hasUsageStatsPermission(getContext())) {
             callback.onPermissionGranted()
         } else {
+            currentSpecialPermission = SpecialPermission.USAGE_STATS
             val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
             specificPermissionLauncher.launch(intent)
             this.callback = callback
+            startPollingForPermission(SpecialPermission.USAGE_STATS)
         }
     }
 
@@ -277,25 +328,18 @@ class PermissionManager<T : Any>(private val owner: T) {
      * 请求悬浮窗权限
      */
     fun requestOverlayPermission(callback: PermissionCallback) {
-        val context = getContext()
-        if (hasOverlayPermission()) {
+        if (hasOverlayPermission(getContext())) {
             callback.onPermissionGranted()
         } else {
+            currentSpecialPermission = SpecialPermission.OVERLAY
             val intent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:${context.packageName}")
+                Uri.parse("package:${getContext().packageName}")
             )
             specificPermissionLauncher.launch(intent)
             this.callback = callback
+            startPollingForPermission(SpecialPermission.OVERLAY)
         }
-    }
-
-    /**
-     * 检查是否具有悬浮窗权限
-     */
-    fun hasOverlayPermission(): Boolean {
-        val context = getContext()
-        return Settings.canDrawOverlays(context)
     }
 
     /**
@@ -311,10 +355,17 @@ class PermissionManager<T : Any>(private val owner: T) {
      * 请求辅助功能权限
      */
     fun requestAccessibilityPermission(callback: PermissionCallback) {
-        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-        specificPermissionLauncher.launch(intent)
-        this.callback = callback
+        if (hasAccessibilityPermission(getContext())) {
+            callback.onPermissionGranted()
+        } else {
+            currentSpecialPermission = SpecialPermission.ACCESSIBILITY
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            specificPermissionLauncher.launch(intent)
+            this.callback = callback
+            startPollingForPermission(SpecialPermission.ACCESSIBILITY)
+        }
     }
+
 
 
     private fun getContext(): Context {
@@ -346,101 +397,69 @@ class PermissionManager<T : Any>(private val owner: T) {
 
     // 以下是一些特殊权限
 
+    private var currentSpecialPermission: SpecialPermission? = null
+
     /**
      * 处理特殊权限申请结果
      */
     private fun handleSpecificPermissionResult(result: ActivityResult) {
-        when {
-            callback == null -> return // 如果没有回调，直接返回
-
-            // 检查应用使用情况权限
-            hasUsageStatsPermission() -> {
-                callback?.onPermissionGranted(result)
-                Log.d(TAG, "应用使用情况权限申请成功")
-            }
-
-            // 检查悬浮窗权限
-            hasOverlayPermission() -> {
-                callback?.onPermissionGranted(result)
-                Log.d(TAG, "悬浮窗权限申请成功")
-            }
-
-            // 检查辅助功能权限
-            hasAccessibilityPermission() -> {
-                callback?.onPermissionGranted(result)
-                Log.d(TAG, "辅助功能权限申请成功")
-            }
-
-            // 检查电池优化权限
-            // 注意：电池优化权限本质上是跳转设置页面，无法直接判断具体某个权限是否被忽略
-            // 这里可以选择性通知用户自行确认
-            else -> {
-                callback?.onPermissionDenied(result)
-                Log.d(TAG, "特殊权限申请失败，或需要用户进一步确认")
-            }
-        }
-    }
-
-
-    /**
-     * 检查是否具有辅助功能权限
-     */
-    fun hasAccessibilityPermission(): Boolean {
         val context = getContext()
-        val accessibilityManager =
-            context.getSystemService(Context.ACCESSIBILITY_SERVICE) as android.view.accessibility.AccessibilityManager
-        val enabledServices = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-        )
-        val packageName = context.packageName
-        return enabledServices?.split(":")?.any { it.contains(packageName) } == true &&
-                accessibilityManager.isEnabled
-    }
 
-    /**
-     * 检查是否具有存储权限
-     *
-     * @return 如果当前版本已授予存储权限，返回 true；否则返回 false
-     */
-    fun hasStoragePermission(): Boolean {
-        return when {
-            isOverAndroidVersionInclude11() -> Environment.isExternalStorageManager()
-            isOverAndroidVersionInclude6() && isBelowAndroidVersionInclude10() -> {
-                val context = when (owner) {
-                    is Activity -> owner
-                    is Fragment -> owner.requireContext()
-                    else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
+        currentSpecialPermission?.let { permission ->
+            when (permission) {
+                SpecialPermission.USAGE_STATS -> {
+                    if (hasUsageStatsPermission(context)) {
+                        callback?.onPermissionGranted(result)
+                        Log.d(TAG, "应用使用情况权限申请成功")
+                    } else {
+                        callback?.onPermissionDenied(result)
+                        Log.d(TAG, "应用使用情况权限申请失败")
+                    }
+                    stopPollingForPermission(SpecialPermission.USAGE_STATS)
                 }
 
-                val readGranted = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-                val writeGranted = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
+                SpecialPermission.OVERLAY -> {
+                    if (hasOverlayPermission(context)) {
+                        callback?.onPermissionGranted(result)
+                        Log.d(TAG, "悬浮窗权限申请成功")
+                    } else {
+                        callback?.onPermissionDenied(result)
+                        Log.d(TAG, "悬浮窗权限申请失败")
+                    }
+                    stopPollingForPermission(SpecialPermission.OVERLAY)
+                }
 
-                readGranted && writeGranted
+                SpecialPermission.ACCESSIBILITY -> {
+                    if (hasAccessibilityPermission(context)) {
+                        callback?.onPermissionGranted(result)
+                        Log.d(TAG, "辅助功能权限申请成功")
+                    } else {
+                        callback?.onPermissionDenied(result)
+                        Log.d(TAG, "辅助功能权限申请失败")
+                    }
+                    stopPollingForPermission(SpecialPermission.ACCESSIBILITY)
+                }
+
+                SpecialPermission.STORAGE -> {
+                    if (hasStoragePermission(context)) {
+                        callback?.onPermissionGranted(result)
+                        Log.d(TAG, "文件管理权限申请成功")
+                    } else {
+                        callback?.onPermissionDenied(result)
+                        Log.d(TAG, "文件管理权限申请失败")
+                    }
+                    stopPollingForPermission(SpecialPermission.STORAGE)
+                }
             }
-
-            else -> true // Android 6 以下版本默认授予权限
+        } ?: run {
+            Log.w(TAG, "未找到当前请求的特殊权限类型")
+            callback?.onPermissionDenied(result)
         }
+
+        // 重置当前权限状态
+        currentSpecialPermission = null
     }
 
-    /**
-     * 检查是否具有应用使用情况权限
-     */
-    fun hasUsageStatsPermission(): Boolean {
-        val context = getContext()
-        val appOpsManager =
-            context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
-        val mode = appOpsManager.checkOpNoThrow(
-            android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
-            android.os.Process.myUid(),
-            context.packageName
-        )
-        return mode == android.app.AppOpsManager.MODE_ALLOWED
-    }
+
+
 }

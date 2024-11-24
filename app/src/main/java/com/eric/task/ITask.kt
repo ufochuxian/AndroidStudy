@@ -123,7 +123,7 @@ class StoragePermissionTask(
     }
 
     override fun isFinished(): Boolean {
-        return permissionMgr?.hasStoragePermission() == true
+        return PermissionManager.hasStoragePermission(context)
     }
 }
 
