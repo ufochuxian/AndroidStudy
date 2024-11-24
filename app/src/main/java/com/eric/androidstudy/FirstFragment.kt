@@ -23,9 +23,8 @@ import com.eric.routers.TgmRouter
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
 import com.eric.task.GestureTask
-import com.eric.task.ITask
-import com.eric.task.PasswordTask
-import com.eric.task.PermissionTask
+import com.eric.task.PatternPasswordTask
+import com.eric.task.CameraPermissionTask
 import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
@@ -115,13 +114,13 @@ class FirstFragment : Fragment() {
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(
-                    PermissionTask(requireContext(),null, "PermissionTask",permissionMgr),
-                    StoragePermissionTask(requireContext(),null, "PermissionTask",permissionMgr),
-                    PasswordTask(null, "PasswordTask"),
+                    CameraPermissionTask(requireContext(), null, permissionMgr),
+                    StoragePermissionTask(requireContext(), null, permissionMgr),
+                    PatternPasswordTask(context,null, "PasswordTask"),
                     BroadcastTask(broadCastViewModel, "BroadcastTask"),
                     GestureTask(null, "GestureTask")
                 )
-                TasksChainManager<Boolean>().executeTasks(tasks) //串行执行任务
+                TasksChainManager<String?>().executeTasksSequentially(tasks) //串行执行任务
 //                ParallelTasksManager().executeTasks(tasks) //并发执行任务
             }
         }

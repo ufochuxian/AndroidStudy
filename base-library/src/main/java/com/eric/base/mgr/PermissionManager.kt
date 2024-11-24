@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.Settings
@@ -13,6 +14,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eric.base.ext.ERIC_TAG
 import com.eric.base.ext.isBelowAndroidVersionInclude10
@@ -233,6 +235,54 @@ class PermissionManager<T : Any>(private val owner: T) {
             dynamicPermissionCallback?.onPermissionsGranted()
         } else {
             dynamicPermissionCallback?.onPermissionsDenied(deniedPermissions.toList())
+        }
+    }
+
+    /**
+     * 检查是否具有存储权限
+     *
+     * @return 如果当前版本已授予存储权限，返回 true；否则返回 false
+     */
+    fun hasStoragePermission(): Boolean {
+        return when {
+            isOverAndroidVersionInclude11() -> Environment.isExternalStorageManager()
+            isOverAndroidVersionInclude6() && isBelowAndroidVersionInclude10() -> {
+                val context = when (owner) {
+                    is Activity -> owner
+                    is Fragment -> owner.requireContext()
+                    else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
+                }
+
+                val readGranted = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+                val writeGranted = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+
+                readGranted && writeGranted
+            }
+            else -> true // Android 6 以下版本默认授予权限
+        }
+    }
+
+    /**
+     * 检查是否具有指定的权限
+     *
+     * @param permissions 要检查的权限列表
+     * @return 如果所有权限均已授予，返回 true；否则返回 false
+     */
+    fun hasPermissions(permissions: Array<String>): Boolean {
+        val context = when (owner) {
+            is Activity -> owner
+            is Fragment -> owner.requireContext()
+            else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
+        }
+
+        return permissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
     }
 }
