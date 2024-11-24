@@ -3,6 +3,7 @@ package com.eric.androidstudy
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
+import com.eric.base.ext.ERIC_TAG
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
@@ -21,8 +23,10 @@ import com.eric.routers.TgmRouter
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
 import com.eric.task.GestureTask
+import com.eric.task.ITask
 import com.eric.task.PasswordTask
 import com.eric.task.PermissionTask
+import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
 import kotlinx.coroutines.launch
@@ -112,6 +116,7 @@ class FirstFragment : Fragment() {
             lifecycleScope.launch {
                 val tasks = listOf(
                     PermissionTask(requireContext(),null, "PermissionTask",permissionMgr),
+                    StoragePermissionTask(requireContext(),null, "PermissionTask",permissionMgr),
                     PasswordTask(null, "PasswordTask"),
                     BroadcastTask(broadCastViewModel, "BroadcastTask"),
                     GestureTask(null, "GestureTask")
@@ -141,6 +146,11 @@ class FirstFragment : Fragment() {
         context?.let {
             copyFile(sourceFile, it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(ERIC_TAG,"FirstFragment onResume")
     }
 
     override fun onDestroyView() {

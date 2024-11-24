@@ -7,7 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import android.Manifest
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LifecycleOwner
+import timber.log.Timber
 
 
 const val TAG = "ITask"
@@ -50,7 +52,8 @@ interface ITask<out T> {
 }
 
 // 定义具体任务类
-class PermissionTask(val context: Context, private val viewModel: BaseViewModel?, override var taskName : String,val permissionMgr: PermissionManager<LifecycleOwner>?) : ITask<Boolean> {
+class PermissionTask(val context: Context, private val viewModel: BaseViewModel?, override var taskName : String,
+                     private val permissionMgr: PermissionManager<LifecycleOwner>?) : ITask<Boolean> {
     override val dependencies: List<Class<out ITask<*>>>?
         get() = null
     override suspend fun execute(): Boolean {
@@ -59,25 +62,40 @@ class PermissionTask(val context: Context, private val viewModel: BaseViewModel?
             arrayOf(Manifest.permission.CAMERA),
             object : PermissionManager.DynamicPermissionCallback {
                 override fun onPermissionsGranted() {
-                    Log.d("PermissionManager", "所有权限已授予")
+                    Log.d(TAG, "所有权限已授予")
                     result = true
                 }
 
                 override fun onPermissionsDenied(deniedPermissions: List<String>) {
-                    Log.d("PermissionManager", "被拒绝的权限：$deniedPermissions")
+                    Log.d(TAG, "被拒绝的权限：$deniedPermissions")
                     result = false
                 }
             }
         )
         return result
+    }
+}
 
+// 定义具体任务类
+class StoragePermissionTask(val context: Context, private val viewModel: BaseViewModel?, override var taskName : String,
+                     private val permissionMgr: PermissionManager<LifecycleOwner>?) : ITask<Boolean> {
+    override val dependencies: List<Class<out ITask<*>>>?
+        get() = null
+    override suspend fun execute(): Boolean {
+        var result = false
+        permissionMgr?.requestStoragePermission(object : PermissionManager.PermissionCallback {
+            override fun onPermissionGranted(activityResult: ActivityResult?) {
+                Log.d(TAG, "文件读写权限已授予")
+                result = true
+            }
 
-//        return withContext(Dispatchers.Main) {
-//            // 模拟显示权限弹窗，并等待用户操作
-//            // 例如：showPermissionDialog() 返回用户是否授予权限的结果
-//            Log.i(TAG, "PermissionTask executed")
-//            true // 返回结果 true 或 false
-//        }
+            override fun onPermissionDenied(activityResult: ActivityResult?) {
+                Log.d(TAG, "文件读写权限没有被授予")
+                result = false
+            }
+
+        })
+        return result
     }
 }
 

@@ -197,19 +197,6 @@ class MainActivity : AppCompatActivity() {
 
         // 检查权限
 //        checkAndRequestPermission()
-
-        permissionMgr.requestStoragePermission(object : PermissionManager.PermissionCallback {
-            override fun onPermissionGranted(result: ActivityResult?) {
-                Log.i(ERIC_TAG, "onPermissionGranted:${result?.resultCode}")
-
-            }
-
-            override fun onPermissionDenied(result: ActivityResult?) {
-                Log.i(ERIC_TAG, "onPermissionDenied:${result?.resultCode}")
-
-            }
-        })
-
     }
 
 
