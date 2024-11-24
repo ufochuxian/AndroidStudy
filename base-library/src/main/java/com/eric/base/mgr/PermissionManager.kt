@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.eric.base.ext.ERIC_TAG
 import com.eric.base.ext.isBelowAndroidVersionInclude10
 import com.eric.base.ext.isOverAndroidVersionInclude11
 import com.eric.base.ext.isOverAndroidVersionInclude6
@@ -26,6 +25,8 @@ import com.eric.base.ext.isOverAndroidVersionInclude6
  *
  * @param T 上下文类型，可以是 Activity 或 Fragment
  */
+private const val TAG = "PermissionManager"
+
 class PermissionManager<T : Any>(private val owner: T) {
 
     /**
@@ -51,7 +52,7 @@ class PermissionManager<T : Any>(private val owner: T) {
             }
 
             override fun onTimeout() {
-                Log.d(ERIC_TAG, "轮询超时，未获取权限")
+                Log.d(TAG, "轮询超时，未获取权限")
             }
         }))
     }
@@ -64,21 +65,6 @@ class PermissionManager<T : Any>(private val owner: T) {
         fun onPermissionDenied(result: ActivityResult? = null)
     }
 
-    companion object {
-        private const val REQUEST_CODE_MANAGE_STORAGE = 1001 // 文件管理权限请求码
-    }
-
-    private var callback: PermissionCallback? = null
-
-    // 用于文件管理权限的 ActivityResultLauncher
-    private lateinit var manageStorageLauncher: ActivityResultLauncher<Intent>
-
-    // 用于动态权限请求的 ActivityResultLauncher
-    private lateinit var generalPermissionLauncher: ActivityResultLauncher<Array<String>>
-
-    // 动态权限申请的回调
-    private var dynamicPermissionCallback: DynamicPermissionCallback? = null
-
     /**
      * 动态权限申请回调接口
      */
@@ -86,6 +72,18 @@ class PermissionManager<T : Any>(private val owner: T) {
         fun onPermissionsGranted() // 所有权限均已授予
         fun onPermissionsDenied(deniedPermissions: List<String>) // 返回被拒绝的权限列表
     }
+
+    private var callback: PermissionCallback? = null
+    private var dynamicPermissionCallback: DynamicPermissionCallback? = null
+
+    // 用于文件管理权限的 ActivityResultLauncher
+    private lateinit var manageStorageLauncher: ActivityResultLauncher<Intent>
+
+    // 用于动态权限请求的 ActivityResultLauncher
+    private lateinit var generalPermissionLauncher: ActivityResultLauncher<Array<String>>
+
+    // 用于特殊权限（如电池优化、辅助功能权限等）的 ActivityResultLauncher
+    private lateinit var specificPermissionLauncher: ActivityResultLauncher<Intent>
 
     init {
         initializeLaunchers()
@@ -111,6 +109,12 @@ class PermissionManager<T : Any>(private val owner: T) {
                 ) { permissions ->
                     handleGeneralPermissionResult(permissions)
                 }
+
+                specificPermissionLauncher = owner.registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) { result ->
+                    handleSpecificPermissionResult(result)
+                }
             }
 
             is Fragment -> {
@@ -124,6 +128,12 @@ class PermissionManager<T : Any>(private val owner: T) {
                     ActivityResultContracts.RequestMultiplePermissions()
                 ) { permissions ->
                     handleGeneralPermissionResult(permissions)
+                }
+
+                specificPermissionLauncher = owner.registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) { result ->
+                    handleSpecificPermissionResult(result)
                 }
             }
 
@@ -155,6 +165,7 @@ class PermissionManager<T : Any>(private val owner: T) {
             isOverAndroidVersionInclude6() && isBelowAndroidVersionInclude10() -> {
                 processAndroid6To10StoragePermission(callback)
             }
+
             else -> {
                 // Android 6 以下版本，默认授予权限
                 callback.onPermissionGranted()
@@ -195,10 +206,10 @@ class PermissionManager<T : Any>(private val owner: T) {
         if (isOverAndroidVersionInclude11()) {
             if (Environment.isExternalStorageManager()) {
                 callback?.onPermissionGranted(result)
-                Log.d(ERIC_TAG, "文件管理权限申请成功")
+                Log.d(TAG, "文件管理权限申请成功")
             } else {
                 callback?.onPermissionDenied(result)
-                Log.d(ERIC_TAG, "文件管理权限申请失败")
+                Log.d(TAG, "文件管理权限申请失败")
             }
             pollingManager.stop()
         }
@@ -238,6 +249,123 @@ class PermissionManager<T : Any>(private val owner: T) {
         }
     }
 
+    // 新增逻辑部分
+
+    /**
+     * 请求应用使用情况权限
+     *
+     * @param callback 回调接口，通知权限申请结果
+     */
+    fun requestUsageStatsPermission(callback: PermissionCallback) {
+        val context = getContext()
+        if (hasUsageStatsPermission()) {
+            callback.onPermissionGranted()
+        } else {
+            val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+            specificPermissionLauncher.launch(intent)
+            this.callback = callback
+        }
+    }
+
+    /**
+     * 请求悬浮窗权限
+     */
+    fun requestOverlayPermission(callback: PermissionCallback) {
+        val context = getContext()
+        if (hasOverlayPermission()) {
+            callback.onPermissionGranted()
+        } else {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:${context.packageName}")
+            )
+            specificPermissionLauncher.launch(intent)
+            this.callback = callback
+        }
+    }
+
+    /**
+     * 检查是否具有悬浮窗权限
+     */
+    fun hasOverlayPermission(): Boolean {
+        val context = getContext()
+        return Settings.canDrawOverlays(context)
+    }
+
+    /**
+     * 请求电池优化权限
+     */
+    fun requestBatteryOptimizationPermission(callback: PermissionCallback) {
+        val context = getContext()
+        val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+        specificPermissionLauncher.launch(intent)
+        this.callback = callback
+    }
+
+    /**
+     * 请求辅助功能权限
+     */
+    fun requestAccessibilityPermission(callback: PermissionCallback) {
+        val context = getContext()
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        specificPermissionLauncher.launch(intent)
+        this.callback = callback
+    }
+
+
+    private fun getContext(): Context {
+        return when (owner) {
+            is Activity -> owner
+            is Fragment -> owner.requireContext()
+            else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
+        }
+    }
+
+
+    /**
+     * 检查是否具有指定的动态申请的通用权限
+     *
+     * @param permissions 要检查的权限列表
+     * @return 如果所有权限均已授予，返回 true；否则返回 false
+     */
+    fun hasPermissions(permissions: Array<String>): Boolean {
+        val context = when (owner) {
+            is Activity -> owner
+            is Fragment -> owner.requireContext()
+            else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
+        }
+
+        return permissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    // 以下是一些特殊权限
+
+    /**
+     * 处理特殊权限申请结果
+     */
+    private fun handleSpecificPermissionResult(result: ActivityResult) {
+        // 目前的实现假设所有特殊权限都成功
+        callback?.onPermissionGranted(result)
+    }
+
+    /**
+     * 检查是否具有辅助功能权限
+     */
+    fun hasAccessibilityPermission(): Boolean {
+        val context = getContext()
+        val accessibilityManager =
+            context.getSystemService(Context.ACCESSIBILITY_SERVICE) as android.view.accessibility.AccessibilityManager
+        val enabledServices = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        val packageName = context.packageName
+        return enabledServices?.split(":")?.any { it.contains(packageName) } == true &&
+                accessibilityManager.isEnabled
+    }
+
     /**
      * 检查是否具有存储权限
      *
@@ -264,25 +392,23 @@ class PermissionManager<T : Any>(private val owner: T) {
 
                 readGranted && writeGranted
             }
+
             else -> true // Android 6 以下版本默认授予权限
         }
     }
 
     /**
-     * 检查是否具有指定的权限
-     *
-     * @param permissions 要检查的权限列表
-     * @return 如果所有权限均已授予，返回 true；否则返回 false
+     * 检查是否具有应用使用情况权限
      */
-    fun hasPermissions(permissions: Array<String>): Boolean {
-        val context = when (owner) {
-            is Activity -> owner
-            is Fragment -> owner.requireContext()
-            else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
-        }
-
-        return permissions.all {
-            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-        }
+    fun hasUsageStatsPermission(): Boolean {
+        val context = getContext()
+        val appOpsManager =
+            context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
+        val mode = appOpsManager.checkOpNoThrow(
+            android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
+            android.os.Process.myUid(),
+            context.packageName
+        )
+        return mode == android.app.AppOpsManager.MODE_ALLOWED
     }
 }
