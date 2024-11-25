@@ -1,10 +1,14 @@
 package com.eric.task
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleOwner
+import com.eric.androidstudy.PatternLockActivity
 import com.eric.androidstudy.R
 import com.eric.dialog.DialogPresenter
 import com.eric.base.mgr.PermissionManager
@@ -12,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 
@@ -178,15 +183,33 @@ class BroadcastTask(
 
 // GestureTask 改造
 class GestureTask(
-    private val viewModel: BaseViewModel?,
+    private val context: Context?,
+    private val activityResultLauncher: ActivityResultLauncher<Intent>
 ) : ITask<TaskResult<String?>> {
 
     override val dependencies: List<Class<out ITask<*>>>? = null
 
     override suspend fun execute(): TaskResult<String?> {
-        return withContext(Dispatchers.Main) {
-            // 模拟用户设置手势密码成功
-            TaskResult.Success("手势密码设置成功")
+        return suspendCancellableCoroutine {
+            val intent = Intent(context, PatternLockActivity::class.java)
+            activityResultLauncher.launch(intent)
+        }
+    }
+
+    fun onPatternResult(resultCode: Int) {
+        when (resultCode) {
+            PatternLockActivity.RESULT_SUCCESS -> {
+                TaskResult.Success("手势密码设置成功")
+            }
+
+            PatternLockActivity.RESULT_FAILED -> {
+                TaskResult.Failure(Throwable("用户取消授权"))
+            }
+
+            PatternLockActivity.RESULT_CANCELLED -> {
+                TaskResult.Cancelled("手势密码任务被取消")
+            }
         }
     }
 }
+

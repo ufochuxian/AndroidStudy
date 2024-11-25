@@ -124,6 +124,7 @@ dependencies {
 
 //    api 'com.jakewharton.timber:timber:4.7.1'
 
+    api 'com.github.ihsg:PatternLocker:2.5.7'
 
 
 

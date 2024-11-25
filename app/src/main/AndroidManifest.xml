@@ -65,6 +65,7 @@
         <activity android:name="com.eric.glass.GlassActivity"/>
         <activity android:name="com.eric.audio.AudioWaveActivity"/>
         <activity android:name="com.eric.androidstudy.ExampleActivity"/>
+        <activity android:name="com.eric.androidstudy.PatternLockActivity"/>
 
 
     </application>

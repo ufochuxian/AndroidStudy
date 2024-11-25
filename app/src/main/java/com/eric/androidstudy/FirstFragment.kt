@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -116,25 +117,35 @@ class FirstFragment : Fragment() {
 //            copyFileByOkio()
         }
 
+
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(
-                    AppLockPermissionTask(requireContext(),null,permissionMgr),
-                    CameraPermissionTask(requireContext(), null, permissionMgr),
-                    StoragePermissionTask(requireContext(), null, permissionMgr),
-                    PatternPasswordTask(context, null),
+//                    AppLockPermissionTask(requireContext(),null,permissionMgr),
+//                    CameraPermissionTask(requireContext(), null, permissionMgr),
+//                    StoragePermissionTask(requireContext(), null, permissionMgr),
+//                    PatternPasswordTask(context, null),
+                    gestureTask,
                     BroadcastTask(broadCastViewModel),
-                    GestureTask(null)
                 )
                 TasksChainManager<String?>().executeTasksSequentially(tasks) //串行执行任务
 //                ParallelTasksManager().executeTasks(tasks) //并发执行任务
             }
         }
 
+
         val anim = CustomAnim()
         anim.setRotateY(10f)
         binding.threeDView.text = "测试3d效果"
         binding.threeDView.startAnimation(anim)
+    }
+
+    private val gestureTask: GestureTask by lazy {
+        GestureTask(context, gestureLauncher)
+    }
+
+    private val gestureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        gestureTask.onPatternResult(result.resultCode)
     }
 
     private fun initObserver() {
