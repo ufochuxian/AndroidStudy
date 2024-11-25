@@ -7,19 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import com.eric.androidstudy.BuildConfig
 import com.eric.androidstudy.R
 import com.eric.base.ext.ERIC_TAG
-import android.provider.Settings
-import android.widget.LinearLayout
-import android.widget.TextView
+import com.eric.base.mgr.PermissionManager
 
 // 数据类，用于定义权限信息
 data class PermissionInfo(
     val permissionName: String, // 权限名称
     val description: String,    // 权限描述文案
-    val action: (() -> Unit)?   // 点击权限时的动作（跳转到权限设置页等）
+    val action: ((itemView : View) -> Unit)?   // 点击权限时的动作（跳转到权限设置页等）
 )
 
 // 回调接口，用于处理权限申请结果
@@ -34,7 +34,8 @@ class DialogPresenter(val context: Context) {
     // 自定义弹窗方法
     fun showCustomPermissionDialog(
         permissions: List<PermissionInfo>,
-        callback: PermissionDialogCallback
+        callback: PermissionDialogCallback,
+        onCancel: ((dialog: Dialog) -> Unit)? = null
     ) : Dialog{
         // 创建自定义 Dialog
         val dialog = Dialog(context).apply {
@@ -46,6 +47,14 @@ class DialogPresenter(val context: Context) {
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
             window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+
+        dialog.setCancelable(true)
+
+        dialog.setOnCancelListener {
+            if(onCancel != null) {
+                onCancel(dialog)
+            }
         }
 
         // 获取根布局
@@ -70,13 +79,13 @@ class DialogPresenter(val context: Context) {
             permissionStatusView.text = if (isGranted) "已授权" else "未授权"
             permissionStatusView.setTextColor(
                 context.resources.getColor(
-                    if (isGranted) android.R.color.holo_green_dark else android.R.color.holo_red_dark
+                    if (isGranted) R.color.colorAccent else android.R.color.holo_red_dark
                 )
             )
 
             // 点击权限描述触发对应的动作
             itemView.setOnClickListener {
-                permission.action?.invoke()
+                permission.action?.invoke(permissionStatusView)
             }
 
             permissionContainer.addView(itemView)
@@ -91,18 +100,11 @@ class DialogPresenter(val context: Context) {
     private fun isPermissionGranted(permissionName: String): Boolean {
         return when (permissionName) {
             "应用使用情况权限" -> {
-                val appOpsManager =
-                    context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
-                val mode = appOpsManager.checkOpNoThrow(
-                    android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
-                    android.os.Process.myUid(),
-                    context.packageName
-                )
-                mode == android.app.AppOpsManager.MODE_ALLOWED
+                PermissionManager.hasUsageStatsPermission(context)
             }
 
             "悬浮窗权限" -> {
-                Settings.canDrawOverlays(context)
+                PermissionManager.hasOverlayPermission(context)
             }
 
             else -> false

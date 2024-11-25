@@ -3,8 +3,10 @@ package com.eric.task
 import android.app.Dialog
 import android.content.Context
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LifecycleOwner
+import com.eric.androidstudy.R
 import com.eric.base.mgr.PermissionManager
 import com.eric.dialog.DialogPresenter
 import com.eric.dialog.PermissionDialogCallback
@@ -21,20 +23,23 @@ class AppLockPermissionTask(
     private var mAppLockPermissionDialog: Dialog? = null
 
     override suspend fun execute(): TaskResult<String?> {
-        return suspendCoroutine { continutation ->
+        return suspendCoroutine { continuation ->
             // 定义权限列表，每个权限包括名称、描述和点击时的动作
             val permissions = listOf(
                 PermissionInfo(
                     permissionName = "应用使用情况权限",
                     description = "应用需要获取使用情况统计数据的权限。",
-                    action = {
+                    action = { itemView ->
                         // 跳转到应用使用情况权限设置页
                         permissionMgr?.requestUsageStatsPermission(object :
                             PermissionManager.PermissionCallback {
 
                             override fun onPermissionGranted(result: ActivityResult?) {
                                 Log.i(TAG, "获取到应用使用情况权限")
-                                onGrantedAppLockPermissions(continutation)
+                                onGrantedAppLockPermissions(continuation)
+                                (itemView as TextView).text = "已授权"
+                                (itemView as TextView).setTextColor(context.resources.getColor(R.color.colorAccent))
+
                             }
 
                             override fun onPermissionDenied(result: ActivityResult?) {
@@ -47,14 +52,16 @@ class AppLockPermissionTask(
                 PermissionInfo(
                     permissionName = "悬浮窗权限",
                     description = "应用需要悬浮窗权限以显示重要提示信息。",
-                    action = {
+                    action = { itemView->
                         // 跳转到悬浮窗权限设置页
                         permissionMgr?.requestOverlayPermission(object :
                             PermissionManager.PermissionCallback {
 
                             override fun onPermissionGranted(result: ActivityResult?) {
                                 Log.i(TAG, "获取到应用悬浮权限")
-                                onGrantedAppLockPermissions(continutation)
+                                onGrantedAppLockPermissions(continuation)
+                                (itemView as TextView).text = "已授权"
+                                (itemView as TextView).setTextColor(context.resources.getColor(R.color.colorAccent))
                             }
 
                             override fun onPermissionDenied(result: ActivityResult?) {
@@ -82,6 +89,8 @@ class AppLockPermissionTask(
                         // 权限被拒绝的处理逻辑
                         Log.e("PermissionDialog", "被拒绝的权限: $deniedPermissions")
                     }
+                }, onCancel = {
+                    continuation.resume(TaskResult.Failure(Throwable("用户取消授权")))
                 }
             )
 
