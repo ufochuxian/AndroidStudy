@@ -22,13 +22,9 @@ import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
-import com.eric.task.AppLockPermissionTask
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
 import com.eric.task.GestureTask
-import com.eric.task.PatternPasswordTask
-import com.eric.task.CameraPermissionTask
-import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
 import kotlinx.coroutines.launch
@@ -116,7 +112,7 @@ class FirstFragment : Fragment() {
 
         binding.copyFileByOkio.setOnClickListener {
 //            copyFileByOkio()
-            permissionMgr?.requestBackgroundLocationPermission(object : PermissionManager.PermissionCallback {
+            permissionMgr?.requestLocationPermissionOnBackground(object : PermissionManager.PermissionCallback {
                 override fun onPermissionGranted(result: ActivityResult?) {
                     Log.d(ERIC_TAG,"后台定位权限已经获取成功")
                 }

@@ -14,7 +14,6 @@ import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -285,7 +284,7 @@ class PermissionManager<T : Any>(private val owner: T) {
      *      步骤 2: 前台权限获得后，再单独动态申请 ACCESS_BACKGROUND_LOCATION。
      *      步骤 3: 如果 ACCESS_BACKGROUND_LOCATION 被拒绝，提示用户手动进入设置页面授权。
      */
-    fun requestBackgroundLocationPermission(callback: PermissionCallback) {
+    fun requestLocationPermissionOnBackground(callback: PermissionCallback) {
         val context = getContext()
         // 检查前台定位权限是否已授予
         if (!hasForegroundLocationPermission(context)) {
