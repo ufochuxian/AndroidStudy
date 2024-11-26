@@ -7,15 +7,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.eric.base.ext.isAndroidVersionEquals10
 import com.eric.base.ext.isBelowAndroidVersionInclude10
 import com.eric.base.ext.isOverAndroidVersionInclude11
 import com.eric.base.ext.isOverAndroidVersionInclude6
@@ -108,9 +111,9 @@ class PermissionManager<T : Any>(private val owner: T) {
         }
 
         /**
-         * 检查是否具有定位权限
+         * 检查是否具有前台定位权限
          */
-        fun hasLocationPermission(context: Context): Boolean {
+        fun hasForegroundLocationPermission(context: Context): Boolean {
             val fineLocationGranted = ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -120,6 +123,18 @@ class PermissionManager<T : Any>(private val owner: T) {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
             return fineLocationGranted && coarseLocationGranted
+        }
+
+        /**
+         * 检查是否具有后台定位权限
+         */
+        fun hasBackgroundLocationPermission(context: Context): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                hasPermissions(context, arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION))
+            } else {
+                Log.w(TAG, "通过设置页面申请后台定位权限需要 Android 10 及以上版本，这个api是为 10以上版本使用定义")
+                false
+            }
         }
     }
 
@@ -228,6 +243,99 @@ class PermissionManager<T : Any>(private val owner: T) {
             else -> throw IllegalArgumentException("Owner must be an AppCompatActivity or Fragment.")
         }
     }
+
+    /**
+     *
+     * “前台定位权限“的逻辑处理
+     *
+     * 精确定位和粗略定位的权限区分
+     * ACCESS_FINE_LOCATION: 精确位置权限，允许访问 GPS 或者 Wi-Fi 提供的更高精度的位置。
+     * ACCESS_COARSE_LOCATION: 粗略位置权限，允许访问基站或 Wi-Fi 提供的近似位置。
+     * 如果需要精确位置，必须同时申请 ACCESS_FINE_LOCATION，而不能仅申请 ACCESS_COARSE_LOCATION。
+     *
+     * @param isNeedFineLocation 是否需要精准位置，默认true
+     */
+    fun requestLocationPermissionOnForeground(
+        callback: PermissionCallback,
+        isNeedFineLocation: Boolean = true,
+        ) {
+        val permissions = if (isNeedFineLocation) {
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        }
+        this.callback = callback
+        generalPermissionLauncher.launch(permissions)
+    }
+
+    /**
+     * 后台定位权限
+     *
+     *  如果应用需要在后台访问用户的位置信息，必须单独申请 ACCESS_BACKGROUND_LOCATION 权限。
+     *  在 Android 10 (API 29) 及更高版本中，如果应用需要后台位置权限，会弹出一个专用对话框，用户可以选择授予或拒绝权限。
+     *  在 Android 11 (API 30) 中，用户必须手动进入设置页面为应用授予后台位置权限。
+     *
+     * 在 Android 11 及更高版本，如果需要 ACCESS_BACKGROUND_LOCATION：
+     *      步骤 1: 先动态申请前台权限 (ACCESS_FINE_LOCATION (精准位置)或 ACCESS_COARSE_LOCATION（大概位置）)。
+     *      步骤 2: 前台权限获得后，再单独动态申请 ACCESS_BACKGROUND_LOCATION。
+     *      步骤 3: 如果 ACCESS_BACKGROUND_LOCATION 被拒绝，提示用户手动进入设置页面授权。
+     */
+    fun requestBackgroundLocationPermission(callback: PermissionCallback) {
+        val context = getContext()
+        // 检查前台定位权限是否已授予
+        if (!hasForegroundLocationPermission(context)) {
+            requestLocationPermissionOnForeground(object : PermissionCallback {
+                override fun onPermissionGranted(result: ActivityResult?) {
+                    processAndroidBackgroundLocationRequest(context, callback)
+                }
+
+                override fun onPermissionDenied(result: ActivityResult?) {
+                    Log.w(TAG, "申请后台位置权限，一定需要先获得前台位置权限")
+                }
+            })
+        } else {
+            processAndroidBackgroundLocationRequest(context, callback)
+        }
+    }
+
+    private fun processAndroidBackgroundLocationRequest(
+        context: Context,
+        callback: PermissionCallback
+    ) {
+        when {
+            // Android 11 及以上，需要引导用户进入设置页面手动授予后台定位权限
+            isOverAndroidVersionInclude11() -> {
+                if (hasBackgroundLocationPermission(context)
+                ) {
+                    // 已经授予后台权限
+                    callback.onPermissionGranted()
+                } else {
+                    // 跳转到设置页面，引导用户手动授权
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    specificPermissionLauncher.launch(intent)
+                    startPollingForPermission(SpecialPermission.LOCATION_BACKGROUND)
+                    this.callback = callback
+                }
+            }
+
+            // Android 10，动态申请后台定位权限
+            isAndroidVersionEquals10() -> {
+                generalPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION))
+                this.callback = callback
+            }
+
+            // Android 9 及以下，不需要特殊处理
+            else -> {
+                callback.onPermissionGranted()
+            }
+        }
+    }
+
 
     /**
      * 文件访问权限版本逻辑
@@ -461,6 +569,17 @@ class PermissionManager<T : Any>(private val owner: T) {
                     }
                     stopPollingForPermission(SpecialPermission.STORAGE)
                 }
+
+                SpecialPermission.LOCATION_BACKGROUND -> {
+                    if (hasBackgroundLocationPermission(context)) {
+                        callback?.onPermissionGranted(result)
+                        Log.d(TAG, "后台定位权限申请成功")
+                    } else {
+                        callback?.onPermissionDenied(result)
+                        Log.d(TAG, "后台定位权限申请失败")
+                    }
+                    stopPollingForPermission(SpecialPermission.LOCATION_BACKGROUND)
+                }
             }
         } ?: run {
             Log.w(TAG, "未找到当前请求的特殊权限类型")
@@ -470,7 +589,6 @@ class PermissionManager<T : Any>(private val owner: T) {
         // 重置当前权限状态
         currentSpecialPermission = null
     }
-
 
 
 }

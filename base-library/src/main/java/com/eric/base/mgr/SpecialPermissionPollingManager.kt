@@ -18,7 +18,8 @@ class PermissionPollingManager(private val context: Context) {
         SpecialPermission.STORAGE to StoragePermissionHandler(context),
         SpecialPermission.OVERLAY to OverlayPermissionHandler(context),
         SpecialPermission.USAGE_STATS to UsageStatsPermissionHandler(context),
-        SpecialPermission.ACCESSIBILITY to AccessibilityPermissionHandler(context)
+        SpecialPermission.ACCESSIBILITY to AccessibilityPermissionHandler(context),
+        SpecialPermission.LOCATION_BACKGROUND to BackgroundLocationPermissionHandler(context)
     )
     /**
      * 启动指定权限的轮询

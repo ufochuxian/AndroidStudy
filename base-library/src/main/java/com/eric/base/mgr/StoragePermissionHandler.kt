@@ -3,7 +3,9 @@ package com.eric.base.mgr
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 
 private const val TAG = "StoragePermissionHandler"
 
@@ -59,11 +61,26 @@ class AccessibilityPermissionHandler(context: Context) : SpecialPermissionPollin
     override fun onTick(context: Context) {
         if (PermissionManager.hasAccessibilityPermission(context)) {
             Log.d(TAG, "辅助功能权限已授予")
+            clearTopActivity(context)
         }
     }
 
     override fun onTimeout(context: Context) {
         Log.d(TAG, "辅助功能权限轮询超时")
+    }
+}
+
+class BackgroundLocationPermissionHandler(context: Context) : SpecialPermissionPollingHandler {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun onTick(context: Context) {
+        if (PermissionManager.hasBackgroundLocationPermission(context)) {
+            Log.d(TAG, "后台定位权限已授予")
+            clearTopActivity(context)
+        }
+    }
+
+    override fun onTimeout(context: Context) {
+        Log.d(TAG, "后台定位权限轮询超时")
     }
 }
 

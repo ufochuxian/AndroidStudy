@@ -8,5 +8,7 @@ enum class SpecialPermission {
     //应用使用情况权限
     USAGE_STATS,
     //辅助功能权限
-    ACCESSIBILITY
+    ACCESSIBILITY,
+    // 30+ api以上申请后台定位权限
+    LOCATION_BACKGROUND
 }

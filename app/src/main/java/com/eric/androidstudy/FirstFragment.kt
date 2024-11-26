@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -115,6 +116,16 @@ class FirstFragment : Fragment() {
 
         binding.copyFileByOkio.setOnClickListener {
 //            copyFileByOkio()
+            permissionMgr?.requestBackgroundLocationPermission(object : PermissionManager.PermissionCallback {
+                override fun onPermissionGranted(result: ActivityResult?) {
+                    Log.d(ERIC_TAG,"后台定位权限已经获取成功")
+                }
+
+                override fun onPermissionDenied(result: ActivityResult?) {
+                    Log.d(ERIC_TAG,"后台定位权限已经获取失败")
+                }
+            })
+
         }
 
 
