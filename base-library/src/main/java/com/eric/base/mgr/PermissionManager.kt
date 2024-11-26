@@ -31,6 +31,20 @@ private const val TAG = "PermissionManager"
 class PermissionManager<T : Any>(private val owner: T) {
 
     companion object {
+
+
+        /**
+         * 检查是否具有指定的动态申请的通用权限
+         *
+         * @param permissions 要检查的权限列表
+         * @return 如果所有权限均已授予，返回 true；否则返回 false
+         */
+        fun hasPermissions(context: Context,permissions: Array<String>): Boolean {
+            return permissions.all {
+                ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+
         /**
          * 检查是否具有辅助功能权限
          */
@@ -391,24 +405,6 @@ class PermissionManager<T : Any>(private val owner: T) {
         }
     }
 
-
-    /**
-     * 检查是否具有指定的动态申请的通用权限
-     *
-     * @param permissions 要检查的权限列表
-     * @return 如果所有权限均已授予，返回 true；否则返回 false
-     */
-    fun hasPermissions(permissions: Array<String>): Boolean {
-        val context = when (owner) {
-            is Activity -> owner
-            is Fragment -> owner.requireContext()
-            else -> throw IllegalArgumentException("Owner must be an Activity or Fragment.")
-        }
-
-        return permissions.all {
-            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-        }
-    }
 
     // 以下是一些特殊权限
 

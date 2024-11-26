@@ -95,7 +95,7 @@ class CameraPermissionTask(
     }
 
     override fun isFinished(): Boolean {
-        return permissionMgr?.hasPermissions(arrayOf(Manifest.permission.CAMERA)) == true
+        return PermissionManager.hasPermissions(context,arrayOf(Manifest.permission.CAMERA))
     }
 }
 
