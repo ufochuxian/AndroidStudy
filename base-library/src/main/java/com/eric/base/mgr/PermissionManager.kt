@@ -92,6 +92,21 @@ class PermissionManager<T : Any>(private val owner: T) {
             )
             return mode == android.app.AppOpsManager.MODE_ALLOWED
         }
+
+        /**
+         * 检查是否具有定位权限
+         */
+        fun hasLocationPermission(context: Context): Boolean {
+            val fineLocationGranted = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            val coarseLocationGranted = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            return fineLocationGranted && coarseLocationGranted
+        }
     }
 
 
