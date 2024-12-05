@@ -22,9 +22,13 @@ import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
+import com.eric.task.AppLockPermissionTask
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
+import com.eric.task.CameraPermissionTask
 import com.eric.task.GestureTask
+import com.eric.task.PatternPasswordTask
+import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
 import kotlinx.coroutines.launch
@@ -128,10 +132,11 @@ class FirstFragment : Fragment() {
         binding.testTask.setOnClickListener {
             lifecycleScope.launch {
                 val tasks = listOf(
-//                    AppLockPermissionTask(requireContext(),null,permissionMgr),
-//                    CameraPermissionTask(requireContext(), null, permissionMgr),
-//                    StoragePermissionTask(requireContext(), null, permissionMgr),
-//                    PatternPasswordTask(context, null),
+                    AppLockPermissionTask(requireContext(),null,permissionMgr),
+                    CameraPermissionTask(requireContext(), null, permissionMgr),
+                    //一组上锁逻辑
+                    StoragePermissionTask(requireContext(), null, permissionMgr),
+                    PatternPasswordTask(context, null),
                     gestureTask,
                     BroadcastTask(broadCastViewModel),
                 )

@@ -39,5 +39,6 @@ class PollingManager(private val config: PollingConfig) {
     fun stop() {
         scheduledFuture?.cancel(true)
         scheduledFuture = null
+        handler.removeCallbacksAndMessages(null)
     }
 }

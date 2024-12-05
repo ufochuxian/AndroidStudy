@@ -1,6 +1,7 @@
 package com.eric.base.mgr
 
 import android.content.Context
+import android.util.Log
 
 // PermissionPollingManager 类，使用委托
 
@@ -54,6 +55,7 @@ class PermissionPollingManager(private val context: Context) {
     fun stopPolling(permission: SpecialPermission) {
         pollingManagers[permission]?.stop()
         pollingManagers.remove(permission)
+        Log.d("StoragePermissionHandler", "${permission.name} ,停止权限轮询了，pollingManagers:${pollingManagers.size}")
     }
 
     /**
