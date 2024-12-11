@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
+import com.eric.base.AppLockPermissionManager
 import com.eric.base.ext.ERIC_TAG
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
@@ -54,6 +55,8 @@ class FirstFragment : Fragment() {
 
     private var permissionMgr: PermissionManager<LifecycleOwner>? = null
 
+    private var appLockPermissionManager :AppLockPermissionManager? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,6 +66,7 @@ class FirstFragment : Fragment() {
 
         activity?.let {
             permissionMgr = PermissionManager(it)
+            appLockPermissionManager = AppLockPermissionManager(permissionMgr!!)
         }
         return binding.root
 
@@ -112,6 +116,12 @@ class FirstFragment : Fragment() {
 //                    Log.d(TAG, "${imgFile.name} is capture & saved success,path:${imgFile.path}")
 //                })
 //            }
+
+            appLockPermissionManager?.requestCameraPermission(onPermissionDenied = {
+
+            }, onPermissionGranted = {
+
+            })
         }
 
         binding.copyFileByOkio.setOnClickListener {
