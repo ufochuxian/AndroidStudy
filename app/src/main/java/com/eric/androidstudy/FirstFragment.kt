@@ -21,6 +21,7 @@ import com.eric.base.AppLockPermissionManager
 import com.eric.base.ext.ERIC_TAG
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
+import com.eric.kotlin.flow.ShareFlowTest
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
 import com.eric.task.AppLockPermissionTask
@@ -83,6 +84,8 @@ class FirstFragment : Fragment() {
         binding.threeDView.setOnClickListener {
 
         }
+
+        ShareFlowTest.testSharedFlow2()
 
 
         val cornerRadius = 12f // 你可以根据需要动态计算这个值

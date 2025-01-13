@@ -127,6 +127,9 @@ dependencies {
 
     api 'com.github.ihsg:PatternLocker:2.5.7'
 
+    api 'com.tinder.statemachine:statemachine:0.2.0'
+
+
 
 
     api(project(":network"))
