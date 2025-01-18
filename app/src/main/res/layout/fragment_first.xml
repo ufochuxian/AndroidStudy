@@ -123,6 +123,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_first" />
 
+
+    <TextView
+        android:id="@+id/startMusicService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="创建音乐服务"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/dp_30"
+        />
+
+    <TextView
+        android:id="@+id/stopMusicService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="创建音乐服务"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startMusicService"
+        android:layout_marginTop="@dimen/dp_20"
+        />
+
+
+
     <Button
         android:id="@+id/jumpBtn"
         android:layout_width="wrap_content"

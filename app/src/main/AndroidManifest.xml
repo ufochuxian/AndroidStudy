@@ -33,6 +33,13 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+
+
+
 
 
 
@@ -75,6 +82,13 @@
         <activity android:name="com.eric.androidstudy.ExampleActivity"/>
         <activity android:name="com.eric.androidstudy.PatternLockActivity"/>
         <activity android:name="com.eric.androidstudy.RegistrationActivity"/>
+
+        <service
+            android:name="com.eric.service.MusicPlayerService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback"
+            />
 
 
     </application>

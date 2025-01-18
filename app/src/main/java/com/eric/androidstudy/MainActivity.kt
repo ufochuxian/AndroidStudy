@@ -33,6 +33,7 @@ import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
+import com.eric.service.MusicPlayerService
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
@@ -197,6 +198,11 @@ class MainActivity : AppCompatActivity() {
 
         // 检查权限
 //        checkAndRequestPermission()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 
 

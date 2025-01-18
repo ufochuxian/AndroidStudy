@@ -24,6 +24,7 @@ import com.eric.base.setRippleBackground
 import com.eric.kotlin.flow.ShareFlowTest
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
+import com.eric.service.MusicPlayerService
 import com.eric.task.AppLockPermissionTask
 import com.eric.task.BroadCastViewModel
 import com.eric.task.BroadcastTask
@@ -34,6 +35,7 @@ import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 
@@ -129,6 +131,7 @@ class FirstFragment : Fragment() {
 
         binding.copyFileByOkio.setOnClickListener {
 //            copyFileByOkio()
+            Timber.d("开始请求定位后台定位权限")
             permissionMgr?.requestLocationPermissionOnBackground(object : PermissionManager.PermissionCallback {
                 override fun onPermissionGranted(result: ActivityResult?) {
                     Log.d(ERIC_TAG,"后台定位权限已经获取成功")
@@ -155,6 +158,20 @@ class FirstFragment : Fragment() {
                 )
                 TasksChainManager<String?>().executeTasksSequentially(tasks) //串行执行任务
 //                ParallelTasksManager().executeTasks(tasks) //并发执行任务
+            }
+        }
+
+        binding.startMusicService.setOnClickListener {
+            activity?.let {
+                val intent = Intent(it, MusicPlayerService::class.java)
+                it.startService(intent)
+            }
+        }
+
+        binding.stopMusicService.setOnClickListener {
+            activity?.let {
+                val intent = Intent(it, MusicPlayerService::class.java)
+                it.stopService(intent)
             }
         }
 
