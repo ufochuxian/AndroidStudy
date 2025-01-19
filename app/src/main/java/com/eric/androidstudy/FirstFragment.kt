@@ -19,6 +19,7 @@ import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
 import com.eric.base.AppLockPermissionManager
 import com.eric.base.ext.ERIC_TAG
+import com.eric.base.logTd
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
 import com.eric.kotlin.flow.ShareFlowTest
@@ -37,6 +38,7 @@ import com.eric.task.copyFile
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+
 
 
 /**
@@ -132,6 +134,8 @@ class FirstFragment : Fragment() {
         binding.copyFileByOkio.setOnClickListener {
 //            copyFileByOkio()
             Timber.d("开始请求定位后台定位权限")
+            val permission = true
+            logTd("first","permission:${permission}")
             permissionMgr?.requestLocationPermissionOnBackground(object : PermissionManager.PermissionCallback {
                 override fun onPermissionGranted(result: ActivityResult?) {
                     Log.d(ERIC_TAG,"后台定位权限已经获取成功")

@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import com.eric.base.setRippleForeground
 import com.eric.baselibrary.R
+import timber.log.Timber
 
 /**
  * @Author: jianxiang.chen
@@ -57,6 +58,7 @@ class ShapeAbleTextView @JvmOverloads constructor(
         if(rippleColor != Color.TRANSPARENT) {
             setRippleForeground(getContext(),R.color.colorTextHint,cornerRadius)
         }
+
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.eric.baselibrary.R
+import timber.log.Timber
 
 fun View.setRippleBackground(
     context: Context,
@@ -87,4 +88,24 @@ fun View.setRippleForeground(
         )
     }
     this.foreground = rippleDrawable
+}
+
+fun logTd(tag: String, msg: String) {
+    Timber.tag(tag).d(msg)
+}
+
+fun logTi(tag: String, msg: String) {
+    Timber.tag(tag).i(msg)
+}
+
+fun logTw(tag: String, msg: String) {
+    Timber.tag(tag).w(msg)
+}
+
+fun logTe(tag: String, msg: String) {
+    Timber.tag(tag).e(msg)
+}
+
+fun logTwtf(tag: String, msg: String) {
+    Timber.tag(tag).wtf(msg)
 }

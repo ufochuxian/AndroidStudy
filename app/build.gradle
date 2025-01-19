@@ -12,7 +12,7 @@ android {
         targetSdkVersion 34
         //renderscript 兼容配置;
         renderscriptTargetApi 14
-        renderscriptSupportModeEnabled  true
+        renderscriptSupportModeEnabled true
         versionCode 1
         versionName "1.0"
 
@@ -32,12 +32,79 @@ android {
         }
     }
 
+    // 添加自定义打包任务
+    android.applicationVariants.all { variant ->
+        // 获取打包时间
+        def dateTime = new Date().format('yyyyMMdd_HHmmss')
+
+        // 在variant的assembleTask完成后执行复制操作
+        variant.assembleProvider.configure { assembleTask ->
+            assembleTask.doLast {
+                // 确保输出目录存在
+                def outDir = new File(project.rootDir, "out/${variant.flavorName}")
+                outDir.mkdirs()
+
+                // 获取APK文件
+                def apkFile = variant.outputs[0].outputFile
+
+                // 构建新的APK名称
+                def newApkName = "${project.name}_${variant.flavorName}_v${variant.versionName}_${variant.buildType.name}_${dateTime}.apk"
+
+                // 复制并重命名APK
+                copy {
+                    from apkFile
+                    into outDir
+                    rename { newApkName }
+                }
+
+                println """
+                ========================================
+                APK generated at: ${outDir}/${newApkName}
+                ========================================
+            """
+            }
+        }
+    }
+
+// 可选：保留原有的总任务
+    tasks.register('buildAllChannels') {
+        dependsOn android.applicationVariants.collect { variant ->
+            variant.assembleProvider
+        }
+
+        doLast {
+            println "All channel packages have been generated in ${project.rootDir}/out/"
+        }
+    }
+
+
+    // 定义多个 Product Flavor
+    flavorDimensions "source" // 定义维度名称
+
+    productFlavors {
+        inner {
+            dimension "source" // 将 Flavor 归入 "source" 维度
+            applicationIdSuffix ".inner" // 应用 ID 后缀
+            versionNameSuffix "-inner"  // 版本名称后缀
+        }
+        google {
+            dimension "source"
+            applicationIdSuffix ".google"
+            versionNameSuffix "-google"
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
