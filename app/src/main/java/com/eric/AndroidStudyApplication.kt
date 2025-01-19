@@ -8,6 +8,7 @@ import com.eric.androidstudy.BuildConfig
 import com.eric.base.log.LogbackConfigurator
 import com.eric.base.log.LogbackTree
 import com.eric.kotlin.corotinue.app.AppObserver
+import com.facebook.stetho.Stetho
 import timber.log.Timber
 
 
@@ -44,6 +45,9 @@ class AndroidStudyApplication : Application() {
             LogbackConfigurator.configure(applicationContext)
             Timber.plant(LogbackTree(AndroidStudyApplication::class.java))
         }
+
+        Stetho.initializeWithDefaults(this);
+
     }
 
 }
