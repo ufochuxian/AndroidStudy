@@ -78,6 +78,40 @@ android {
     }
 
 
+    // 添加构建前清理输出目录的选项
+    def shouldCleanOutput = true // 设置为 true 则在每次构建前清理输出目录
+
+    android.applicationVariants.all { variant ->
+        variant.assembleProvider.configure { assembleTask ->
+            assembleTask.doFirst {
+                if (shouldCleanOutput) {
+                    def outDir = new File(project.rootDir, "out/${variant.flavorName}")
+                    if (outDir.exists()) {
+                        outDir.deleteDir()
+                        println "Cleaned output directory: ${outDir.absolutePath}"
+                    }
+                }
+            }
+        }
+    }
+
+// 可选：添加文件大小信息
+    android.applicationVariants.all { variant ->
+        variant.assembleProvider.configure { assembleTask ->
+            assembleTask.doLast {
+                def apkFile = variant.outputs[0].outputFile
+                def fileSize = apkFile.length()
+                def sizeInMb = String.format("%.2f", fileSize / (1024 * 1024))
+                println """
+                ========================================
+                APK Size: ${sizeInMb} MB
+                ========================================
+            """
+            }
+        }
+    }
+
+
     // 定义多个 Product Flavor
     flavorDimensions "source" // 定义维度名称
 
