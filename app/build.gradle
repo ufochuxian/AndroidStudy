@@ -81,7 +81,7 @@ android {
     // 添加构建前清理输出目录的选项
     def shouldCleanOutput = true // 设置为 true 则在每次构建前清理输出目录
 
-    android.applicationVariants.all { variant ->
+    android.applicationVariants.configureEach { variant ->
         variant.assembleProvider.configure { assembleTask ->
             assembleTask.doFirst {
                 if (shouldCleanOutput) {
