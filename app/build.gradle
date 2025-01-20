@@ -14,7 +14,7 @@ android {
         renderscriptTargetApi 14
         renderscriptSupportModeEnabled true
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -33,7 +33,7 @@ android {
     }
 
     // 添加自定义打包任务
-    android.applicationVariants.all { variant ->
+    android.applicationVariants.configureEach { variant ->
         // 获取打包时间
         def dateTime = new Date().format('yyyyMMdd_HHmmss')
 
@@ -119,12 +119,12 @@ android {
         inner {
             dimension "source" // 将 Flavor 归入 "source" 维度
             applicationIdSuffix ".inner" // 应用 ID 后缀
-            versionNameSuffix "-inner"  // 版本名称后缀
+            versionNameSuffix "_inner"  // 版本名称后缀
         }
         google {
             dimension "source"
             applicationIdSuffix ".google"
-            versionNameSuffix "-google"
+            versionNameSuffix "_google"
         }
     }
 
