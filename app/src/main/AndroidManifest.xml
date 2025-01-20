@@ -82,6 +82,12 @@
         <activity android:name="com.eric.androidstudy.ExampleActivity"/>
         <activity android:name="com.eric.androidstudy.PatternLockActivity"/>
         <activity android:name="com.eric.androidstudy.RegistrationActivity"/>
+        <activity android:name="com.eric.kotlin.flow.sharedflowevent.SubscriptionPage"/>
+        <activity android:name="com.eric.kotlin.flow.sharedflowevent.SubscriptionListenerPage"/>
+        <activity android:name="com.eric.kotlin.flow.sharedflowevent.AnotherPage"/>
+        <activity android:name="com.eric.kotlin.lock.LockActivity"/>
+        <activity android:name="com.eric.kotlin.lock.PageAActivity"/>
+        <activity android:name="com.eric.kotlin.lock.PageBActivity"/>
 
         <service
             android:name="com.eric.service.MusicPlayerService"

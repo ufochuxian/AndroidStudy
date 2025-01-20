@@ -22,7 +22,13 @@ import com.eric.base.ext.ERIC_TAG
 import com.eric.base.logTd
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
+import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.flow.ShareFlowTest
+import com.eric.kotlin.flow.sharedflowevent.AnotherPage
+import com.eric.kotlin.flow.sharedflowevent.SubscriptionListenerPage
+import com.eric.kotlin.flow.sharedflowevent.SubscriptionPage
+import com.eric.kotlin.lock.NavigationManager
+import com.eric.kotlin.lock.PageAActivity
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
 import com.eric.service.MusicPlayerService
@@ -35,6 +41,7 @@ import com.eric.task.PatternPasswordTask
 import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -89,7 +96,7 @@ class FirstFragment : Fragment() {
 
         }
 
-        ShareFlowTest.testSharedFlow2()
+        ShareFlowTest.testSharedFlow3()
 
 
         val cornerRadius = 12f // 你可以根据需要动态计算这个值
@@ -124,11 +131,32 @@ class FirstFragment : Fragment() {
 //                })
 //            }
 
-            appLockPermissionManager?.requestCameraPermission(onPermissionDenied = {
+//            appLockPermissionManager?.requestCameraPermission(onPermissionDenied = {
+//
+//            }, onPermissionGranted = {
+//
+//            })
 
-            }, onPermissionGranted = {
+//            lifecycleScope.launch {
+//                val subscriptionListenerPage = Intent(activity,SubscriptionListenerPage::class.java)
+//                startActivity(subscriptionListenerPage)
+//
+//                delay(3000)
+//
+//                val anotherPage = Intent(activity,AnotherPage::class.java)
+//                startActivity(anotherPage)
+//
+//                delay(3000)
+//
+//                val subscriptionPageIntent = Intent(activity,SubscriptionPage::class.java)
+//                startActivity(subscriptionPageIntent)
+//            }
 
-            })
+            context?.let {
+                val intent = Intent(it,PageAActivity::class.java)
+                NavigationManager.navigate(it,intent)
+            }
+
         }
 
         binding.copyFileByOkio.setOnClickListener {
