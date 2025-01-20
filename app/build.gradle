@@ -96,7 +96,7 @@ android {
     }
 
 // 可选：添加文件大小信息
-    android.applicationVariants.all { variant ->
+    android.applicationVariants.configureEach { variant ->
         variant.assembleProvider.configure { assembleTask ->
             assembleTask.doLast {
                 def apkFile = variant.outputs[0].outputFile
