@@ -130,13 +130,9 @@ dependencies {
     api 'com.jakewharton.timber:timber:5.0.1'
     api 'org.slf4j:slf4j-api:1.7.25'
     api 'com.github.tony19:logback-android:2.0.0'
-
-
-
-
-
-
+    api 'com.alibaba.android:vlayout:1.2.33@aar'
 
 
     api(project(":network"))
+    api(project(":architecturemodule"))
 }
