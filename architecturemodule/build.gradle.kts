@@ -12,9 +12,19 @@ android {
         minSdk = 25
 
     }
-
     viewBinding.isEnabled = true
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21)) // 使用 Java 21
+    }
+}
+
+kotlin {
+    jvmToolchain(21) // 设置 Kotlin 使用 Java 21
+}
+
 
 dependencies {
 
