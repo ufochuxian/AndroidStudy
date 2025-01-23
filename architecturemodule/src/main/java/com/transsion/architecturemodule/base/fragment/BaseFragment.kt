@@ -13,8 +13,18 @@ import com.transsion.architecturemodule.base.interfaces.BackPressedListener
  * @author chen
  */
 abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener {
+
+    companion object {
+        const val ARGS = "args"
+    }
+
     protected open var mBinding: VB? = null
     protected var mParentContainer: ViewGroup? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,11 +33,14 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
         mParentContainer = container
         mBinding = getViewBinding()
         mBinding?.root?.isClickable = true
-        initView()
         return mBinding?.root
     }
 
+    abstract fun initData()
+
     abstract fun initView()
+
+    abstract fun initAction()
 
     abstract fun getViewBinding(): VB
 
@@ -35,16 +48,18 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
         super.onViewCreated(view, savedInstanceState)
         initStatusBar()
         initNavigationBar()
+        initData()
+        initView()
+        initAction()
     }
 
     open fun initStatusBar() {
-        // default is empty
+
     }
 
     open fun initNavigationBar() {
 
     }
-
 
     override fun onResume() {
         super.onResume()

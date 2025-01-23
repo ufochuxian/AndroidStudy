@@ -152,8 +152,13 @@ class FirstFragment : Fragment() {
 //                startActivity(subscriptionPageIntent)
 //            }
 
+//            context?.let {
+//                val intent = Intent(it,PageAActivity::class.java)
+//                NavigationManager.navigate(it,intent)
+//            }
+
             context?.let {
-                val intent = Intent(it,PageAActivity::class.java)
+                val intent = Intent(it,VLayoutActivity::class.java)
                 NavigationManager.navigate(it,intent)
             }
 

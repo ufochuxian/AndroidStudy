@@ -1,26 +1,37 @@
 package com.eric.androidstudy
 
+import android.os.Bundle
 import com.eric.androidstudy.databinding.ActivityVlayoutBinding
+import com.eric.base.logTd
 import com.transsion.architecturemodule.base.activity.BaseVMActivity
 
+
 class VLayoutActivity : BaseVMActivity<ActivityVlayoutBinding, VLayoutViewModel>() {
-    override fun initObserve() {
-        TODO("Not yet implemented")
+
+    companion object {
+        val VLAYOUT_TAG = "VLayoutActivity"
+
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutActivity initData")
+    }
+
+    override fun initView(savedInstanceState: Bundle?) {
+        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutActivity initView")
+        replacePage(R.id.container,VLayoutFragment.newInstance(),VLayoutFragment.TAG,true)
+    }
+
+    override fun initObserve() {
+        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutActivity initObserve")
     }
 
     override fun initAction() {
-        TODO("Not yet implemented")
+        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutActivity initAction")
+
     }
 
-    override fun viewModelClass(): Class<VLayoutViewModel> {
-        TODO("Not yet implemented")
-    }
+    override fun viewModelClass(): Class<VLayoutViewModel> = VLayoutViewModel::class.java
 
-    override fun getViewBinding(): ActivityVlayoutBinding {
-        TODO("Not yet implemented")
-    }
+    override fun getViewBinding(): ActivityVlayoutBinding = ActivityVlayoutBinding.inflate(layoutInflater)
 }

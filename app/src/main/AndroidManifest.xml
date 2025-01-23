@@ -88,6 +88,7 @@
         <activity android:name="com.eric.kotlin.lock.LockActivity"/>
         <activity android:name="com.eric.kotlin.lock.PageAActivity"/>
         <activity android:name="com.eric.kotlin.lock.PageBActivity"/>
+        <activity android:name=".VLayoutActivity"/>
 
         <service
             android:name="com.eric.service.MusicPlayerService"

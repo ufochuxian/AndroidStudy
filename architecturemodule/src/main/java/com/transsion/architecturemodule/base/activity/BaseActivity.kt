@@ -27,8 +27,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = getViewBinding()
         setContentView(mBinding?.root)
-        initStatusBar()
-        initNavigationBar()
+        initData()
+        initView(savedInstanceState)
+        initAction()
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 onIMBackPressed()
@@ -36,13 +37,18 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         })
     }
 
-    open fun initStatusBar() {
 
-    }
+    /**
+     * 用于初始化数据
+     */
+    abstract fun initData()
 
-    open fun initNavigationBar() {
+    abstract fun initView(savedInstanceState : Bundle?)
 
-    }
+    /**
+     * 用于初始化点击事件
+     */
+    abstract fun initAction()
 
     /**
      * 返回键处理，默认finish

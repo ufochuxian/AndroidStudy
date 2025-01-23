@@ -4,7 +4,9 @@ import com.transsion.architecturemodule.base.viewmodel.BaseViewModel
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
@@ -18,14 +20,20 @@ abstract class BaseVMFragment<VB : ViewBinding, VM : BaseViewModel> : BaseFragme
 
     private val TAG = "BaseVMFragment"
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initVM()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initVM()
         if (requireActivity().isFinishing || requireActivity().isDestroyed)
             return
         initObserve()
-        initData()
-        initAction()
     }
 
     private fun initVM() {
@@ -36,15 +44,7 @@ abstract class BaseVMFragment<VB : ViewBinding, VM : BaseViewModel> : BaseFragme
         return requireActivity() as AppCompatActivity
     }
 
-    override fun initView() {
-
-    }
-
     abstract fun initObserve()
-
-    abstract fun initData()
-
-    abstract fun initAction()
 
     abstract fun viewModelClass(): Class<VM>
 

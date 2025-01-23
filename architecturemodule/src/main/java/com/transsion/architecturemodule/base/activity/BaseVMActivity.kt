@@ -16,21 +16,11 @@ abstract class BaseVMActivity<VB : ViewBinding, VM : BaseViewModel> : BaseActivi
     protected open lateinit var mViewModel: VM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initVM()
-        if (isFinishing || isDestroyed) {
-            return
-        }
         window.useImmersiveWindow(false)
-
-        initView(savedInstanceState)
+        initVM()
         initObserve()
-        initData()
-        initAction()
     }
 
-    open fun initView(savedInstanceState : Bundle?) {
-
-    }
 
     private fun initVM() {
         mViewModel = ViewModelProvider(this)[viewModelClass()]
@@ -40,16 +30,6 @@ abstract class BaseVMActivity<VB : ViewBinding, VM : BaseViewModel> : BaseActivi
      * 用于初始化视图
      */
     abstract fun initObserve()
-
-    /**
-     * 用于初始化数据
-     */
-    abstract fun initData()
-
-    /**
-     * 用于初始化点击事件
-     */
-    abstract fun initAction()
 
     abstract fun viewModelClass(): Class<VM>
 
