@@ -1,11 +1,13 @@
 package com.eric.androidstudy
 
 import android.os.Bundle
+import com.eric.VLayoutChildFragment
 import com.eric.VLayoutFragmentViewModel
 import com.eric.androidstudy.VLayoutActivity.Companion.VLAYOUT_TAG
 import com.eric.androidstudy.databinding.VlayoutFragmentBinding
 import com.eric.base.logTd
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
+import com.transsion.architecturemodule.base.ktx.showFragment
 
 
 class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentViewModel>() {
@@ -37,11 +39,15 @@ class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentVi
 
     override fun initAction() {
         logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment initAction")
+        mBinding?.goToSecond?.setOnClickListener {
+            activity?.showFragment(R.id.container,VLayoutChildFragment.newInstance(),VLayoutChildFragment.TAG,true)
+            logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment showFragment")
+        }
 
 
     }
 
     override fun viewModelClass(): Class<VLayoutFragmentViewModel> = VLayoutFragmentViewModel::class.java
 
-    override fun getViewBinding(): VlayoutFragmentBinding = VlayoutFragmentBinding.inflate(layoutInflater)
+    override fun getViewBinding(): VlayoutFragmentBinding = VlayoutFragmentBinding.inflate(layoutInflater,mParentContainer,false)
 }
