@@ -25,23 +25,23 @@ class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentVi
     }
 
     override fun initView() {
-        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment initView")
+        logTd(VLAYOUT_TAG + TAG,"VLayoutFragment initView")
 
     }
 
     override fun initObserve() {
-        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment initObserve")
+        logTd(VLAYOUT_TAG + TAG,"VLayoutFragment initObserve")
     }
 
     override fun initData() {
-        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment initData")
+        logTd(VLAYOUT_TAG + TAG,"VLayoutFragment initData")
     }
 
     override fun initAction() {
-        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment initAction")
+        logTd(VLAYOUT_TAG + TAG,"VLayoutFragment initAction")
         mBinding?.goToSecond?.setOnClickListener {
             activity?.showFragment(R.id.container,VLayoutChildFragment.newInstance(),VLayoutChildFragment.TAG,true)
-            logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment showFragment")
+            logTd(VLAYOUT_TAG + TAG,"VLayoutFragment showFragment")
         }
 
 
@@ -49,7 +49,12 @@ class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentVi
 
     override fun onBackKeyPress() {
         super.onBackKeyPress()
-        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment onBackKeyPress")
+        logTd(VLAYOUT_TAG + TAG,"VLayoutFragment onBackKeyPress")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        logTd(VLAYOUT_TAG + TAG,"VLayoutFragment onDestroy")
     }
 
     override fun viewModelClass(): Class<VLayoutFragmentViewModel> = VLayoutFragmentViewModel::class.java

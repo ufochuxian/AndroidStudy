@@ -2,7 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorButton"
-    >
+    android:id="@+id/container">
+
+    <TextView
+        android:id="@+id/goToThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="三级页面"
+        android:textSize="20sp"
+        android:layout_marginTop="@dimen/dp_50"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

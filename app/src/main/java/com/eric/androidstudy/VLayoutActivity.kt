@@ -19,7 +19,7 @@ class VLayoutActivity : BaseVMActivity<ActivityVlayoutBinding, VLayoutViewModel>
 
     override fun initView(savedInstanceState: Bundle?) {
         logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutActivity initView")
-        replacePage(R.id.container,VLayoutFragment.newInstance(),VLayoutFragment.TAG,true)
+        showPage(R.id.container,VLayoutFragment.newInstance(),VLayoutFragment.TAG,true)
     }
 
     override fun initObserve() {

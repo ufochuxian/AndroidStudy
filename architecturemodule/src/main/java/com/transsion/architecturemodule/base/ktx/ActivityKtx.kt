@@ -19,7 +19,7 @@ fun FragmentActivity.showFragment(
     containerID : Int,
     fr: Fragment,
     tag: String? = null,
-    isAddToBackStack: Boolean = false
+    isAddToBackStack: Boolean = true
 ) {
     supportFragmentManager.beginTransaction()
         .setCustomAnimations(
