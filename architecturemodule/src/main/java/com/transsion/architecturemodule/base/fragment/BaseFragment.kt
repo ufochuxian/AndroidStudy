@@ -1,6 +1,7 @@
 package com.transsion.architecturemodule.base.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.transsion.architecturemodule.base.interfaces.BackPressedListener
 abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener {
 
     companion object {
+        const val TAG = "BaseFragment"
         const val ARGS = "args"
     }
 
@@ -25,8 +27,10 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.d(TAG,"添加返回监听，viewLifecycleOwner:${this}")
         requireActivity().onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                Log.d(TAG,"handleOnBackPressed,viewLifecycleOwner:${this}")
                 this@BaseFragment.onBackKeyPress()
                 activity?.supportFragmentManager?.popBackStackImmediate()
             }
