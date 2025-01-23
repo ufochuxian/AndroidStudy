@@ -27,12 +27,19 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(TAG,"添加返回监听，viewLifecycleOwner:${this}")
-        requireActivity().onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true) {
+        Log.d(TAG, "添加返回监听，viewLifecycleOwner:${this}")
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d(TAG,"handleOnBackPressed,viewLifecycleOwner:${this}")
+                Log.d(TAG, "handleOnBackPressed, viewLifecycleOwner:${this}")
+                // 检查当前 FragmentManager 中的 Fragment 数量
+                val fragmentCount = activity?.supportFragmentManager?.backStackEntryCount ?: 0
                 this@BaseFragment.onBackKeyPress()
-                activity?.supportFragmentManager?.popBackStackImmediate()
+                // 如果只剩下一个 Fragment，直接退出 Activity
+                if (fragmentCount <= 1) {
+                    activity?.finish()
+                } else {
+                    activity?.supportFragmentManager?.popBackStackImmediate()
+                }
             }
         })
     }

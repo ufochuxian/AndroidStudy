@@ -30,11 +30,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         initData()
         initView(savedInstanceState)
         initAction()
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onIMBackPressed()
-            }
-        })
+//        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                onIMBackPressed()
+//            }
+//        })
     }
 
 
