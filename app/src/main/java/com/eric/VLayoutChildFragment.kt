@@ -2,7 +2,9 @@ package com.eric
 
 import android.os.Bundle
 import com.eric.androidstudy.VLayoutActivity
+import com.eric.androidstudy.VLayoutActivity.Companion.VLAYOUT_TAG
 import com.eric.androidstudy.VLayoutChildViewModel
+import com.eric.androidstudy.VLayoutFragment
 import com.eric.androidstudy.databinding.LayoutVlayoutChildFragmentBinding
 import com.eric.base.logTd
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
@@ -40,6 +42,11 @@ class VLayoutChildFragment : BaseVMFragment<LayoutVlayoutChildFragmentBinding, V
     override fun initAction() {
         logTd(VLayoutActivity.VLAYOUT_TAG + TAG, "VLayoutChildFragment initAction")
 
+    }
+
+    override fun onBackKeyPress() {
+        super.onBackKeyPress()
+        logTd(VLAYOUT_TAG + TAG,"VLayoutChildFragment onBackKeyPress")
     }
 
     override fun getViewBinding(): LayoutVlayoutChildFragmentBinding = LayoutVlayoutChildFragmentBinding.inflate(layoutInflater,mParentContainer,false)

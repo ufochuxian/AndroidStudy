@@ -31,6 +31,11 @@ class VLayoutActivity : BaseVMActivity<ActivityVlayoutBinding, VLayoutViewModel>
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutActivity onDestroy")
+    }
+
     override fun viewModelClass(): Class<VLayoutViewModel> = VLayoutViewModel::class.java
 
     override fun getViewBinding(): ActivityVlayoutBinding = ActivityVlayoutBinding.inflate(layoutInflater)

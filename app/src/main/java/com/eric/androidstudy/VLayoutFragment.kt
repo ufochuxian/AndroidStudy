@@ -47,6 +47,11 @@ class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentVi
 
     }
 
+    override fun onBackKeyPress() {
+        super.onBackKeyPress()
+        logTd(VLAYOUT_TAG + VLayoutFragment.TAG,"VLayoutFragment onBackKeyPress")
+    }
+
     override fun viewModelClass(): Class<VLayoutFragmentViewModel> = VLayoutFragmentViewModel::class.java
 
     override fun getViewBinding(): VlayoutFragmentBinding = VlayoutFragmentBinding.inflate(layoutInflater,mParentContainer,false)

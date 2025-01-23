@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.transsion.architecturemodule.base.interfaces.BackPressedListener
@@ -23,6 +24,13 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                this@BaseFragment.onBackKeyPress()
+                activity?.supportFragmentManager?.popBackStackImmediate()
+            }
+        })
     }
 
     override fun onCreateView(
@@ -71,6 +79,10 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
 
     override fun onPause() {
         super.onPause()
+
+    }
+
+    protected open fun onBackKeyPress() {
 
     }
 

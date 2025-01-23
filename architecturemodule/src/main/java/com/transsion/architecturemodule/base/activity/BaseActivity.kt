@@ -80,39 +80,31 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         super.onDestroy()
         mBinding = null
     }
+
+//    /**
+//     * 拦截事件
+//     */
+//    open fun interceptBackPressed(): Boolean {
+//        supportFragmentManager.fragments.forEach {
+//            if (it is BackPressedListener) {
+//                if (it.handleBackPressed()) {
+//                    return true
+//                }
+//            }
+//        }
+//        return false
+//    }
+
 //    override fun onBackPressed() {
 //        if (!interceptBackPressed()) {
-//            if (supportFragmentManager.backStackEntryCount > 0) {
+//            reportBackEvent()
+//            if (supportFragmentManager.fragments.size > 1) {
 //                supportFragmentManager.popBackStackImmediate()
 //            } else {
 //                super.onBackPressed()
 //            }
 //        }
 //    }
-    /**
-     * 拦截事件
-     */
-    open fun interceptBackPressed(): Boolean {
-        supportFragmentManager.fragments.forEach {
-            if (it is BackPressedListener) {
-                if (it.handleBackPressed()) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    override fun onBackPressed() {
-        if (!interceptBackPressed()) {
-            reportBackEvent()
-            if (supportFragmentManager.fragments.size > 1) {
-                supportFragmentManager.popBackStackImmediate()
-            } else {
-                super.onBackPressed()
-            }
-        }
-    }
 
     open fun reportBackEvent() {
 
