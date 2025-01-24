@@ -150,9 +150,114 @@ android {
         viewBinding true
     }
     namespace 'com.eric.androidstudy'
+
+    tasks.register("generateModule") {
+        doLast {
+            // 从 gradle.properties 中读取参数
+            def moduleName = project.hasProperty("moduleName") ? project.property("moduleName").toString() : "DefaultModule"
+            def packagePath = project.hasProperty("packagePath") ? project.property("packagePath").toString() : "com.example"
+            def outputPath = project.hasProperty("outputPath") ? project.property("outputPath").toString() : "src/main/java"
+
+            // 动态生成完整包名路径
+            def packageDir = packagePath.replace('.', '/')
+            def baseDir = file("${project.projectDir}/${outputPath}/${packageDir}")
+            def resDir = file("${project.projectDir}/src/main/res/layout")
+
+            // 创建目录
+            baseDir.mkdirs()
+            resDir.mkdirs()
+
+            // 规范化模块名称，防止非法字符
+            def sanitizedModuleName = moduleName.replaceAll("[^A-Za-z0-9_]", "")
+
+            // 生成 Activity 文件
+            def activityContent = """
+                package ${packagePath};
+
+                import android.os.Bundle;
+                import ${packagePath}.databinding.Activity${sanitizedModuleName}Binding;
+                import com.transsion.architecturemodule.base.activity.BaseVMActivity;
+
+                public class ${sanitizedModuleName}Activity extends BaseVMActivity<Activity${sanitizedModuleName}Binding, ${sanitizedModuleName}ViewModel> {
+                    @Override
+                    public void initData() {
+                        logTd("${sanitizedModuleName} initData");
+                    }
+
+                    @Override
+                    public void initView(Bundle savedInstanceState) {
+                        logTd("${sanitizedModuleName} initView");
+                        showPage(R.id.container, ${sanitizedModuleName}Fragment.newInstance(), "${sanitizedModuleName}Fragment", true);
+                    }
+
+                    @Override
+                    public void initObserve() {
+                        logTd("${sanitizedModuleName} initObserve");
+                    }
+
+                    @Override
+                    public void initAction() {
+                        logTd("${sanitizedModuleName} initAction");
+                    }
+
+                    @Override
+                    public Class<${sanitizedModuleName}ViewModel> viewModelClass() {
+                        return ${sanitizedModuleName}ViewModel.class;
+                    }
+
+                    @Override
+                    public Activity${sanitizedModuleName}Binding getViewBinding() {
+                        return Activity${sanitizedModuleName}Binding.inflate(getLayoutInflater());
+                    }
+                }
+            """.stripIndent()
+            def activityFile = new File(baseDir, "${sanitizedModuleName}Activity.java")
+            activityFile.write(activityContent)
+
+            // 生成 ViewModel 文件
+            def viewModelContent = """
+                package ${packagePath};
+
+                import com.transsion.architecturemodule.base.viewmodel.BaseViewModel;
+
+                public class ${sanitizedModuleName}ViewModel extends BaseViewModel {
+                }
+            """.stripIndent()
+            def viewModelFile = new File(baseDir, "${sanitizedModuleName}ViewModel.java")
+            viewModelFile.write(viewModelContent)
+
+            // 生成布局 XML 文件
+            def layoutContent = """
+                <?xml version="1.0" encoding="utf-8"?>
+                <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            """.stripIndent()
+            def layoutFile = new File(resDir, "activity_${sanitizedModuleName.toLowerCase()}.xml")
+            layoutFile.write(layoutContent)
+
+            println """
+            ========================================
+            Module ${sanitizedModuleName} has been generated at:
+            - Activity: ${activityFile.absolutePath}
+            - ViewModel: ${viewModelFile.absolutePath}
+            - Layout: ${layoutFile.absolutePath}
+            ========================================
+            """
+        }
+    }
 }
 
-dependencies {
+
+
+    dependencies {
     api(project(':base-library'))
     implementation 'androidx.exifinterface:exifinterface:1.3.6'
     implementation 'androidx.test.ext:junit-ktx:1.2.1'
