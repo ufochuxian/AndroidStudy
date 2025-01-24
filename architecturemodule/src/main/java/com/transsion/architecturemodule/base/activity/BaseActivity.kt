@@ -1,12 +1,9 @@
 package com.transsion.architecturemodule.base.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.transsion.architecturemodule.base.interfaces.BackPressedListener
 import androidx.viewbinding.ViewBinding
 import com.transsion.architecturemodule.BuildConfig
 import com.transsion.architecturemodule.base.ktx.replaceFragment
@@ -80,31 +77,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         super.onDestroy()
         mBinding = null
     }
-
-//    /**
-//     * 拦截事件
-//     */
-//    open fun interceptBackPressed(): Boolean {
-//        supportFragmentManager.fragments.forEach {
-//            if (it is BackPressedListener) {
-//                if (it.handleBackPressed()) {
-//                    return true
-//                }
-//            }
-//        }
-//        return false
-//    }
-
-//    override fun onBackPressed() {
-//        if (!interceptBackPressed()) {
-//            reportBackEvent()
-//            if (supportFragmentManager.fragments.size > 1) {
-//                supportFragmentManager.popBackStackImmediate()
-//            } else {
-//                super.onBackPressed()
-//            }
-//        }
-//    }
 
     open fun reportBackEvent() {
 
