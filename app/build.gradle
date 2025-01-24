@@ -172,85 +172,85 @@ android {
 
             // 生成 Activity 文件
             def activityContent = """
-                package ${packagePath};
+            package ${packagePath};
 
-                import android.os.Bundle;
-                import ${packagePath}.databinding.Activity${sanitizedModuleName}Binding;
-                import com.transsion.architecturemodule.base.activity.BaseVMActivity;
+            import android.os.Bundle;
+            import ${packagePath}.databinding.Activity${sanitizedModuleName}Binding;
+            import com.transsion.architecturemodule.base.activity.BaseVMActivity;
 
-                public class ${sanitizedModuleName}Activity extends BaseVMActivity<Activity${sanitizedModuleName}Binding, ${sanitizedModuleName}ViewModel> {
-                    @Override
-                    public void initData() {
-                        logTd("${sanitizedModuleName} initData");
-                    }
-
-                    @Override
-                    public void initView(Bundle savedInstanceState) {
-                        logTd("${sanitizedModuleName} initView");
-                        showPage(R.id.container, ${sanitizedModuleName}Fragment.newInstance(), "${sanitizedModuleName}Fragment", true);
-                    }
-
-                    @Override
-                    public void initObserve() {
-                        logTd("${sanitizedModuleName} initObserve");
-                    }
-
-                    @Override
-                    public void initAction() {
-                        logTd("${sanitizedModuleName} initAction");
-                    }
-
-                    @Override
-                    public Class<${sanitizedModuleName}ViewModel> viewModelClass() {
-                        return ${sanitizedModuleName}ViewModel.class;
-                    }
-
-                    @Override
-                    public Activity${sanitizedModuleName}Binding getViewBinding() {
-                        return Activity${sanitizedModuleName}Binding.inflate(getLayoutInflater());
-                    }
+            public class ${sanitizedModuleName}Activity extends BaseVMActivity<Activity${sanitizedModuleName}Binding, ${sanitizedModuleName}ViewModel> {
+                @Override
+                public void initData() {
+                    // Initialize data here
                 }
-            """.stripIndent()
+
+                @Override
+                public void initView(Bundle savedInstanceState) {
+                    // Initialize views here
+                    showPage(R.id.container, ${sanitizedModuleName}Fragment.newInstance(), "${sanitizedModuleName}Fragment", true);
+                }
+
+                @Override
+                public void initObserve() {
+                    // Observe LiveData or ViewModel states here
+                }
+
+                @Override
+                public void initAction() {
+                    // Initialize actions or click listeners here
+                }
+
+                @Override
+                public Class<${sanitizedModuleName}ViewModel> viewModelClass() {
+                    return ${sanitizedModuleName}ViewModel.class;
+                }
+
+                @Override
+                public Activity${sanitizedModuleName}Binding getViewBinding() {
+                    return Activity${sanitizedModuleName}Binding.inflate(getLayoutInflater());
+                }
+            }
+        """.stripIndent()
             def activityFile = new File(baseDir, "${sanitizedModuleName}Activity.java")
             activityFile.write(activityContent)
 
             // 生成 ViewModel 文件
             def viewModelContent = """
-                package ${packagePath};
+            package ${packagePath};
 
-                import com.transsion.architecturemodule.base.viewmodel.BaseViewModel;
+            import com.transsion.architecturemodule.base.viewmodel.BaseViewModel;
 
-                public class ${sanitizedModuleName}ViewModel extends BaseViewModel {
-                }
-            """.stripIndent()
+            public class ${sanitizedModuleName}ViewModel extends BaseViewModel {
+                // Add ViewModel logic here
+            }
+        """.stripIndent()
             def viewModelFile = new File(baseDir, "${sanitizedModuleName}ViewModel.java")
             viewModelFile.write(viewModelContent)
 
             // 生成布局 XML 文件
-            def layoutContent = """
-                <?xml version="1.0" encoding="utf-8"?>
-                <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            def layoutContent = """<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/container"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            """.stripIndent()
+</androidx.constraintlayout.widget.ConstraintLayout>
+        """.trim() // 移除多余空白
             def layoutFile = new File(resDir, "activity_${sanitizedModuleName.toLowerCase()}.xml")
             layoutFile.write(layoutContent)
 
             println """
-            ========================================
-            Module ${sanitizedModuleName} has been generated at:
-            - Activity: ${activityFile.absolutePath}
-            - ViewModel: ${viewModelFile.absolutePath}
-            - Layout: ${layoutFile.absolutePath}
-            ========================================
-            """
+        ========================================
+        Module ${sanitizedModuleName} has been generated at:
+        - Activity: ${activityFile.absolutePath}
+        - ViewModel: ${viewModelFile.absolutePath}
+        - Layout: ${layoutFile.absolutePath}
+        ========================================
+        """
         }
     }
 }
