@@ -13,9 +13,8 @@ class GenerateModulePlugin implements Plugin<Project> {
                         ? project.property("namespace").toString()
                         : project.android.namespace ?: "com.example"
                 println("namespace:${namespace}")
-                def packagePath = project.hasProperty("packagePath")
-                        ? project.property("packagePath").toString()
-                        : "${namespace}.${moduleName.toLowerCase()}"
+                def packagePath = "${namespace}.${moduleName.toLowerCase()}"
+                println("packagePath:${packagePath}")
                 def outputPath = project.hasProperty("outputPath") ? project.property("outputPath").toString() : "src/main/java"
                 println("outputPath:${outputPath}")
 
