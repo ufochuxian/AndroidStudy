@@ -1,6 +1,9 @@
 package com.eric.androidstudy
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.eric.VLayoutChildFragment
 import com.eric.VLayoutFragmentViewModel
 import com.eric.androidstudy.VLayoutActivity.Companion.VLAYOUT_TAG
@@ -24,7 +27,7 @@ class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentVi
         }
     }
 
-    override fun initView() {
+    override fun initView(view: View, savedInstanceState: Bundle?) {
         logTd(VLAYOUT_TAG + TAG,"VLayoutFragment initView")
 
     }
@@ -59,5 +62,5 @@ class VLayoutFragment : BaseVMFragment<VlayoutFragmentBinding, VLayoutFragmentVi
 
     override fun viewModelClass(): Class<VLayoutFragmentViewModel> = VLayoutFragmentViewModel::class.java
 
-    override fun getViewBinding(): VlayoutFragmentBinding = VlayoutFragmentBinding.inflate(layoutInflater,mParentContainer,false)
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): VlayoutFragmentBinding = VlayoutFragmentBinding.inflate(layoutInflater,mParentContainer,false)
 }

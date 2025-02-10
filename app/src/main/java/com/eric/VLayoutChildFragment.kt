@@ -1,6 +1,9 @@
 package com.eric
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.eric.androidstudy.R
 import com.eric.androidstudy.VLayoutActivity
 import com.eric.androidstudy.VLayoutActivity.Companion.VLAYOUT_TAG
@@ -37,7 +40,8 @@ class VLayoutChildFragment : BaseVMFragment<LayoutVlayoutChildFragmentBinding, V
         logTd(VLayoutActivity.VLAYOUT_TAG + TAG, "${this.toString()} VLayoutChildFragment initData")
     }
 
-    override fun initView() {
+
+    override fun initView(view: View, savedInstanceState: Bundle?) {
         logTd(VLayoutActivity.VLAYOUT_TAG + TAG, "${this.toString()} VLayoutChildFragment initView")
         mBinding?.goToThree?.setOnClickListener {
             activity?.showFragment(R.id.container,VLayoutChildFragment.newInstance(), TAG,true)
@@ -54,7 +58,7 @@ class VLayoutChildFragment : BaseVMFragment<LayoutVlayoutChildFragmentBinding, V
         logTd(VLAYOUT_TAG + TAG,"${this.toString()} VLayoutChildFragment onBackKeyPress")
     }
 
-    override fun getViewBinding(): LayoutVlayoutChildFragmentBinding = LayoutVlayoutChildFragmentBinding.inflate(layoutInflater,mParentContainer,false)
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): LayoutVlayoutChildFragmentBinding = LayoutVlayoutChildFragmentBinding.inflate(layoutInflater,mParentContainer,false)
 
     override fun onDestroy() {
         super.onDestroy()

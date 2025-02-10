@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.eric.androidstudy.applock.AppLockActivity
 import com.eric.androidstudy.databinding.FragmentFirstBinding
 import com.eric.animation.CustomAnim
 import com.eric.base.AppLockPermissionManager
@@ -158,7 +159,7 @@ class FirstFragment : Fragment() {
 //            }
 
             context?.let {
-                val intent = Intent(it,VLayoutActivity::class.java)
+                val intent = Intent(it,AppLockActivity::class.java)
                 NavigationManager.navigate(it,intent)
             }
 
