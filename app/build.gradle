@@ -265,13 +265,13 @@ android {
                 override fun initView(view: View, savedInstanceState: Bundle?) {
                     // 初始化 UI
                 }
+                
+                override fun initAction() {
+                    // 处理点击事件等
+                }
 
                 override fun initObserve() {
                     // 观察 LiveData 变化
-                }
-
-                override fun initAction() {
-                    // 处理点击事件等
                 }
 
                 override fun viewModelClass(): Class<${fragmentViewModelClass}> = ${fragmentViewModelClass}::class.java

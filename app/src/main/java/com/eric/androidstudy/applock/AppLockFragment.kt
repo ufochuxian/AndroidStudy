@@ -27,12 +27,12 @@ class AppLockFragment : BaseVMFragment<FragmentApplockBinding, AppLockFragmentVi
         // 初始化 UI
     }
 
-    override fun initObserve() {
-        // 观察 LiveData 变化
-    }
-
     override fun initAction() {
         // 处理点击事件等
+    }
+
+    override fun initObserve() {
+        // 观察 LiveData 变化
     }
 
     override fun viewModelClass(): Class<AppLockFragmentViewModel> = AppLockFragmentViewModel::class.java
