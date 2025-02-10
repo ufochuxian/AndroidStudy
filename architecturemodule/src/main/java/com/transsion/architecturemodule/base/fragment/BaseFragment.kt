@@ -50,25 +50,26 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BackPressedListener 
         savedInstanceState: Bundle?
     ): View? {
         mParentContainer = container
-        mBinding = getViewBinding()
+        mBinding = getViewBinding(inflater,container)
         mBinding?.root?.isClickable = true
         return mBinding?.root
     }
 
     abstract fun initData()
 
-    abstract fun initView()
+    abstract fun initView(view: View, savedInstanceState: Bundle?)
 
     abstract fun initAction()
 
-    abstract fun getViewBinding(): VB
+    abstract fun getViewBinding(inflater: LayoutInflater,
+                                    container: ViewGroup?,): VB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initStatusBar()
         initNavigationBar()
         initData()
-        initView()
+        initView(view, savedInstanceState)
         initAction()
     }
 
