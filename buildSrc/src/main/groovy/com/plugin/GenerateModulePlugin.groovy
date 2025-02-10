@@ -24,8 +24,10 @@ class GenerateModulePlugin implements Plugin<Project> {
                 // 生成文件路径
                 def packageDir = packagePath.replace('.', '/')
                 def namespaceDir = namespace.replace('.', '/')
-                def baseDir = file("${project.projectDir}/${outputPath}/${packageDir}")
-                def resDir = file("${project.projectDir}/src/main/res/layout")
+//                def baseDir = project.file("${project.projectDir}/${outputPath}/${packageDir}")
+//                def resDir = project.file("${project.projectDir}/src/main/res/layout")
+                def baseDir = project.file("${outputPath}/${packageDir}")
+                def resDir = project.file("src/main/res/layout")
 
                 // 确保目录存在
                 baseDir.mkdirs()
