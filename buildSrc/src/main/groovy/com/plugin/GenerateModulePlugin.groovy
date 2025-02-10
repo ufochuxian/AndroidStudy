@@ -9,9 +9,15 @@ class GenerateModulePlugin implements Plugin<Project> {
             doLast {
                 // 读取参数
                 def moduleName = project.hasProperty("moduleName") ? project.property("moduleName").toString() : "DefaultModule"
-                def packagePath = project.hasProperty("packagePath") ? project.property("packagePath").toString() : "com.example"
-                def namespace = project.hasProperty("namespace") ? project.property("namespace").toString() : namespace
+                def namespace = project.hasProperty("namespace")
+                        ? project.property("namespace").toString()
+                        : project.android.namespace ?: "com.example"
+                println("namespace:${namespace}")
+                def packagePath = project.hasProperty("packagePath")
+                        ? project.property("packagePath").toString()
+                        : "${namespace}.${moduleName.toLowerCase()}"
                 def outputPath = project.hasProperty("outputPath") ? project.property("outputPath").toString() : "src/main/java"
+                println("outputPath:${outputPath}")
 
                 // 处理 ViewBinding 类名，符合 Android 生成规则
                 def activityBindingClass = "Activity" + moduleName.toLowerCase().split('_').collect { it.capitalize() }.join('') + "Binding"
