@@ -370,6 +370,10 @@ dependencies {
 
 }
 
+dependencies {
+    implementation(project(":featuretest"))
+}
+
 class CustomPlugin implements Plugin<Project> {
     @Override
     void apply(Project target) {

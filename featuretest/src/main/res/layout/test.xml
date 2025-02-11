@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/some_id"
+    android:layout_width="328dp"
+    android:layout_height="226dp"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:clipToOutline="true"
+    android:background="@drawable/some_id"
+    />

@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.eric.androidstudy.R
 import com.eric.androidstudy.databinding.FragmentApplockBinding
+import com.example.guestmode.GuestModeDialog
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
 
 class AppLockFragment : BaseVMFragment<FragmentApplockBinding, AppLockFragmentViewModel>() {
@@ -25,6 +28,18 @@ class AppLockFragment : BaseVMFragment<FragmentApplockBinding, AppLockFragmentVi
 
     override fun initView(view: View, savedInstanceState: Bundle?) {
         // 初始化 UI
+        context?.let {
+            val appIcons = listOf(R.drawable.shapeable_view, R.drawable.shapeable_view, R.drawable.shapeable_view, R.drawable.shapeable_view)
+            val dialog = GuestModeDialog(
+                context = it,
+                appIcons = appIcons,
+                onActivate = { Toast.makeText(it, "Guest Mode Activated", Toast.LENGTH_SHORT).show() },
+                onCancel = { Toast.makeText(it, "Cancelled", Toast.LENGTH_SHORT).show() }
+            )
+            dialog.show()
+        }
+
+
     }
 
     override fun initAction() {
