@@ -23,6 +23,11 @@ import timber.log.Timber
  */
 class AndroidStudyApplication : Application() {
 
+
+    init {
+        System.loadLibrary("opencv_java4")
+    }
+
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var instance: Context? = null

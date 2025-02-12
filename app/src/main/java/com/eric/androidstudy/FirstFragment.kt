@@ -23,13 +23,8 @@ import com.eric.base.ext.ERIC_TAG
 import com.eric.base.logTd
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
-import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.flow.ShareFlowTest
-import com.eric.kotlin.flow.sharedflowevent.AnotherPage
-import com.eric.kotlin.flow.sharedflowevent.SubscriptionListenerPage
-import com.eric.kotlin.flow.sharedflowevent.SubscriptionPage
 import com.eric.kotlin.lock.NavigationManager
-import com.eric.kotlin.lock.PageAActivity
 import com.eric.lifecycle.TestLifeCycleActivity
 import com.eric.routers.TgmRouter
 import com.eric.service.MusicPlayerService
@@ -42,7 +37,6 @@ import com.eric.task.PatternPasswordTask
 import com.eric.task.StoragePermissionTask
 import com.eric.task.TasksChainManager
 import com.eric.task.copyFile
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -159,7 +153,7 @@ class FirstFragment : Fragment() {
 //            }
 
             context?.let {
-                val intent = Intent(it,AppLockActivity::class.java)
+                val intent = Intent(it, AppLockActivity::class.java)
                 NavigationManager.navigate(it,intent)
             }
 

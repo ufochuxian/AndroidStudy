@@ -135,4 +135,5 @@ dependencies {
 
     api(project(":network"))
     api(project(":architecturemodule"))
+    api project(":openCVLibrary410")
 }
