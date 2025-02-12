@@ -1,5 +1,6 @@
 package com.eric.androidstudy.applock
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -10,6 +11,7 @@ import org.opencv.android.Utils
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
+
 
 class AppLockActivity : BaseVMActivity<ActivityApplockBinding, AppLockActivityViewModel>() {
     override fun initData() {
@@ -37,7 +39,12 @@ class AppLockActivity : BaseVMActivity<ActivityApplockBinding, AppLockActivityVi
     }
 
     override fun initObserve() {}
-    override fun initAction() {}
+    override fun initAction() {
+
+        mBinding?.imageView?.setOnClickListener {
+            mViewModel.faceDetect(this)
+        }
+    }
     override fun viewModelClass(): Class<AppLockActivityViewModel> = AppLockActivityViewModel::class.java
     override fun getViewBinding(): ActivityApplockBinding = ActivityApplockBinding.inflate(layoutInflater)
 
@@ -59,4 +66,5 @@ class AppLockActivity : BaseVMActivity<ActivityApplockBinding, AppLockActivityVi
         Imgproc.GaussianBlur(src, blurredMat, Size(25.0, 25.0), 0.0)
         return blurredMat
     }
+
 }
