@@ -132,8 +132,14 @@ dependencies {
     api 'com.github.tony19:logback-android:2.0.0'
     api 'com.alibaba.android:vlayout:1.2.33@aar'
 
+    debugApi 'com.facebook.flipper:flipper:0.273.0'
+    debugApi 'com.facebook.soloader:soloader:0.10.5'
+
+    releaseApi 'com.facebook.flipper:flipper-noop:0.273.0'
+
 
     api(project(":network"))
     api(project(":architecturemodule"))
     api project(":openCVLibrary410")
+
 }

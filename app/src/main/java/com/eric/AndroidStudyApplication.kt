@@ -8,6 +8,11 @@ import com.eric.androidstudy.BuildConfig
 import com.eric.base.log.LogbackConfigurator
 import com.eric.base.log.LogbackTree
 import com.eric.kotlin.corotinue.app.AppObserver
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
 import timber.log.Timber
 
@@ -27,6 +32,7 @@ class AndroidStudyApplication : Application() {
     init {
         System.loadLibrary("opencv_java4")
     }
+
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -51,7 +57,17 @@ class AndroidStudyApplication : Application() {
             Timber.plant(LogbackTree(AndroidStudyApplication::class.java))
         }
 
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this)
+
+        SoLoader.init(this, false)
+
+        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
+            val client = AndroidFlipperClient.getInstance(this)
+            val withDefaults = DescriptorMapping.withDefaults()
+            client.addPlugin(InspectorFlipperPlugin(this, withDefaults))
+            client.start()
+        }
+
 
     }
 
