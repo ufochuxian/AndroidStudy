@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.plugin.generateModule' // 应用插件
+    id 'com.plugin.thread-pool-transform'
 }
 
 android {
