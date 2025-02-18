@@ -22,8 +22,10 @@ import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.base.ext.ERIC_TAG
+import com.eric.base.logTd
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.base.mgr.PermissionManager
+import com.eric.base.thread.TaskManager
 import com.eric.function.costTime
 import com.eric.function.sayHello
 import com.eric.kotlin.SPMgr
@@ -106,6 +108,37 @@ class MainActivity : AppCompatActivity() {
         binding.page3.setOnClickListener {
             startActivity(Intent(this, VideoPlayerWithFilterActivity::class.java))
         }
+
+        TaskManager.submitTask(Runnable {
+            // 初始的数字
+            var counter = 0
+
+            // 每隔 1 秒打印一次数字，直到任务结束
+            while (counter < 100) {  // 这里限制打印次数为100次
+
+                //我们在线程池中对应的任务cacel的方式，是通过Future.cancle的方式来调用的，这个只是个标记线程被打断，并不一定立即生效，有可能延迟生效的，所以为了安全的保证
+                //我们加入这个Thread.currentThread().isInterrupted判断，保证调用后，异步的任务逻辑，不要继续执行了
+                if (Thread.currentThread().isInterrupted) {
+                    // 检查中断标志，如果任务被取消，立即退出任务
+                    logTd("MainActivity", "Task interrupted, stopping task execution.")
+                    return@Runnable
+                }
+
+                logTd("MainActivity", "开启一个applock任务，当前任务处于：${Thread.currentThread().name}，当前数字：$counter")
+
+                // 自增
+                counter++
+
+                try {
+                    Thread.sleep(1000)  // 休眠 1 秒
+                } catch (e: InterruptedException) {
+                    // 处理中断异常，标记任务已中断
+                    logTd("MainActivity", "Task interrupted during sleep, stopping task.")
+                    Thread.currentThread().interrupt()  // 设置线程的中断标志
+                    return@Runnable
+                }
+            }
+        }, this, "MainActivity", "initView")
 
         var flowable = JustOperator()
 
@@ -202,6 +235,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        TaskManager.cancelTasksForPageInstance(this)
 
     }
 
