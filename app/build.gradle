@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.plugin.generateModule' // 应用插件
-    id 'com.plugin.thread-pool-transform'
+    id 'com.plugin.threadConvergence'
 }
 
 android {
@@ -155,6 +155,24 @@ android {
     }
     namespace 'com.eric.androidstudy'
 }
+
+import com.plugin.ThreadTransformTask
+
+android.applicationVariants.all { variant ->
+    if (variant.name == "googleDebug") {
+        def compileJavaTask = tasks.findByName("compile${variant.name.capitalize()}JavaWithJavac")
+
+        // 检查并创建任务
+        def existingTask = tasks.findByName("threadConvergence")
+        def threadTransformTask = existingTask ?: tasks.create("threadConvergence", ThreadTransformTask)
+
+        // 确保任务顺序正确
+        threadTransformTask.mustRunAfter(compileJavaTask)
+        variant.assembleProvider.get().dependsOn(threadTransformTask)
+    }
+}
+
+
 
 
 dependencies {

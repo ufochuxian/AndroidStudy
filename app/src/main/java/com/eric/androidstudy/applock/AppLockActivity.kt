@@ -82,6 +82,9 @@ class AppLockActivity : BaseVMActivity<ActivityApplockBinding, AppLockActivityVi
         }, this, "AppLockActivity", "initView")
 
 
+        Thread().run {
+            logTd("threadpool","线程收敛插件测试")
+        }
     }
 
     override fun initObserve() {}
