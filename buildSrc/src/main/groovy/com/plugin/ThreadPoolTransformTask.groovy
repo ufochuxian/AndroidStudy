@@ -3,6 +3,7 @@ package com.plugin
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.*
 import org.gradle.workers.WorkQueue
 import org.gradle.workers.WorkerExecutor
@@ -30,10 +31,12 @@ abstract class ThreadPoolTransformTask extends DefaultTask {
         }
 
         classFiles.each { File classFile ->
-            File outputFile = new File(outputDir.get().asFile, classFile.name)
-            workQueue.submit(ThreadPoolTransformAction) {
-                inputFile.set(classFile)
-                outputFile.set(outputFile)
+            // **创建新的输出文件**
+            File transformedFile = new File(outputDir.get().asFile, classFile.name)
+
+            workQueue.submit(ThreadPoolTransformAction) { parameters ->
+                parameters.inputFile.set(classFile)  //  修正
+                parameters.outputFile.set(transformedFile)  //  修正
             }
         }
     }

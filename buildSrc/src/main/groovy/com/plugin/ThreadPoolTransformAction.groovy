@@ -1,38 +1,24 @@
-package com.plugin
-
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
-import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.ClassWriter
 
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 abstract class ThreadPoolTransformAction implements WorkAction<ThreadPoolTransformParameters> {
-
     @Override
     void execute() {
-        File inputClassFile = parameters.inputFile.get().asFile
-        File outputClassFile = parameters.outputFile.get().asFile
+        File input = parameters.inputFile.get().asFile
+        File output = parameters.outputFile.get().asFile
 
-        if (!inputClassFile.name.endsWith(".class")) {
-            return
-        }
+        // 确保输出目录存在
+        output.parentFile.mkdirs()
 
-        FileInputStream fis = new FileInputStream(inputClassFile)
-        ClassReader cr = new ClassReader(fis)
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES)
-        ClassVisitor cv = new ThreadPoolClassVisitor(Opcodes.ASM9, cw)
-        cr.accept(cv, ClassReader.EXPAND_FRAMES)
-        fis.close()
-
-        Files.copy(inputClassFile.toPath(), outputClassFile.toPath())
-        FileOutputStream fos = new FileOutputStream(outputClassFile)
-        fos.write(cw.toByteArray())
-        fos.close()
+        // ✅ 使用 Java NIO 进行文件拷贝（强制覆盖）
+        Files.copy(input.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 }
+
 
 interface ThreadPoolTransformParameters extends WorkParameters {
     RegularFileProperty getInputFile()
