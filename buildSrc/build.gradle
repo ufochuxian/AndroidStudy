@@ -1,5 +1,6 @@
 plugins {
     id 'groovy'
+    id 'java-gradle-plugin'
 }
 
 repositories {
@@ -8,9 +9,10 @@ repositories {
 }
 
 dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:8.7.3'  // 使用 AGP 8.7.2
     implementation 'org.ow2.asm:asm:9.5'
     implementation 'org.ow2.asm:asm-commons:9.5'
     implementation 'org.ow2.asm:asm-util:9.5'
-    implementation gradleApi()
-    implementation localGroovy()
 }

@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.plugin.generateModule' // 应用插件
     id 'com.plugin.threadConvergence'
+    id 'com.plugin.activity-timing-plugin' // 这里引用 buildSrc 中的插件
 }
 
 android {
