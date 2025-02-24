@@ -100,6 +100,13 @@
             android:foregroundServiceType="mediaPlayback"
             />
 
+        <service
+            android:name="com.eric.servicebind.ServiceManagerService"
+            android:process=":service_manager"
+            android:exported="true" >
+        </service>
+
+
 
     </application>
 
