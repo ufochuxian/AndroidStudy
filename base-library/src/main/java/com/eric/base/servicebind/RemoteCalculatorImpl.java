@@ -1,4 +1,6 @@
-package com.eric.servicebind;
+package com.eric.base.servicebind;
+
+import com.eric.base.aidl.IRemoteCalculator;
 
 public class RemoteCalculatorImpl extends IRemoteCalculator.Stub {
     @Override

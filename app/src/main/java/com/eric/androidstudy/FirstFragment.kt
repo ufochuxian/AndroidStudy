@@ -23,6 +23,7 @@ import com.eric.base.ext.ERIC_TAG
 import com.eric.base.logTd
 import com.eric.base.mgr.PermissionManager
 import com.eric.base.setRippleBackground
+import com.eric.feature.partygame.PartyGameActivity
 import com.eric.kotlin.flow.ShareFlowTest
 import com.eric.kotlin.lock.NavigationManager
 import com.eric.lifecycle.TestLifeCycleActivity
@@ -153,7 +154,7 @@ class FirstFragment : Fragment() {
 //            }
 
             context?.let {
-                val intent = Intent(it, AppLockActivity::class.java)
+                val intent = Intent(it, PartyGameActivity::class.java)
                 NavigationManager.navigate(it,intent)
             }
 

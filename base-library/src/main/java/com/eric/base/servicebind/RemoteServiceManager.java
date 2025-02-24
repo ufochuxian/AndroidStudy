@@ -1,6 +1,8 @@
-package com.eric.servicebind;
+package com.eric.base.servicebind;
 
 import android.os.IBinder;
+
+import com.eric.base.aidl.IRemoteServiceManager;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -25,6 +25,7 @@ import com.eric.base.ext.ERIC_TAG
 import com.eric.base.logTd
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.base.mgr.PermissionManager
+import com.eric.base.servicebind.ServiceManagerHelper
 import com.eric.base.thread.TaskManager
 import com.eric.function.costTime
 import com.eric.function.sayHello
@@ -191,6 +192,9 @@ class MainActivity : AppCompatActivity() {
 
 
         ScreenMatchUtil.log(this)
+
+        ServiceManagerHelper.bindServiceManager(this);
+
 
 //        val launchBitmap = binding.icLauncher.drawable.toBitmap()
 //
