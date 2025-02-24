@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eric.feature.databinding.FragmentPartyGameBinding
+import com.eric.feature.databinding.FragmentPartygameBinding
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
 
-class PartyGameFragment : BaseVMFragment<FragmentPartyGameBinding, PartyGameFragmentViewModel>() {
+class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFragmentViewModel>() {
 
     companion object {
         const val TAG = "PartyGameFragment"
@@ -37,7 +37,7 @@ class PartyGameFragment : BaseVMFragment<FragmentPartyGameBinding, PartyGameFrag
 
     override fun viewModelClass(): Class<PartyGameFragmentViewModel> = PartyGameFragmentViewModel::class.java
 
-    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPartyGameBinding {
-        return FragmentPartyGameBinding.inflate(layoutInflater, mParentContainer, false)
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPartygameBinding {
+        return FragmentPartygameBinding.inflate(layoutInflater, mParentContainer, false)
     }
 }

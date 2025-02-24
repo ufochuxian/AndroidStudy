@@ -3,10 +3,10 @@ package com.eric.feature.partygame
 
 import android.os.Bundle
 import com.eric.feature.R
-import com.eric.feature.databinding.ActivityPartyGameBinding
+import com.eric.feature.databinding.ActivityPartygameBinding
 import com.transsion.architecturemodule.base.activity.BaseVMActivity
 
-class PartyGameActivity : BaseVMActivity<ActivityPartyGameBinding, PartyGameActivityViewModel>() {
+class PartyGameActivity : BaseVMActivity<ActivityPartygameBinding, PartyGameActivityViewModel>() {
     override fun initData() {
         // 初始化数据
     }
@@ -26,5 +26,5 @@ class PartyGameActivity : BaseVMActivity<ActivityPartyGameBinding, PartyGameActi
 
     override fun viewModelClass(): Class<PartyGameActivityViewModel> = PartyGameActivityViewModel::class.java
 
-    override fun getViewBinding(): ActivityPartyGameBinding = ActivityPartyGameBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivityPartygameBinding = ActivityPartygameBinding.inflate(layoutInflater)
 }
