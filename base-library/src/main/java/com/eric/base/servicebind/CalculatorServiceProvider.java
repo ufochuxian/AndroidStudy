@@ -10,14 +10,14 @@ import com.eric.base.aidl.IRemoteServiceManager;
 
 public class CalculatorServiceProvider {
     private static final String TAG = "CalculatorServiceProvider";
-    private final ServiceManagerHelper serviceManagerHelper = new ServiceManagerHelper();
+    private final RemoteServiceConnector serviceManagerHelper = new RemoteServiceConnector();
 
     /**
      * 在服务提供进程中调用此方法（例如在 Service 的 onCreate() 中），绑定 ServiceManagerService，
      * 绑定成功后注册 Calculator 服务。
      */
     public void registerCalculatorService(final Context context) {
-        serviceManagerHelper.bindServiceManager(context, new ServiceManagerHelper.ServiceManagerConnectionCallback() {
+        serviceManagerHelper.bindServiceManager(context, new RemoteServiceConnector.ServiceManagerConnectionCallback() {
             @SuppressLint("LogNotTimber")
             @Override
             public void onConnected(IRemoteServiceManager manager) {

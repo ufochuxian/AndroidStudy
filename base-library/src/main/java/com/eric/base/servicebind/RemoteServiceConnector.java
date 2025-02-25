@@ -6,11 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.eric.base.aidl.IRemoteServiceManager;
 
-public class ServiceManagerHelper {
+public class RemoteServiceConnector {
     private static final String TAG = "ServiceManagerHelper";
 
     // 当前进程中绑定到 ServiceManagerService 后获得的 IRemoteServiceManager 代理
@@ -20,7 +21,7 @@ public class ServiceManagerHelper {
      * 定义回调接口，用于在服务绑定成功后通知调用者
      */
     public interface ServiceManagerConnectionCallback {
-        void onConnected(IRemoteServiceManager manager);
+        void onConnected(IRemoteServiceManager manager) throws RemoteException;
     }
 
     /**
@@ -40,10 +41,14 @@ public class ServiceManagerHelper {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(TAG, "onServiceConnected: 绑定成功，ComponentName: " + name);
-                // 正确转换：通过 AIDL 生成的 Stub.asInterface() 方法将 IBinder 转换为 IRemoteServiceManager
+                // 通过 AIDL 生成的 Stub.asInterface() 方法将 IBinder 转换为 IRemoteServiceManager
                 mManager = IRemoteServiceManager.Stub.asInterface(service);
                 if (callback != null) {
-                    callback.onConnected(mManager);
+                    try {
+                        callback.onConnected(mManager);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 

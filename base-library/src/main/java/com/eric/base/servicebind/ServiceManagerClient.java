@@ -1,10 +1,7 @@
 package com.eric.base.servicebind;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -14,57 +11,27 @@ import com.eric.base.aidl.IRemoteServiceManager;
 
 public class ServiceManagerClient {
     private static final String TAG = "ServiceManagerClient";
-    // 使用 AIDL 定义的接口类型
-    private IRemoteServiceManager mManager;
-
-    public interface ServiceManagerClientCallback {
-        void onConnected(IRemoteServiceManager manager) throws RemoteException;
-    }
+    // 使用 ServiceManagerHelper 复用绑定 ServiceManagerService 的逻辑
+    private final RemoteServiceConnector serviceManagerHelper = new RemoteServiceConnector();
 
     /**
-     * 在客户端进程中绑定 ServiceManagerService，获取 IRemoteServiceManager 实例
+     * 在客户端进程中绑定 ServiceManagerService，查询 "Calculator" 服务，并调用其 add 方法
+     *
+     * @param context 用于绑定服务的 Context
      */
     @SuppressLint("LogNotTimber")
-    public void bindServiceManager(final Context context, final ServiceManagerClientCallback callback) {
-        Log.d(TAG, "bindServiceManager: 开始绑定 ServiceManagerService");
-        Intent intent = new Intent(context, ServiceManagerService.class);
-        context.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                Log.d(TAG, "onServiceConnected: 绑定成功，ComponentName: " + name);
-                // 通过 AIDL Stub.asInterface() 将 IBinder 转换为 IRemoteServiceManager 实例
-                mManager = IRemoteServiceManager.Stub.asInterface(service);
-                if (callback != null) {
-                    try {
-                        callback.onConnected(mManager);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Log.d(TAG, "onServiceDisconnected: 服务断开，ComponentName: " + name);
-                mManager = null;
-            }
-        }, Context.BIND_AUTO_CREATE);
-        Log.d(TAG, "bindServiceManager: 绑定请求已发送");
-    }
-    /**
-     * 绑定服务后查询并调用 Calculator 服务
-     */
     public void queryCalculatorService(final Context context) {
-        bindServiceManager(context, new ServiceManagerClientCallback() {
-            @SuppressLint("LogNotTimber")
+        serviceManagerHelper.bindServiceManager(context, new RemoteServiceConnector.ServiceManagerConnectionCallback() {
             @Override
             public void onConnected(IRemoteServiceManager manager) throws RemoteException {
-                // 通过服务管理器查询 "Calculator" 服务的 Binder
+                Log.d(TAG, "onConnected: 成功绑定 ServiceManagerService");
+                // 通过服务管理器查询 "Calculator" 服务的 IBinder
                 IBinder binder = manager.getService("Calculator");
                 if (binder != null) {
-                    // 获取 AIDL 自动生成的代理对象
+                    // 将 IBinder 转换为 IRemoteCalculator 代理对象
                     IRemoteCalculator calculator = IRemoteCalculator.Stub.asInterface(binder);
                     try {
+                        // 调用远程方法
                         int result = calculator.add(5, 3);
                         Log.d(TAG, "Calculator.add(5, 3) = " + result);
                     } catch (RemoteException e) {
