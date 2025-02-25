@@ -1,4 +1,4 @@
-package com.eric.base.servicebind;
+package com.eric.base.servicebind.rpc;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.eric.base.aidl.IRemoteServiceManager;
+import com.eric.base.servicebind.ServiceManagerService;
 
 public class RemoteServiceConnector {
     private static final String TAG = "ServiceManagerHelper";

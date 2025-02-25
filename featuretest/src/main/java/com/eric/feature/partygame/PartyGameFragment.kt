@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eric.base.logTd
-import com.eric.base.servicebind.ServiceManagerClient
+import com.eric.base.servicebind.rpc.ServiceManagerClient
 import com.eric.feature.databinding.FragmentPartygameBinding
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
 

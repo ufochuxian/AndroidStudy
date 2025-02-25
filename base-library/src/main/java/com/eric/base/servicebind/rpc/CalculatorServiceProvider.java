@@ -1,4 +1,4 @@
-package com.eric.base.servicebind;
+package com.eric.base.servicebind.rpc;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.eric.base.aidl.IRemoteServiceManager;
+import com.eric.base.servicebind.RemoteCalculatorImpl;
 
 public class CalculatorServiceProvider {
     private static final String TAG = "CalculatorServiceProvider";

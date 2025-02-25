@@ -1,4 +1,4 @@
-package com.eric.base.servicebind;
+package com.eric.base.servicebind.rpc;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
