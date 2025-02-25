@@ -229,10 +229,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val threadTest = ThreadTest()
-        threadTest.testThreadMethod()
-
-
         // 检查权限
 //        checkAndRequestPermission()
     }
