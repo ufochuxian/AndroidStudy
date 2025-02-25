@@ -7,10 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.blankj.utilcode.util.ProcessUtils
 import com.eric.base.aidl.IRemoteCalculator
 import com.eric.base.logTd
 import com.eric.base.servicebind.rpc.ServiceManagerClient
-import com.eric.base.servicebind.rpc.ServiceManagerClient.ServiceQueryCallback
+import com.eric.base.servicebind.rpc.RpcServiceName
 import com.eric.feature.databinding.FragmentPartygameBinding
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
 
@@ -38,15 +39,16 @@ class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFrag
         // 初始化 UI
         mBinding?.calaulator?.setOnClickListener {
             // 处理点击事件
-            logTd("Calculator", "远程调用方法的result被点击了")
+            logTd("${RpcServiceName.REMOTE_CALCULATOR}", "远程调用方法的result被点击了")
             val client = ServiceManagerClient()
-            client.queryService<IRemoteCalculator>(context, "Calculator",  // 转换器：将 IBinder 转换为 IRemoteCalculator 代理对象
+            client.queryService<IRemoteCalculator>(context, "${RpcServiceName.REMOTE_CALCULATOR}",  // 转换器：将 IBinder 转换为 IRemoteCalculator 代理对象
                 { binder -> IRemoteCalculator.Stub.asInterface(binder) },  // 查询结果的回调
                 { service ->
                     service?.let {
                         try {
                             val result = service.add(5, 3)
                             Log.d("Client", "Calculator.add(5, 3) = $result")
+                            logTd("rpc","调用Calculator服务，pid:${ProcessUtils.getCurrentProcessName()}")
                         } catch (e: RemoteException) {
                             Log.e("Client", "调用 Calculator 服务失败", e)
                         }
