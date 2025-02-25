@@ -47,7 +47,7 @@ class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFrag
                     service?.let {
                         try {
                             val result = service.add(5, 3)
-                            Log.d("Client", "Calculator.add(5, 3) = $result")
+                            Log.d("Client", "Calculator 方法调用结果: = ${result.result}")
                             logTd("rpc","调用Calculator服务，pid:${ProcessUtils.getCurrentProcessName()}")
                         } catch (e: RemoteException) {
                             Log.e("Client", "调用 Calculator 服务失败", e)

@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'  // 必须启用注解处理器
-}
+    id("kotlin-parcelize")}
 
 android {
     namespace 'com.eric.baselibrary'

@@ -1,6 +1,8 @@
 package com.eric.base.servicebind.rpc;
 
 
+import androidx.annotation.NonNull;
+
 public enum RpcServiceName {
     REMOTE_CALCULATOR("com.eric.base.aidl.IRemoteCalculator");
 
@@ -10,6 +12,7 @@ public enum RpcServiceName {
         this.name = name;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name;
