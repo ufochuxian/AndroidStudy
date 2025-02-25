@@ -1,5 +1,6 @@
 package com.eric.base.servicebind;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -17,6 +18,7 @@ public class CalculatorServiceProvider {
      */
     public void registerCalculatorService(final Context context) {
         serviceManagerHelper.bindServiceManager(context, new ServiceManagerHelper.ServiceManagerConnectionCallback() {
+            @SuppressLint("LogNotTimber")
             @Override
             public void onConnected(IRemoteServiceManager manager) {
                 // 绑定成功后，创建服务实现对象并注册

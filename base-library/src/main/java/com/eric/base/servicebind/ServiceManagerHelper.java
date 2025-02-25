@@ -1,5 +1,6 @@
 package com.eric.base.servicebind;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ public class ServiceManagerHelper {
      * @param context  用于绑定服务的 Context
      * @param callback 服务绑定成功后的回调通知
      */
+    @SuppressLint("LogNotTimber")
     public void bindServiceManager(final Context context, final ServiceManagerConnectionCallback callback) {
         Log.d(TAG, "bindServiceManager: 开始绑定 ServiceManagerService");
         Intent intent = new Intent(context, ServiceManagerService.class);
@@ -59,6 +61,7 @@ public class ServiceManagerHelper {
      *
      * @return 如果绑定成功，返回 IRemoteServiceManager 实例；否则返回 null
      */
+    @SuppressLint("LogNotTimber")
     public IRemoteServiceManager getServiceManager() {
         if (mManager == null) {
             Log.w(TAG, "getServiceManager: 未获取到 IRemoteServiceManager 实例，服务可能尚未绑定或已断开");

@@ -51,20 +51,6 @@ public class ServiceManagerClient {
         }, Context.BIND_AUTO_CREATE);
         Log.d(TAG, "bindServiceManager: 绑定请求已发送");
     }
-
-    /**
-     * 获取当前绑定的 IRemoteServiceManager 实例
-     */
-    @SuppressLint("LogNotTimber")
-    public IRemoteServiceManager getServiceManager() {
-        if (mManager == null) {
-            Log.w(TAG, "getServiceManager: 未获取到 IRemoteServiceManager 实例，服务可能尚未绑定或已断开");
-        } else {
-            Log.d(TAG, "getServiceManager: 成功获取 IRemoteServiceManager 实例");
-        }
-        return mManager;
-    }
-
     /**
      * 绑定服务后查询并调用 Calculator 服务
      */
