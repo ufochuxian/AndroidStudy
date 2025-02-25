@@ -22,7 +22,7 @@ import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.base.logTd
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.base.mgr.PermissionManager
-import com.eric.base.servicebind.rpc.CalculatorServiceProvider
+import com.eric.base.servicebind.rpc.ServiceManagerClient
 import com.eric.base.thread.TaskManager
 import com.eric.function.costTime
 import com.eric.function.sayHello
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity() {
 
         ScreenMatchUtil.log(this)
 
-        val provider = CalculatorServiceProvider()
+        val provider = ServiceManagerClient()
         provider.registerCalculatorService(this)
 
 
