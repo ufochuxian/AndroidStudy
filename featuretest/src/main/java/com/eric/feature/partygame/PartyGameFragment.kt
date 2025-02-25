@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.blankj.utilcode.util.ProcessUtils
+import com.eric.base.aidl.DeviceInfo
 import com.eric.base.aidl.IRemoteCalculator
+import com.eric.base.aidl.VersionInfo
 import com.eric.base.logTd
 import com.eric.base.servicebind.rpc.ServiceManagerClient
 import com.eric.base.servicebind.rpc.RpcServiceName
@@ -46,8 +48,8 @@ class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFrag
                 { service ->
                     service?.let {
                         try {
-                            val result = service.add(5, 3)
-                            Log.d("Client", "Calculator 方法调用结果: = ${result.result}")
+                            val result = service.get(DeviceInfo(VersionInfo("firstVersion",0)), 3)
+                            Log.d("Client", "Calculator 方法调用结果: = ${result.description}")
                             logTd("rpc","调用Calculator服务，pid:${ProcessUtils.getCurrentProcessName()}")
                         } catch (e: RemoteException) {
                             Log.e("Client", "调用 Calculator 服务失败", e)
