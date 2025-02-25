@@ -1,12 +1,16 @@
-
 package com.eric.feature.partygame
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.RemoteException
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eric.base.aidl.IRemoteCalculator
 import com.eric.base.logTd
 import com.eric.base.servicebind.rpc.ServiceManagerClient
+import com.eric.base.servicebind.rpc.ServiceManagerClient.ServiceQueryCallback
 import com.eric.feature.databinding.FragmentPartygameBinding
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
 
@@ -29,12 +33,27 @@ class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFrag
         // 初始化数据
     }
 
+    @SuppressLint("LogNotTimber")
     override fun initView(view: View, savedInstanceState: Bundle?) {
         // 初始化 UI
         mBinding?.calaulator?.setOnClickListener {
             // 处理点击事件
-            logTd("Calculator","远程调用方法的result被点击了")
-            serviceManagerClient.queryCalculatorService(activity)
+            logTd("Calculator", "远程调用方法的result被点击了")
+            val client = ServiceManagerClient()
+            client.queryService<IRemoteCalculator>(context, "Calculator",  // 转换器：将 IBinder 转换为 IRemoteCalculator 代理对象
+                { binder -> IRemoteCalculator.Stub.asInterface(binder) },  // 查询结果的回调
+                { service ->
+                    service?.let {
+                        try {
+                            val result = service.add(5, 3)
+                            Log.d("Client", "Calculator.add(5, 3) = $result")
+                        } catch (e: RemoteException) {
+                            Log.e("Client", "调用 Calculator 服务失败", e)
+                        }
+                    } ?: {
+                        Log.w("Client", "未找到 Calculator 服务");
+                    }
+                })
         }
     }
 

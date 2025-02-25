@@ -22,6 +22,7 @@ import com.eric.androidstudy.databinding.ActivityMainBinding
 import com.eric.base.logTd
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.base.mgr.PermissionManager
+import com.eric.base.servicebind.RemoteCalculatorImpl
 import com.eric.base.servicebind.rpc.ServiceManagerClient
 import com.eric.base.thread.TaskManager
 import com.eric.function.costTime
@@ -188,9 +189,8 @@ class MainActivity : AppCompatActivity() {
 
         ScreenMatchUtil.log(this)
 
-        val provider = ServiceManagerClient()
-        provider.registerCalculatorService(this)
-
+        val client = ServiceManagerClient()
+        client.registerService<RemoteCalculatorImpl>(this, "Calculator", RemoteCalculatorImpl())
 
 //        val launchBitmap = binding.icLauncher.drawable.toBitmap()
 //

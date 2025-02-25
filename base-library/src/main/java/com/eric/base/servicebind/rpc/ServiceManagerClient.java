@@ -6,62 +6,89 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.eric.base.aidl.IRemoteCalculator;
 import com.eric.base.aidl.IRemoteServiceManager;
-import com.eric.base.servicebind.RemoteCalculatorImpl;
 
+/**
+ * 泛型版的 ServiceManagerClient，支持任意服务的注册和查询。
+ */
 public class ServiceManagerClient {
     private static final String TAG = "ServiceManagerClient";
-    // 使用 ServiceManagerHelper 复用绑定 ServiceManagerService 的逻辑
+    // 复用 RemoteServiceConnector 用于绑定 ServiceManagerService
     private final RemoteServiceConnector remoteServiceConnector = new RemoteServiceConnector();
 
     /**
-     * 在服务提供进程中调用此方法（例如在 Service 的 onCreate() 中），绑定 ServiceManagerService，
-     * 绑定成功后注册 Calculator 服务。
+     * 注册服务。
+     *
+     * @param context     用于绑定服务的 Context
+     * @param serviceName 服务名称，用于后续查询
+     * @param service     服务实现对象（必须继承自 IInterface）
+     * @param <T>         服务接口类型
      */
-    public void registerCalculatorService(final Context context) {
+    public <T extends android.os.IInterface> void registerService(final Context context,
+                                                                  final String serviceName,
+                                                                  final T service) {
         remoteServiceConnector.bindServiceManager(context, new RemoteServiceConnector.ServiceManagerConnectionCallback() {
             @SuppressLint("LogNotTimber")
             @Override
             public void onConnected(IRemoteServiceManager manager) {
-                // 绑定成功后，创建服务实现对象并注册
-                RemoteCalculatorImpl calculatorImpl = new RemoteCalculatorImpl();
-                IBinder calculatorBinder = calculatorImpl.asBinder();
+                IBinder binder = service.asBinder();
                 try {
-                    manager.registerService("Calculator", calculatorBinder);
-                    Log.d(TAG, "成功注册 Calculator 服务");
+                    manager.registerService(serviceName, binder);
+                    Log.d(TAG, "成功注册服务: " + serviceName);
                 } catch (RemoteException e) {
-                    Log.e(TAG, "注册 Calculator 服务失败", e);
+                    Log.e(TAG, "注册服务 " + serviceName + " 失败", e);
                 }
             }
         });
     }
 
     /**
-     * 在客户端进程中绑定 ServiceManagerService，查询 "Calculator" 服务，并调用其 add 方法
+     * 定义一个转换器接口，用于将 IBinder 转换为指定的服务接口对象。
      *
-     * @param context 用于绑定服务的 Context
+     * @param <T> 服务接口类型
      */
-    @SuppressLint("LogNotTimber")
-    public void queryCalculatorService(final Context context) {
+    public interface ServiceConverter<T extends android.os.IInterface> {
+        T convert(IBinder binder);
+    }
+
+    /**
+     * 定义查询结果的回调接口。
+     *
+     * @param <T> 服务接口类型
+     */
+    public interface ServiceQueryCallback<T extends android.os.IInterface> {
+        void onResult(T service);
+    }
+
+    /**
+     * 查询服务。
+     *
+     * @param context     用于绑定服务的 Context
+     * @param serviceName 服务名称，用于查询服务
+     * @param converter   转换器，将 IBinder 转换为具体服务接口对象
+     * @param callback    查询结果的回调
+     * @param <T>         服务接口类型
+     */
+    public <T extends android.os.IInterface> void queryService(final Context context,
+                                                               final String serviceName,
+                                                               final ServiceConverter<T> converter,
+                                                               final ServiceQueryCallback<T> callback) {
         remoteServiceConnector.bindServiceManager(context, new RemoteServiceConnector.ServiceManagerConnectionCallback() {
+            @SuppressLint("LogNotTimber")
             @Override
-            public void onConnected(IRemoteServiceManager manager) throws RemoteException {
-                Log.d(TAG, "onConnected: 成功绑定 ServiceManagerService");
-                // 通过服务管理器查询 "Calculator" 服务的 IBinder
-                IBinder binder = manager.getService("Calculator");
-                if (binder != null) {
-                    // 将 IBinder 转换为 IRemoteCalculator 代理对象
-                    IRemoteCalculator calculator = IRemoteCalculator.Stub.asInterface(binder);
-                    try {
-                        // 调用远程方法
-                        int result = calculator.add(5, 3);
-                        Log.d(TAG, "Calculator.add(5, 3) = " + result);
-                    } catch (RemoteException e) {
-                        Log.e(TAG, "调用 Calculator 服务失败", e);
+            public void onConnected(IRemoteServiceManager manager) {
+                try {
+                    IBinder binder = manager.getService(serviceName);
+                    if (binder != null) {
+                        T service = converter.convert(binder);
+                        callback.onResult(service);
+                    } else {
+                        Log.w(TAG, "未找到服务: " + serviceName);
+                        callback.onResult(null);
                     }
-                } else {
-                    Log.w(TAG, "queryCalculatorService: 未找到 Calculator 服务");
+                } catch (RemoteException e) {
+                    Log.e(TAG, "查询服务 " + serviceName + " 失败", e);
+                    callback.onResult(null);
                 }
             }
         });
