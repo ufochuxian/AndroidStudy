@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import com.blankj.utilcode.util.ToastUtils
 import com.eric.base.aidl.IRemoteCalculator
 import com.eric.base.logTd
+import com.eric.base.servicebind.ServiceManagerClient
 import com.eric.base.servicebind.ServiceManagerHelper
 import com.eric.feature.databinding.FragmentPartygameBinding
 import com.transsion.architecturemodule.base.fragment.BaseVMFragment
 
 
 class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFragmentViewModel>() {
+
+
+    private val serviceManagerClient = ServiceManagerClient()
 
     companion object {
         const val TAG = "PartyGameFragment"
@@ -33,15 +37,7 @@ class PartyGameFragment : BaseVMFragment<FragmentPartygameBinding, PartyGameFrag
         mBinding?.calaulator?.setOnClickListener {
             // 处理点击事件
             logTd("Calculator","远程调用方法的result被点击了")
-            val manager = ServiceManagerHelper.getServiceManager()
-            if (manager != null) {
-                val binder = manager.getService("Calculator")
-                val calculator = IRemoteCalculator.Stub.asInterface(binder)
-                // 远程调用 calculator.add(a, b)
-                val result = calculator.add(10,20)
-                ToastUtils.showLong(result.toString())
-                logTd("Calculator","远程调用方法的result:${result}")
-            }
+            serviceManagerClient.queryCalculatorService(activity)
         }
     }
 

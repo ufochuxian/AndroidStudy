@@ -8,9 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
-import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -21,10 +19,10 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
-import com.eric.base.ext.ERIC_TAG
 import com.eric.base.logTd
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.base.mgr.PermissionManager
+import com.eric.base.servicebind.CalculatorServiceProvider
 import com.eric.base.servicebind.ServiceManagerHelper
 import com.eric.base.thread.TaskManager
 import com.eric.function.costTime
@@ -36,7 +34,6 @@ import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
 import com.eric.routers.TgmRouter
-import com.eric.service.MusicPlayerService
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
 import com.eric.workmanager.BlurWorker
@@ -45,7 +42,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 
 
 const val TAG = "MainActivity"
@@ -193,7 +189,8 @@ class MainActivity : AppCompatActivity() {
 
         ScreenMatchUtil.log(this)
 
-        ServiceManagerHelper.bindServiceManager(this);
+        val provider = CalculatorServiceProvider()
+        provider.registerCalculatorService(this)
 
 
 //        val launchBitmap = binding.icLauncher.drawable.toBitmap()
