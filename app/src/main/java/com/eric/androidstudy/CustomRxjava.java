@@ -99,34 +99,34 @@ class CustomRxjava {
 
     }
 
-    public void testSubscribeOn() {
-        Observable.create(new Observable() {
-            @Override
-            public void subscribe(Observer observer) {
-                Log.v(FLATMAP_TAG, "[subscribeOn] subscribe,thread:" + Thread.currentThread().getName());
-                observer.onNext("测试testSubscribeOn操作符");
-
-            }
-        }).subscribeOn()
-                .observerOn()
-                .subscribe(new Observer() {
-                    @Override
-                    public void onNext(Object o) {
-                        Log.v(FLATMAP_TAG, "最后的observer的onNext方法,thread:" + Thread.currentThread().getName());
-
-                    }
-
-                    @Override
-                    public void onComplete(Object o) {
-
-                    }
-
-                    @Override
-                    public void onError(Object o) {
-
-                    }
-                });
-    }
+//    public void testSubscribeOn() {
+//        Observable.create(new Observable() {
+//            @Override
+//            public void subscribe(Observer observer) {
+//                Log.v(FLATMAP_TAG, "[subscribeOn] subscribe,thread:" + Thread.currentThread().getName());
+//                observer.onNext("测试testSubscribeOn操作符");
+//
+//            }
+//        }).subscribeOn()
+//                .observerOn()
+//                .subscribe(new Observer() {
+//                    @Override
+//                    public void onNext(Object o) {
+//                        Log.v(FLATMAP_TAG, "最后的observer的onNext方法,thread:" + Thread.currentThread().getName());
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete(Object o) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Object o) {
+//
+//                    }
+//                });
+//    }
 
 
     /**

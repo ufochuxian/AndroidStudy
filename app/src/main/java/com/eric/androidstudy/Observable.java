@@ -84,41 +84,41 @@ abstract class Observable<T> {
         };
     }
 
-    //自定义subscribeOn操作符
-    public Observable<T> subscribeOn() {
-        return new Observable<T>() {
-            @Override
-            public void subscribe(final Observer<T> observerC) {
-
-                //切换到子线程
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Observer<T> observerB = new Observer<T>() {
-                            @Override
-                            public void onNext(T t) {
-                                Log.v(CustomRxjava.FLATMAP_TAG, "subscribeOn操作符 onNext,thread:" + Thread.currentThread().getName());
-                                observerC.onNext(t);
-                            }
-
-                            @Override
-                            public void onComplete(T t) {
-                                observerC.onComplete(t);
-
-                            }
-
-                            @Override
-                            public void onError(T t) {
-                                observerC.onError(t);
-
-                            }
-                        };
-                        Observable.this.subscribe(observerB);
-                    }
-                }).start();
-            }
-        };
-    }
+//    //自定义subscribeOn操作符
+//    public Observable<T> subscribeOn() {
+//        return new Observable<T>() {
+//            @Override
+//            public void subscribe(final Observer<T> observerC) {
+//
+//                //切换到子线程
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Observer<T> observerB = new Observer<T>() {
+//                            @Override
+//                            public void onNext(T t) {
+//                                Log.v(CustomRxjava.FLATMAP_TAG, "subscribeOn操作符 onNext,thread:" + Thread.currentThread().getName());
+//                                observerC.onNext(t);
+//                            }
+//
+//                            @Override
+//                            public void onComplete(T t) {
+//                                observerC.onComplete(t);
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(T t) {
+//                                observerC.onError(t);
+//
+//                            }
+//                        };
+//                        Observable.this.subscribe(observerB);
+//                    }
+//                }).start();
+//            }
+//        };
+//    }
 
     Handler mHandler = new Handler(Looper.getMainLooper());
 
