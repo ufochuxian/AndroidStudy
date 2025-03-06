@@ -39,9 +39,10 @@
             android:textColor="@android:color/white"/>
     </LinearLayout>
 
-    <!-- RecyclerView -->
+    <!-- RecyclerView ，这里为了让recyclerview完全显示，要使用paddingTop，不能使用marginTop,不然top_hint_layout滚动跟随出去会有问题-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:paddingTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
