@@ -94,7 +94,9 @@
             android:exported="true"/>
 
         <activity android:name="com.eric.feature.partygame.PartyGameActivity"
-            android:process=":partyGame"
+            android:process=":partyGame" />
+
+        <activity android:name="com.eric.material.CoordinatorLayoutActivity"
             />
 
         <service

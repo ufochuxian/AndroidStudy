@@ -27,6 +27,7 @@ import com.eric.feature.partygame.PartyGameActivity
 import com.eric.kotlin.flow.ShareFlowTest
 import com.eric.kotlin.lock.NavigationManager
 import com.eric.lifecycle.TestLifeCycleActivity
+import com.eric.material.CoordinatorLayoutActivity
 import com.eric.routers.TgmRouter
 import com.eric.service.MusicPlayerService
 import com.eric.task.AppLockPermissionTask
@@ -153,8 +154,13 @@ class FirstFragment : Fragment() {
 //                NavigationManager.navigate(it,intent)
 //            }
 
+//            context?.let {
+//                val intent = Intent(it, PartyGameActivity::class.java)
+//                NavigationManager.navigate(it,intent)
+//            }
+
             context?.let {
-                val intent = Intent(it, PartyGameActivity::class.java)
+                val intent = Intent(it, CoordinatorLayoutActivity::class.java)
                 NavigationManager.navigate(it,intent)
             }
 
