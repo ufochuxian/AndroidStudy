@@ -99,6 +99,9 @@
         <activity android:name="com.eric.material.CoordinatorLayoutActivity"
             />
 
+        <activity android:name="com.eric.material.ScrollingActivity"
+            />
+
         <service
             android:name="com.eric.service.MusicPlayerService"
             android:enabled="true"

@@ -154,15 +154,15 @@ class FirstFragment : Fragment() {
 //                NavigationManager.navigate(it,intent)
 //            }
 
-            context?.let {
-                val intent = Intent(it, PartyGameActivity::class.java)
-                NavigationManager.navigate(it,intent)
-            }
-
 //            context?.let {
-//                val intent = Intent(it, CoordinatorLayoutActivity::class.java)
+//                val intent = Intent(it, PartyGameActivity::class.java)
 //                NavigationManager.navigate(it,intent)
 //            }
+
+            context?.let {
+                val intent = Intent(it, CoordinatorLayoutActivity::class.java)
+                NavigationManager.navigate(it,intent)
+            }
 
         }
 

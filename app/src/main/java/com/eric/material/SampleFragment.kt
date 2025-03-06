@@ -1,5 +1,6 @@
 package com.eric.material
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,9 @@ class SampleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.textView.text = arguments?.getString("title") ?: "No Title"
+        _binding?.textView?.setOnClickListener {
+            activity?.startActivity(Intent(activity,ScrollingActivity::class.java))
+        }
     }
 
     override fun onDestroyView() {
