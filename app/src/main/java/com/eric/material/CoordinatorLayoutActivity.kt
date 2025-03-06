@@ -1,13 +1,16 @@
 package com.eric.material
 
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.eric.androidstudy.R
 import com.eric.androidstudy.databinding.ActivityCoordinatorLayoutBinding
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
@@ -29,9 +32,36 @@ class CoordinatorLayoutActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             Toast.makeText(this, "FAB Clicked!", Toast.LENGTH_SHORT).show()
         }
-
-//        setupTabLayout()
+        setupCustomViewTabLayout()
     }
+
+    private fun setupCustomViewTabLayout() {
+        val tabTitles = listOf("Tab 1", "Tab 2", "Tab 3")
+
+        for (i in tabTitles.indices) {
+            val tab = binding.tabs.getTabAt(i)
+            tab?.customView = LayoutInflater.from(this).inflate(R.layout.tab_item, null)
+            val textView = tab?.customView?.findViewById<TextView>(R.id.tab_text)
+            textView?.text = tabTitles[i]
+        }
+
+        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val textView = tab.customView?.findViewById<TextView>(R.id.tab_text)
+                textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                textView?.setTextColor(Color.BLACK)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val textView = tab.customView?.findViewById<TextView>(R.id.tab_text)
+                textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                textView?.setTextColor(Color.GRAY)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+    }
+
 
     private fun setupTabLayout() {
         binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

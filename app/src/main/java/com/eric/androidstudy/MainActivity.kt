@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         val client = ServiceManagerClient()
         client.registerService<RemoteCalculatorImpl>(this, "${RpcServiceName.REMOTE_CALCULATOR}", RemoteCalculatorImpl())
-        logTd("rpc","注册Calculator服务，pid:${ProcessUtils.getCurrentProcessName()}")
+        logTd("rpc", "注册Calculator服务，pid:${ProcessUtils.getCurrentProcessName()}")
 
 //        val launchBitmap = binding.icLauncher.drawable.toBitmap()
 //
