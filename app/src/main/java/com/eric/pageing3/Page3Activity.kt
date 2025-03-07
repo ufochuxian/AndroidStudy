@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eric.androidstudy.R
 import com.eric.base.data.Product
 import com.eric.base.db.AppDatabase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
@@ -28,8 +29,9 @@ class Page3Activity : AppCompatActivity() {
 
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
+
         // 插入 2000 条商品信息
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             val productDao = AppDatabase.getDatabase(this@Page3Activity).productDao()
             val products = List(500) { i -> Product(name = "Product $i", price = i.toDouble()) }
             val results = productDao.insertProducts(products)
