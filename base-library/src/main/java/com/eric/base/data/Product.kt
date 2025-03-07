@@ -20,10 +20,11 @@ data class Product(
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM products ORDER BY id ASC")
-    fun getAllProducts(): PagingSource<Int, Product>  // 正确处理分页数据
+    // ✅ 正确的分页查询，使用 LIMIT OFFSET
+    @Query("SELECT * FROM products ORDER BY id ASC LIMIT :limit OFFSET :offset")
+    fun getPagedProducts(limit: Int, offset: Int): List<Product>
 
-    // 也可以使用 Flow 来处理异步数据流
+    // 保留 Flow 方式查询全部数据（非分页）
     @Query("SELECT * FROM products ORDER BY id ASC")
     fun getAllProductsAsFlow(): Flow<List<Product>>
 

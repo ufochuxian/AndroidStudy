@@ -19,6 +19,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         productRepository = ProductRepository(productDao)
     }
 
-    val productPagingData: Flow<PagingData<Product>> = productRepository.getAllProducts()
+    val productPagingData: Flow<PagingData<Product>> = productRepository.getPageingProducts()
         .cachedIn(viewModelScope)
 }

@@ -1,5 +1,6 @@
 package com.eric.pageing3
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ class Page3Activity : AppCompatActivity() {
 
     private lateinit var productViewModel: ProductViewModel
 
+    @SuppressLint("LogNotTimber")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_page)
@@ -29,9 +31,9 @@ class Page3Activity : AppCompatActivity() {
         // 插入 2000 条商品信息
         GlobalScope.launch(Dispatchers.IO) {
             val productDao = AppDatabase.getDatabase(this@Page3Activity).productDao()
-            val products = List(2000) { i -> Product(name = "Product $i", price = i.toDouble()) }
+            val products = List(500) { i -> Product(name = "Product $i", price = i.toDouble()) }
             val results = productDao.insertProducts(products)
-            Log.d(TAG,"插入产品:${results}")
+            Log.i(TAG,"插入产品:${results}")
         }
 
         // 监听并展示分页数据
@@ -42,7 +44,7 @@ class Page3Activity : AppCompatActivity() {
 
         lifecycleScope.launch {
             productViewModel.productPagingData.collectLatest { pagingData ->
-                Log.d(TAG, "Paging data received: $pagingData")  // 确认分页数据是否收到了
+                Log.i(TAG, "Paging data received: $pagingData")  // ✅ 确保收到分页数据
                 adapter.submitData(pagingData)
             }
         }

@@ -10,10 +10,14 @@ import kotlinx.coroutines.flow.Flow
 // ProductRepository.kt
 class ProductRepository(private val productDao: ProductDao) {
 
-    fun getAllProducts(): Flow<PagingData<Product>> {
+    fun getPageingProducts(): Flow<PagingData<Product>> {
         return Pager(
-            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
-            pagingSourceFactory = { productDao.getAllProducts() }
+            config = PagingConfig(
+                pageSize = 20,  // ✅ 每页 20 个
+                initialLoadSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { ProductPagingSource(productDao) } // ✅ 使用分页数据源
         ).flow
     }
 }

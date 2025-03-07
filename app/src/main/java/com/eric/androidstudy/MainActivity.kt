@@ -35,6 +35,7 @@ import com.eric.kotlin.corotinue.broadcast.Message
 import com.eric.kotlin.corotinue.broadcast.PageA
 import com.eric.kotlin.corotinue.broadcast.PageB
 import com.eric.operatprs.JustOperator
+import com.eric.pageing3.Page3Activity
 import com.eric.routers.TgmRouter
 import com.eric.ui.UILayoutActivity
 import com.eric.ui.WanAndroidActivity
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.page3.setOnClickListener {
-            startActivity(Intent(this, VideoPlayerWithFilterActivity::class.java))
+            startActivity(Intent(this, Page3Activity::class.java))
         }
 
         TaskManager.submitTask(Runnable {
