@@ -10,6 +10,7 @@ import android.os.Parcel
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,8 @@ import androidx.work.WorkManager
 import com.blankj.utilcode.util.ProcessUtils
 import com.eric.ScreenMatchUtil
 import com.eric.androidstudy.databinding.ActivityMainBinding
+import com.eric.base.ext.isOverAndroidVersionInclude11
+import com.eric.base.ext.isOverAndroidVersionInclude12
 import com.eric.base.logTd
 import com.eric.base.media.VideoPlayerWithFilterActivity
 import com.eric.base.mgr.PermissionManager
@@ -64,7 +67,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        if(isOverAndroidVersionInclude12()) {
+            installSplashScreen()
+        }
         TgmRouter.getInstance().init(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
 

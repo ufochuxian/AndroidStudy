@@ -23,4 +23,15 @@
 
     <style name="Theme.Rxjava.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight">
+        <!-- ✅ 设置 SplashScreen 背景 -->
+        <item name="android:windowSplashScreenBackground">#FFFFFF</item>
+
+        <!-- ✅ 设置 App 图标 -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+
+        <!-- ✅ 设置品牌 Logo（可选） -->
+        <item name="android:windowSplashScreenBrandingImage">@drawable/img</item>
+    </style>
+
 </resources>
