@@ -103,6 +103,10 @@
         <activity android:name="com.eric.material.ScrollingActivity"
             />
 
+
+        <activity android:name=".HomeActivity"
+            />
+
         <service
             android:name="com.eric.service.MusicPlayerService"
             android:enabled="true"
