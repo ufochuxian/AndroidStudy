@@ -8,9 +8,11 @@ import com.eric.base.data.Product
 import com.eric.base.data.ProductDao
 
 // AppDatabase.kt
-@Database(entities = [Product::class], version = 1, exportSchema = false)
+@Database(entities = [Product::class, PlaybackPerformanceEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
+    abstract fun playbackPerformanceDao(): PlaybackPerformanceDao
+
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null

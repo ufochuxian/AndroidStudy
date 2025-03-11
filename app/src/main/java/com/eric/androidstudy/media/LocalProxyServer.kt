@@ -1,6 +1,10 @@
 package com.eric.androidstudy.media
 
+import android.annotation.SuppressLint
 import android.util.Log
+import com.eric.AndroidStudyApplication
+import com.eric.base.db.AppDatabase
+import com.eric.base.db.PlaybackPerformanceDao
 import fi.iki.elonen.NanoHTTPD
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -10,11 +14,17 @@ import java.net.URLDecoder
 
 class LocalProxyServer(port: Int) : NanoHTTPD(port) {
 
-    private val client = OkHttpClient()
+    private val database: AppDatabase = AppDatabase.getDatabase(AndroidStudyApplication.context)
+    private val playbackPerformanceDao: PlaybackPerformanceDao = database.playbackPerformanceDao()
+
+    private val client = OkHttpClient.Builder()
+        .eventListenerFactory { call -> OkHttpEventListener(call.request().url.toString(), playbackPerformanceDao) }.build()
+
     private val allowedUrls = listOf( // 允许代理的 URL
         "https://media.w3.org"
     )
 
+    @SuppressLint("LogNotTimber")
     override fun serve(session: IHTTPSession): Response {
         val timestamp = System.currentTimeMillis()
         val uri = session.uri.substring(1)
@@ -29,7 +39,9 @@ class LocalProxyServer(port: Int) : NanoHTTPD(port) {
             // 允许的 URL，代理请求远程资源
             try {
                 Log.d("LocalProxyServer", "🔁 代理请求: $uri")
-                val request = Request.Builder().url(URL(uri)).build()
+                val request = Request.Builder()
+                    .url(URL(uri))
+                    .build()
                 val response = client.newCall(request).execute()
 
                 val mimeType = response.header("Content-Type") ?: "video/mp4"
@@ -52,6 +64,7 @@ class LocalProxyServer(port: Int) : NanoHTTPD(port) {
         }
     }
 
+    @SuppressLint("LogNotTimber")
     private fun isUrlAllowed(url: String): Boolean {
         val isAllowed = allowedUrls.any { url.startsWith(it) }
         Log.d("LocalProxyServer", if (isAllowed) "✅ 允许代理: $url" else "🚫 拒绝代理: $url")
