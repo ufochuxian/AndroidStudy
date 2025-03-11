@@ -134,6 +134,8 @@ dependencies {
     api 'com.alibaba.android:vlayout:1.2.33@aar'
 
     api "androidx.core:core-splashscreen:1.0.1"
+    api 'org.nanohttpd:nanohttpd:2.3.1'
+
 
 
     debugApi 'com.facebook.flipper:flipper:0.273.0'

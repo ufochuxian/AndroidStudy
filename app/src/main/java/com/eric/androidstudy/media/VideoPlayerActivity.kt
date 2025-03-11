@@ -22,10 +22,18 @@ class VideoPlayerActivity : AppCompatActivity() {
 
         playerView = findViewById(R.id.playerView)
 
-        // 监听播放器实例变化
-        viewModel.player.observe(this, Observer { player ->
+        // 监听播放器实例
+        viewModel.player.observe(this) { player ->
             playerView.player = player
+        }
+
+        // 监听视频宽高比，动态调整高度
+        viewModel.videoAspectRatio.observe(this, Observer { aspectRatio ->
+            val layoutParams = playerView.layoutParams
+            layoutParams.height = (playerView.width / aspectRatio).toInt()
+            playerView.layoutParams = layoutParams
         })
+
 
         // 播放指定视频
         val videoUrl = intent.getStringExtra("VIDEO_URL") ?: "https://media.w3.org/2010/05/sintel/trailer.mp4"

@@ -3,8 +3,10 @@ package com.eric
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.eric.androidstudy.BuildConfig
+import com.eric.androidstudy.media.LocalProxyServer
 import com.eric.base.log.LogbackConfigurator
 import com.eric.base.log.LogbackTree
 import com.eric.kotlin.corotinue.app.AppObserver
@@ -27,6 +29,8 @@ import timber.log.Timber
 
  */
 class AndroidStudyApplication : Application() {
+
+    lateinit var proxyServer: LocalProxyServer
 
 
     init {
@@ -67,6 +71,10 @@ class AndroidStudyApplication : Application() {
             client.addPlugin(InspectorFlipperPlugin(this, withDefaults))
             client.start()
         }
+
+        proxyServer = LocalProxyServer(8080)
+        proxyServer.start()
+        Log.d("LocalProxyServer", "🚀 代理服务器启动，监听端口 8080")
 
 
     }
