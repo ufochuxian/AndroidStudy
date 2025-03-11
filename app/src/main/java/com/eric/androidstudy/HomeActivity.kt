@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eric.androidstudy.media.VideoPlayerActivity
 import com.eric.feature.partygame.PartyGameActivity
 import com.eric.material.CoordinatorLayoutActivity
 
@@ -18,6 +19,7 @@ class HomeActivity : AppCompatActivity() {
     private val testPages = listOf(
         TestPage("PartyGameActivity", PartyGameActivity::class.java),
         TestPage("CoordinatorLayoutActivity", CoordinatorLayoutActivity::class.java),
+        TestPage("VideoPlayerActivity", VideoPlayerActivity::class.java),
         // 添加更多测试页面
     )
 

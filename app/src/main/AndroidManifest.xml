@@ -107,6 +107,9 @@
         <activity android:name=".HomeActivity"
             />
 
+        <activity android:name=".media.VideoPlayerActivity"
+            />
+
         <service
             android:name="com.eric.service.MusicPlayerService"
             android:enabled="true"
