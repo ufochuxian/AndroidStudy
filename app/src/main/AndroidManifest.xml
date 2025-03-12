@@ -109,6 +109,9 @@
         <activity android:name=".HomeActivity"
             />
 
+
+        <activity android:name=".AvifActivity"/>
+
         <activity android:name=".media.VideoPlayerActivity"
             />
 

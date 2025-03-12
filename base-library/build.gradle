@@ -97,6 +97,10 @@ dependencies {
     api 'com.github.bumptech.glide:glide:4.15.1' // Glide 版本 4.x 最新版
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1' // Glide 注解处理器
 
+    api 'org.aomedia.avif.android:avif:1.1.1.14d8e3c4'
+
+
+
     // Room runtime
     api "androidx.room:room-runtime:2.6.1"  // 检查最新版本
 
@@ -135,6 +139,7 @@ dependencies {
 
     api "androidx.core:core-splashscreen:1.0.1"
     api 'org.nanohttpd:nanohttpd:2.3.1'
+
 
 
 

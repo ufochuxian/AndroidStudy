@@ -20,6 +20,7 @@ class HomeActivity : AppCompatActivity() {
         TestPage("PartyGameActivity", PartyGameActivity::class.java),
         TestPage("CoordinatorLayoutActivity", CoordinatorLayoutActivity::class.java),
         TestPage("VideoPlayerActivity", VideoPlayerActivity::class.java),
+        TestPage("AvifActivity", AvifActivity::class.java),
         // 添加更多测试页面
     )
 
