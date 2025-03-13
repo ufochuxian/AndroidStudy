@@ -112,8 +112,10 @@
 
         <activity android:name=".AvifActivity"/>
 
-        <activity android:name=".media.VideoPlayerActivity"
-            />
+        <activity android:name=".media.VideoPlayerActivity" />
+        <activity android:name=".SwipeToDeleteActivity" />
+
+
 
         <service
             android:name="com.eric.service.MusicPlayerService"

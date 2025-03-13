@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.eric.base.util.GlideApp
 import java.io.File
 
 class AvifActivity : AppCompatActivity() {
@@ -13,10 +14,11 @@ class AvifActivity : AppCompatActivity() {
 
         val imageView: ImageView = findViewById(R.id.imageView)
 
-        // 读取应用私有 files 目录中的 AVIF 文件
-        val avifFile = File(filesDir, "kimono.crop.avif")
+        val file = File(filesDir, "1718924786_aniC6mEngif_file-converters-online.com_ytC.avif") // 获取 files 目录下的 a.avif
+
         Glide.with(this)
-            .load(avifFile)
+            .load(file)
             .into(imageView)
+
     }
 }
