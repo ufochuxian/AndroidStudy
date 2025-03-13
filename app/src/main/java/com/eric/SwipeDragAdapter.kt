@@ -11,7 +11,6 @@ import com.eric.androidstudy.R
 
 class SwipeDragAdapter(
     private val items: MutableList<String>,
-    private val onItemDelete: (Int) -> Unit
 ) : RecyclerView.Adapter<SwipeDragAdapter.ViewHolder>(), ItemTouchHelperAdapter {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -28,9 +27,15 @@ class SwipeDragAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemText.text = items[position]
 
+        // 确保绑定 SwipeRevealLayout，避免复用时状态异常
+        holder.swipeLayout.close(true)
+
         // 删除按钮监听
         holder.deleteButton.setOnClickListener {
-            onItemDelete(holder.adapterPosition)
+            val pos = holder.bindingAdapterPosition
+            if (pos != RecyclerView.NO_POSITION) {
+                onItemDismiss(pos)
+            }
         }
     }
 
@@ -44,7 +49,10 @@ class SwipeDragAdapter(
 
     // 处理滑动删除
     override fun onItemDismiss(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
+        if (position < items.size) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, items.size) // 避免删除后索引错乱
+        }
     }
 }

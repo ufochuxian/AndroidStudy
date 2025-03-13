@@ -19,9 +19,7 @@ class SwipeDragActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val items = mutableListOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
-        adapter = SwipeDragAdapter(items) { position ->
-            adapter?.notifyItemRemoved(position)
-        }
+        adapter = SwipeDragAdapter(items)
 
         val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
         itemTouchHelper.attachToRecyclerView(recyclerView)
