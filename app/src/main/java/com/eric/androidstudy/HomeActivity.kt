@@ -22,6 +22,7 @@ class HomeActivity : AppCompatActivity() {
         TestPage("VideoPlayerActivity", VideoPlayerActivity::class.java),
         TestPage("AvifActivity", AvifActivity::class.java),
         TestPage("SwipeToDeleteActivity", SwipeToDeleteActivity::class.java),
+        TestPage("SwipeDragActivity", SwipeDragActivity::class.java),
         // 添加更多测试页面
     )
 

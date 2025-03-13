@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
+    app:dragEdge="right"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 隐藏的左滑菜单 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@android:color/holo_red_light"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="删除"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <!-- 前景内容 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="示例项"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
