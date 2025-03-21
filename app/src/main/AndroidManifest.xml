@@ -115,6 +115,7 @@
         <activity android:name=".media.VideoPlayerActivity" />
         <activity android:name=".SwipeToDeleteActivity" />
         <activity android:name=".SwipeDragActivity" />
+        <activity android:name=".ExpandableTextViewActivity" />
 
 
 

@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <!-- sample xml -->
+    <com.eric.kotlin.ExpandableTextView
+        android:id="@+id/expandable_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="The golden light of the setting sun shines on the tall snowy mountains. It is shining, the sky is shining..."
+        app:maxCollapsedLines="2"
+        app:animDuration="300"/>
+
+</LinearLayout>

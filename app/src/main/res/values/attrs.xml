@@ -36,4 +36,11 @@
         <attr name="bgShadowDx" format="float" />
         <attr name="bgShadowDy" format="float" />
     </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="maxCollapsedLines" format="integer"/>
+        <attr name="animDuration" format="integer"/>
+        <attr name="expandDrawable" format="reference"/>
+        <attr name="collapseDrawable" format="reference"/>
+    </declare-styleable>
 </resources>
