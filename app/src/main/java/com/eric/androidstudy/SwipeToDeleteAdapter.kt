@@ -31,6 +31,7 @@ class SwipeToDeleteAdapter(private val itemList: MutableList<String>) :
 
         // 绑定 SwipeRevealLayout 的状态
         viewBinderHelper.bind(holder.swipeLayout, item)
+        viewBinderHelper.closeLayout(item)
 
         holder.textView.text = item
         holder.btnDelete.setOnClickListener {

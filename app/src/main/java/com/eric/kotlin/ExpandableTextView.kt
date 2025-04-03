@@ -61,6 +61,7 @@ class ExpandableTextView @JvmOverloads constructor(
         // 创建ImageSpan
         expandDrawable?.let {
             expandImageSpan = ImageSpan(it, ImageSpan.ALIGN_CENTER)
+
         }
         collapseDrawable?.let {
             collapseImageSpan = ImageSpan(it, ImageSpan.ALIGN_CENTER)
@@ -144,5 +145,10 @@ class ExpandableTextView @JvmOverloads constructor(
             isExpanded = expanded
             setEllipsizedText()
         }
+    }
+
+    // 辅助函数转换dp
+    private fun dp(value: Int): Int {
+        return (value * resources.displayMetrics.density).toInt()
     }
 }

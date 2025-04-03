@@ -18,7 +18,7 @@
             android:id="@+id/btn_delete"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:text="删除"
+            android:text="@string/btn_delete"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 
@@ -30,7 +30,7 @@
         android:background="@android:color/white"
         android:orientation="vertical">
 
-        <TextView
+        <com.eric.kotlin.ExpandableTextView
             android:id="@+id/text_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

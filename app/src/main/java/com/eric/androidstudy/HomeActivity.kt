@@ -24,6 +24,7 @@ class HomeActivity : AppCompatActivity() {
         TestPage("SwipeToDeleteActivity", SwipeToDeleteActivity::class.java),
         TestPage("SwipeDragActivity", SwipeDragActivity::class.java),
         TestPage("ExpandableTextViewActivity", ExpandableTextViewActivity::class.java),
+        TestPage("ShimmerListActivity", ShimmerListActivity::class.java),
         // 添加更多测试页面
     )
 

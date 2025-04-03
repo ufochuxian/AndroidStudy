@@ -15,4 +15,5 @@
     <string name="go_to_calculate_fragment">gotoCalculatement</string>
     <string name="schedule">schedule</string>
     <string name="page3">page3使用</string>
+    <string name="btn_delete">删除</string>
 </resources>

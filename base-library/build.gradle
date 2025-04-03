@@ -145,6 +145,8 @@ dependencies {
     api("org.bytedeco:javacv:1.5.8") // JavaCV（包含 FFmpeg）
 
     api 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    api 'com.facebook.shimmer:shimmer:0.5.0'
+
 
     debugApi 'com.facebook.flipper:flipper:0.273.0'
     debugApi 'com.facebook.soloader:soloader:0.10.5'
