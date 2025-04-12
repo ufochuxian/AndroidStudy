@@ -154,6 +154,8 @@ dependencies {
     releaseApi 'com.facebook.flipper:flipper-noop:0.273.0'
 
     api 'com.ms-square:expandableTextView:0.1.4'
+    api 'com.github.chrisbanes:PhotoView:2.3.0'
+
 
 
     api(project(":network"))
