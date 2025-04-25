@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eric.KeyboardPreviewActivity
 import com.eric.androidstudy.media.VideoPlayerActivity
 import com.eric.feature.partygame.PartyGameActivity
 import com.eric.material.CoordinatorLayoutActivity
@@ -25,6 +26,7 @@ class HomeActivity : AppCompatActivity() {
         TestPage("SwipeDragActivity", SwipeDragActivity::class.java),
         TestPage("ExpandableTextViewActivity", ExpandableTextViewActivity::class.java),
         TestPage("ShimmerListActivity", ShimmerListActivity::class.java),
+        TestPage("KeyboardPreviewActivity", KeyboardPreviewActivity::class.java),
         // 添加更多测试页面
     )
 

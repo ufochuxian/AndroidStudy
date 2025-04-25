@@ -117,6 +117,7 @@
         <activity android:name=".SwipeDragActivity" />
         <activity android:name=".ExpandableTextViewActivity" />
         <activity android:name=".ShimmerListActivity" />
+        <activity android:name="com.eric.KeyboardPreviewActivity" />
 
 
 
